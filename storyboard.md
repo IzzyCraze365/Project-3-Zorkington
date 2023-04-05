@@ -51,8 +51,9 @@ if you don't have a sword you will get a black eye
 
 if you dropped the sword and he killed you => `The Underworld`
 
-2. `Order Food` from the Bar
-3. 'Man with Broken Arm' - There is something wrong with the child upstairs.  If anyone injured approaches her
+2. 'Man with Broken Arm' - There is something wrong with the child upstairs.  If anyone injured approaches her
+
+3. `Inkeeper` you can `Order Food` from the Bar or the Inkeeper can `Hold Items for you`
 
 ### 3 `Upstairs Room`
 People waiting outside, sick child laying on a bed
