@@ -1,3 +1,7 @@
+// Project: Week 3
+// Zorkington - A Text Based Adventure
+// John Isabella III
+
 const readline = require('readline');
 const readlineInterface = readline.createInterface(process.stdin, process.stdout);
 
