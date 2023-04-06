@@ -37,8 +37,9 @@ class Room {
 
 // Player's Backpack Inventory Management
 class Player {
-  constructor(inventory) {
+  constructor(inventory, status) {
     this.inventory = inventory;
+    this.status = status
   }
 }
 
@@ -68,7 +69,7 @@ switch (randomNumber) {
 
 //! Object Definition
 //Player Inventory
-let hero = new Player(["Bucket", "Sword", "Premium Horse Manure"]); // Starts with a Sword and useless Junk
+let hero = new Player(["Bucket", "Sword", "Premium Horse Manure"],"You are Healthy."); // Starts with a Sword and useless Junk
 
 // The following is a list of Objects that define our rooms.
 let townTriangle = new Room({
@@ -77,7 +78,7 @@ let townTriangle = new Room({
   inventory: [],
   interact: ["Retired Adventurer", "Simple Villager"],
   possibleLocations: ["Idiot's Inspiring Inn", "Forlorn Forest Of Fatality"],
-  description: "You have now entered Town Triangle....",
+  description: "The center of a rustic hamlet of Placeholder Village in the shape of a triangle. Usually a vibrant hub of activity later in the day. Now its only inhabitants are the Simple Villager and the Retired Adventurer",
 });
 
 let idiotsInspiringInn = new Room({
@@ -86,7 +87,7 @@ let idiotsInspiringInn = new Room({
   inventory: ["Food", "Black Eye"],
   interact: ["Inkeeper", "Obnoxious Man"],
   possibleLocations: ["Town Triangle", "Upstairs Room"],
-  description: "You have now entered Idiot's Inspiring Inn....",
+  description: "The most popular tavern in th",
 });
 
 let upstairsRoom = new Room({
@@ -169,7 +170,10 @@ let highlightedWords = [
   `"m"`,
   `"Backpack"`,
   `"b"`,
-  `"Move"`,
+  `"Look"`,
+  `"l"`,
+  `"Status"`,
+  `"s"`,
   `"Interact"`,
   `"i"`,
   `"Take"`,
@@ -225,7 +229,7 @@ async function heroAction(heroName) {
   action = capitalizePlayerInput(action);
   if (action === "Exit" || action === "E") {
     colorChangeWords(
-      `\nThis is where the advenutre of ${heroName} comes to an end.\n`,
+      `\nThis is where the Adventure of ${heroName} comes to an end.\n`,
       highlightedWords
     );
     process.exit();
@@ -272,12 +276,19 @@ async function heroAction(heroName) {
       colorChangeWords(
         `\nSorry ${heroName}, there is no ${takeItem} for you to take.\n`,
         highlightedWords
-      );
-    }
+      );}
   } else if (action === "Interact" || action === "I") {
     //Let's player Interact with an Object or person
     console.log(`\nINTERACT\n`); //! Test
     let npc = await ask(`What are you going to interact with?\n`);
+  } else if (action === "Look" || action === "L") {
+    //Let's player get a description of the area they are in 
+    console.log(`\nLOOK\n`); //! Test
+    colorChangeWords(`${locations[currentLocation].description}\n`, highlightedWords);
+  } else if (action === "Status" || action === "S") {
+    //Gives the player a quick check of character health 
+    console.log(`\nSTATUS\n`); //! Test
+    colorChangeWords(`Status: ${hero.status}\n`, highlightedWords);
   } else {
     unknownPrompt(action);
   }
@@ -380,7 +391,8 @@ function locationUpdate(newLocation) {
   if (possibleOptionsToUpdateLocation.includes(newLocation) === true) {
     // Found a match and we are able to update the state in the function "locationMove"
     currentLocation = newLocation;
-    colorChangeWords("\nYou have moved state!\n", highlightedWords);
+    //console.log("\nYou have moved state!\n"); //! TEST
+    colorChangeWords(`\n${locations[currentLocation].description}`,highlightedWords) //Gives a description when you enter a new location.
     return currentLocation;
   } else if (newLocation === "Exit") {
     process.exit();
@@ -425,7 +437,7 @@ function colorChangeWords(string, highlightedWords) {
 // Help Menue
 function helpMenu() {
   colorChangeWords(
-    `You may perform any of the following actions:\n     Move to a Nearby Location (type "Move" or "m")\n     Interact with a Person or Item (type "Interact" or "i")\n     Check your Backpack's Inventory (type "Backpack" or "b")\n     Take an Item from this Location (type "Take" or "t")\n     Drop an Item to this Location (type "Drop" or "d")\n     Open the Help Screen (type "Help" or "h")\n     Exit the Game at any time (type "Exit" or "e")\n`,
+    `You may perform any of the following actions:\n     Move to a Nearby Location (type "Move" or "m")\n     Look around the Area you are in (type "Look" or "l")\n     Interact with a Person or Item (type "Interact" or "i")\n     Check your General Wellbeing (type "Status" or "s")\n     Check your Backpack's Inventory (type "Backpack" or "b")\n     Take an Item from this Location (type "Take" or "t")\n     Drop an Item to this Location (type "Drop" or "d")\n     Open the Help Screen (type "Help" or "h")\n     Exit the Game at any time (type "Exit" or "e")\n`,
     highlightedWords
   );
 }
