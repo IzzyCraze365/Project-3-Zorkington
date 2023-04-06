@@ -33,3 +33,11 @@ playerBackpack.addInventory("fries");
 console.log(playerBackpack.removeInventory("beanz")); // "beanz" will not remove anything
 playerBackpack.displayInventory();
 //TODO END OF CLASSES
+
+
+
+  function printThings({ name, greeting }) {
+    console.log(`${greeting}, ${name}`);
+  }
+  
+  printThings({ greeting: "Good Morning", name: "Billy" });

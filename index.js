@@ -2,11 +2,97 @@
 // Zorkington - A Text Based Adventure
 // John Isabella III
 
-const readline = require('readline');
-const readlineInterface = readline.createInterface(process.stdin, process.stdout);
+
+const readline = require("readline");
+const readlineInterface = readline.createInterface(
+  process.stdin,
+  process.stdout
+);
+
+// Classes Go Here FIRST THING!!!
+class Room {
+  constructor({ name, doorLock, inventory, interact, possibleLocations, description }) {
+    this.description = description;
+    this.doorLock = doorLock;
+    this.interact = interact;
+    this.inventory = inventory;
+    this.name = name;
+    this.possibleLocations = possibleLocations;
+  }
+}
+  let townTriangle = new Room({
+    name: "Town Triangle",
+    doorLock: false,
+    inventory: ["Sword"],
+    interact: ["Retired Adventurer", "Simple Villager"],
+    possibleLocations: ["Idiot's Inspiring Inn", "Forlorn Forest Of Fatality"],
+    description: "You have now enter foyer....",
+  });
 
 
+  let idiotsInspiringInn = new Room({
+    name: "Idiot's Inspiring Inn",
+    doorLock: false,
+    inventory: ["Food", "Black Eye"],
+    interact: ["Inkeeper", "Obnoxious Mas"],
+    possibleLocations: ["Town Triangle", "Upstairs Room"],
+    description: "You have now enter foyer....",
+  });
 
+  let upstairsRoom = new Room({
+    name: "Upstairs Room",
+    doorLock: false,
+    inventory: ["Map", "Pie"],
+    interact: ["Sleeping Child", "Exhaused Parents"],
+    possibleLocations: ["Idiot's Inspiring Inn"],
+    description: "You have now enter foyer....",
+  });
+
+  
+  let forlornForestOfFatality = new Room({
+    name: "Forlorn Forest Of Fatality",
+    doorLock: false,
+    inventory: ["Discarded Amulet"],
+    interact: ["Sleeping Child", "Exhaused Parents"],
+    possibleLocations: ["Town Triangle", "Deep Woods Of Certain Doom"],
+    description: "You have now enter foyer....",
+  });
+
+  let deepWoodsOfCertainDoom = new Room({
+    name: "Deep Woods Of Certain Doom",
+    doorLock: true,
+    inventory: ["Pointless Rock"],
+    interact: [],
+    possibleLocations: ["Town Triangle", "Hag's Horrid Hoval", "Dragon's Keep"],
+    description: "You have now enter foyer....",
+  });
+
+  let hagsHorridHoval = new Room({
+    name: "Hag's Horrid Hoval",
+    doorLock: false,
+    inventory: ["Pariah's Name"],
+    interact: ["Mailbox"],
+    possibleLocations: ["Deep Woods Of Certain Doom"],
+    description: "You have now enter foyer....",
+  });
+
+  let dragonsKeep = new Room({
+    name: "Dragon's Keep",
+    doorLock: false,
+    inventory: ["Treasure"],
+    interact: ["Dragon", "Pile of Gold"],
+    possibleLocations: ["Deep Woods Of Certain Doom"],
+    description: "You have now enter foyer....",
+  });
+
+  let underworld = new Room({
+    name: "Underworld",
+    doorLock: true,
+    inventory: ["Death's Scythe"],
+    interact: ["Grim Reaper"],
+    possibleLocations: [],
+    description: "You have now enter foyer....",
+  });
 
 function ask(questionText) {
   return new Promise((resolve, reject) => {
@@ -14,29 +100,18 @@ function ask(questionText) {
   });
 }
 
-
 //TODO start OF TRAFFIC CODE
 let currentLocation = "Town Triangle";
 
 let locations = {
-  "Town Triangle": [
-    "Idiot's Inspiring Inn",
-    "Forlorn Forest Of Fatality",
-  ],
-  "Idiot's Inspiring Inn": ["Town Triangle", "Upstairs Room"],
-
-  "Upstairs Room": ["Idiot's Inspiring Inn"],
-
-  "Forlorn Forest Of Fatality": ["Town Triangle", "Deep Woods Of Certain Doom"],
-
-  "Deep Woods Of Certain Doom": [
-    "Town Triangle",
-    "Hag's Horrid Hoval",
-    "Dragon's Keep",
-  ],
-  "Hag's Horrid Hoval": ["Deep Woods Of Certain Doom"],
-  "Dragon's Keep": ["Deep Woods Of Certain Doom"],
-  "Underworld": [""],
+  "Town Triangle": townTriangle,
+  "Idiot's Inspiring Inn": idiotsInspiringInn,
+  "Upstairs Room": upstairsRoom,
+  "Forlorn Forest Of Fatality": forlornForestOfFatality,
+  "Deep Woods Of Certain Doom": deepWoodsOfCertainDoom,
+  "Hag's Horrid Hoval": hagsHorridHoval,
+  "Dragon's Keep": dragonsKeep,
+  "Underworld": underworld,
 };
 
 async function start() {
@@ -55,21 +130,19 @@ async function start() {
 start();
 
 function updateLocation(newLocation) {
-  let possibleOptionsToUpdateLocation = locations[currentLocation];
+  let possibleOptionsToUpdateLocation = locations[currentLocation].possibleLocations;
   if (possibleOptionsToUpdateLocation.includes(newLocation) === true) {
     // Found a match and we are able to update the current state
     currentLocation = newLocation;
     computerResponse("\nYou have moved state!\n");
-  } else if (
-    newLocation === "Exit"
-  ) {
+  } else if (newLocation === "Exit") {
     process.exit();
   } else {
     // Match was not found and display a message to the user that is an invalid entry.
     computerResponse(
       `\nSorry hero, but you can't go there. From your current location you can go to the ${possibleOptionsToUpdateLocation.join(
-          ", or the "
-        )}\n`
+        ", or the "
+      )}\n`
     );
   }
 }
@@ -83,9 +156,7 @@ class LocationItems {
 
   // Prints the current Inventory
   displayInventory() {
-    console.log(
-      "The current items are " + this.inventory
-    );
+    console.log("The current items are " + this.inventory);
   }
 
   //Adds an item to the inventory
@@ -103,24 +174,27 @@ class LocationItems {
   }
 }
 
+/* 
+//TODO Probably will need to remove these
 let playerBackpack = new LocationItems([""]);
 let itemsTownTriangle = new LocationItems(["Sword Of A Hero"]);
-let itemsIdiotsInspiringInn = new LocationItems(["Food","Black Eye"]);
-let itemsUpstairsRoom = new LocationItems(["Map","Pie"]);
+let itemsIdiotsInspiringInn = new LocationItems(["Food", "Black Eye"]);
+let itemsUpstairsRoom = new LocationItems(["Map", "Pie"]);
 let itemsForlornForestOfFatality = new LocationItems([""]);
 let itemsDeepWoodsOfCeertainDoom = new LocationItems([""]);
 let itemsHagsHorridHoval = new LocationItems(["Witch's Name"]);
 let itemsDragonsKeep = new LocationItems(["Treasure"]);
 let itemUnderworld = new LocationItems(["Immortal Scythe"]);
 
-
 playerBackpack.addInventory("fries");
 console.log(playerBackpack.removeInventory("beanz")); // "beanz" will not remove anything
 playerBackpack.displayInventory();
 //TODO END OF CLASSES
-
+ */
 
 start();
+
+
 /* 
 async function start() {
   const welcomeMessage = `182 Main St.
