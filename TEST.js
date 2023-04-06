@@ -41,3 +41,30 @@ playerBackpack.displayInventory();
   }
   
   printThings({ greeting: "Good Morning", name: "Billy" });
+
+
+
+  class LocationItems {
+    constructor(initialItems) {
+      this.inventory = initialItems;
+    }
+  
+    //Adds an Item to an inventory
+    inventoryAdd(itemToBeAdded) {
+      this.inventory.push(itemToBeAdded);
+    }
+  
+    // Prints the Player's Current Inventory
+    inventoryDisplay() {
+      console.log("Your current items are " + this.inventory);
+    }
+  
+    //This checks to see if something was removed by comparing the length before and after
+    inventoryRemove(itemToBeRemoved) {
+      let snapshotInventorySize = this.inventory.length;
+      this.inventory = this.inventory.filter((item) => item !== itemToBeRemoved);
+      return snapshotInventorySize === this.inventory.length
+        ? `No Items were removed`
+        : `the ${item} was removed`;
+    }
+  }
