@@ -1,4 +1,4 @@
-
+/
 //TODO START OF CLASSES 'Pantry Example'
 class LocationItems {
   constructor(initialItems) {
@@ -68,3 +68,4 @@ playerBackpack.displayInventory();
         : `the ${item} was removed`;
     }
   }
+

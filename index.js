@@ -84,6 +84,7 @@ switch (randomNumber) {
 }
 //console.log("The Secret Name is", secretName); //! TEST
 
+
 //! Object Definition
 // The following is a list of Objects that define our rooms.
 let townTriangle = new Room({
@@ -99,7 +100,7 @@ let idiotsInspiringInn = new Room({
   name: "Idiot's Inspiring Inn",
   doorLock: false,
   inventory: ["Food", "Black Eye"],
-  interact: ["Inkeeper", "Obnoxious Mas"],
+  interact: ["Inkeeper", "Obnoxious Man"],
   possibleLocations: ["Town Triangle", "Upstairs Room"],
   description: "You have now entered Idiot's Inspiring Inn....",
 });
@@ -160,6 +161,7 @@ let underworld = new Room({
 
 // Variables
 let currentLocation = "Town Triangle"; // This updates as the player moves
+let heroName = "Izzy"
 let userInput = ""; // Currently their is no input
 
 //! State Machine, Keeps track of where the Player can Go
@@ -176,70 +178,55 @@ let locations = {
   "Underworld": underworld
 };
 
-
+// A list of words that I want to have in Yellow Text
+let highlightedWords = [secretName, `"Move"`, `"m"`, `"Backpack"`, `"b"`,`"Move"`,`"Interact"`, `"i"`,`"Take"`,`"t"`,`"Drop"`,`"d"`,`"Help"`,`"h"`,`"Exit"`,`"e"`,`Adventurer`,`Retired Adventurer`,`Simple Villager`, `Sword`,`Gold`, `Placeholder Village`, `Town Triangle`, `Idiot's Inspiring Inn`, `Upstairs Room`,`Forlorn Forest Of Fatality`,`Deep Woods Of Certain Doom`,`Hag's Horrid Hoval`,`Dragon's Keep`,`Underworld`]
 
 
 start();
 
 
-/* 
-//TODO Probably will need to remove these
-let playerBackpack = new LocationItems([""]);
-let itemsTownTriangle = new LocationItems(["Sword Of A Hero"]);
-let itemsIdiotsInspiringInn = new LocationItems(["Food", "Black Eye"]);
-let itemsUpstairsRoom = new LocationItems(["Map", "Pie"]);
-let itemsForlornForestOfFatality = new LocationItems([""]);
-let itemsDeepWoodsOfCeertainDoom = new LocationItems([""]);
-let itemsHagsHorridHoval = new LocationItems(["Witch's Name"]);
-let itemsDragonsKeep = new LocationItems(["Treasure"]);
-let itemUnderworld = new LocationItems(["Immortal Scythe"]);
-
-playerBackpack.inventoryAdd("fries");
-console.log(playerBackpack.inventoryRemove("beanz")); // "beanz" will not remove anything
-playerBackpack.inventoryDisplay();
- */
 
 //! Function List
 // This is the function that Plays the Game
 async function start() {
-  let heroName = await introduction(); //The player will have to name themselves;
-  console.log(heroName + userInput+ "Before Loop of Function\n"); //! TEST
-  helpMenu();
+  heroName = await introduction(); //The player will have to name themselves;
+  console.log(heroName, userInput, "Before Loop of Function\n"); //! TEST
+  colorChangeWords(`Type "Help" to see a list of available actions.`,highlightedWords);
   while(userInput !== "Exit"){
   userInput = await heroAction(heroName);
-  console.log(heroName + userInput+ "Inside Loop of Function\n"); //! TEST
+  console.log(heroName, userInput, "Inside Loop of Function\n"); //! TEST
 }
 }
 
 async function heroAction(heroName) {
-  const heroAction = `What would you like to do ${heroName}?\n>_`;
+  const heroAction = `What would you like to do, ${heroName}?\n>_`;
   let action = await ask(heroAction);
   action = capitalizePlayerInput(action);
 if (action === "Exit" || action === "E"){
-  console.log(`\nThis is where the advenutre of ${heroName} comes to an end.\n`)
+  colorChangeWords(`\nThis is where the advenutre of ${heroName} comes to an end.\n`,highlightedWords)
   process.exit();
 }else if (action === "Help" || action === "H"){ //Brings up the Help Menu
   console.log(`\nHELP\n`) //! Test
   helpMenu();
 }else if (action === "Move" || action === "M"){
   console.log(`\nMOVE\n`) //! Test
-  locationMove();
+  await locationMove();
 }else if (action === "Backpack" || action === "B"){
   console.log(`\nBACKPACK\n`) //! Test
   inventoryDisplay();
 }else if (action === "Drop" || action === "D"){ // Removes an item from Backpack, add the item to the current room inventory
   console.log(`\nDROP\n`) //! Test
-  let dropItem = await ask("`What item would you like to ${action}?");
+  let dropItem = await ask(`What item would you like to ${action}?\n`);
   inventoryRemove(dropItem); // Removes an item from Backpack
   inventoryAdd(dropItem); // Add item to the current Room inventory
   }else if (action === "Take" || action === "T"){ //Add item to Backpack, remove from room inventory
     console.log(`\nTAKE\n`) //! Test
-  let takeItem = await ask("`What item would you like to ${action}?");
+  let takeItem = await ask(`What item would you like to ${action}?\n`);
   inventoryRemove(takeItem); // Removes an item from current Room inventory
   inventoryAdd(takeItem); // Add item to the Backpack
 }else if (action === "Interact" || action === "I"){//Let's player Interact with an Object or person
   console.log(`\nINTERACT\n`) //! Test
-  let npc = await ask("What are you going to interact with?");
+  let npc = await ask(`What are you going to interact with?\n`);
 
 }else {
   unknownPrompt(action);
@@ -249,41 +236,41 @@ if (action === "Exit" || action === "E"){
 // TODO Modify this function
 // Response if the Player tries to take something they shouldn't
 function immovableObject(){
-  console.log(`That would be selfish. How will other students find their way?`);
+  colorChangeWords(`That would be selfish. How will other students find their way?`,highlightedWords);
 }
 
 function lockedOut(){
-  console.log(`The door is locked. There is a keypad on the door handle.`);
+  colorChangeWords(`The door is locked. There is a keypad on the door handle.`,highlightedWords);
 }
 
 function speakFriendAndEnter(password){
   if (secretName === password){
-    console.log(`Success! The door opens.\nYou enter the foyer and the door shuts behind you.`);
+    colorChangeWords(`Success! The door opens.\nYou enter the foyer and the door shuts behind you.`,highlightedWords);
   }else{
-    console.log(`Bzzzzt! The door is still locked.`);
+    colorChangeWords(`Bzzzzt! The door is still locked.`);
   }
 }
 
 
 async function introduction() {
-  console.log(
-    `\nThe sun rises peacefully on the small hamlet of Placeholder Village.\nThe birds are singing sweetly in the tress.\nThe morning dew glistens on the grass as the first rays of the sun reach the still earth below.\nA gentle breeze caresses your face as you briskly walk to the Town Triangle, hoping to get a jump on our morning chores.\n\nUpon entering the Town Triangle you see the village's heroic 'Adventurer' in a rather bad temper.\nThe 'Adventurer' groans loudly, before throwing his sword down upon the ground.\n    "I has't hadith enough!\n     Yee all kepeth requesting too much.\n     Th're is nary a way f'r me to slayeth a dragon with this steel!\n     I art to retire."\n\nIt appears the village is in need of a new heroic Adventurer...\n`
+  colorChangeWords(
+    `\nThe sun rises peacefully on the small hamlet of Placeholder Village.\nThe birds are singing sweetly in the tress.\nThe morning dew glistens on the grass as the first rays of the sun reach the still earth below.\nA gentle breeze caresses your face as you briskly walk to the Town Triangle, hoping to get a jump on our morning chores.\n\nUpon entering the Town Triangle you see the village's heroic Adventurer in a rather bad temper.\nThe Adventurer groans loudly, before throwing his Sword down upon the ground.\n    "I has't hadith enough!\n     Yee all kepeth requesting too much.\n     Th're is nary a way f'r me to slayeth a dragon with this steel!\n     I art to retire."\n\nIt appears the village is in need of a new heroic Adventurer...\n\nDo you pick up the Sword?`,highlightedWords
   );
-  const welcomeMessage = `Do you pick up the Sword?\nYes (y) or No (n)\n>_`;
+  const welcomeMessage = `Yes (y) or No (n)\n>_`;
   let answer = await ask(welcomeMessage);
   answer = capitalizePlayerInput(answer);
   if (answer === "Yes" || answer === "Y") {
-    console.log(
-      `\n\nA villager, whom bares an uncanny resemblance to you apporaches.\n    "Greetings stranger!\n     It is not often a new adventurer enters our peaceful hamlet of Placeholder Village.`
+    colorChangeWords(
+      `\nA Simple Villager, whom bares an uncanny resemblance to you apporaches.\n    "Greetings stranger!\n     It is not often a new adventurer enters our peaceful hamlet of Placeholder Village.`,highlightedWords
     );
     let heroName = await ask(`     What is your name, adventurer?"\n>_`);
-    console.log(
-      `\n\n    "I see, your name is ${heroName},\n     Obviously, you were named after '${heroName} the Mighty,' the Hero of Legend\n     As I live and breathe, we are most fortunate for your arrival.\n\n     Recently, a missionary of rightous nuns was dispatched to aid our small hamlet.\n     However, as they were crossing a bridge over a ravine they were attacked by a horde of goblins.\n     The goblins cut the ropes of the bridge and the cart of nuns fell hundreds of feet into the sharp rocks below.\n\n     Your assistance is needed posthaste, ${heroName}!\n     Only you can raise enough gold to help us rebuild that broken bridge.`
+    colorChangeWords(
+      `\n    "I see, your name is ${heroName},\n     Obviously, you were named after '${heroName} the Mighty,' the Hero of Legend\n     As I live and breathe, we are most fortunate for your arrival.\n\n     Recently, a missionary of rightous nuns was dispatched to aid our small hamlet.\n     However, as they were crossing a bridge over a ravine they were attacked by a horde of goblins.\n     The goblins cut the ropes of the bridge and the cart of nuns fell hundreds of feet into the sharp rocks below.\n\n     Your assistance is needed posthaste, ${heroName}!\n     Only you can raise enough Gold to help us rebuild that broken bridge."\n`,highlightedWords
     );
     return heroName;
   } else if (answer === "No" || answer === "N") {
-    console.log(
-      `You ignore the obvious call to adventure and go about your day.\nYou manage to finsih your chores early and have enough time to explore the woods near of town.\nThat is when you met ${secretName}, your soulmate.\nThe two of you began spending more and more time together.\neventually you were married, and moved into the lovliest cottage together by the outskirts of Placeholder Village.\nYou had 3 children, 2 dogs and a hampster.\nIt was an incredibly average and boring life.\n\nYou are so lucky you didn't pick up that sword.\nWho needs a life of adventure?\nNot you.\n\nYou are just a ridiculously normal person,\ndedicating your life to slightly above-average achievement,\ndespite your aggressive and all-consuming mundanity!\n\n`
+    colorChangeWords(
+      `You ignore the obvious call to adventure and go about your day.\nYou manage to finsih your chores early and have enough time to explore the woods near of town.\nThat is when you met ${secretName}, your soulmate.\nThe two of you began spending more and more time together.\neventually you were married, and moved into the lovliest cottage together by the outskirts of Placeholder Village.\nYou had 3 children, 2 dogs and a hampster.\nIt was an incredibly average and boring life.\n\nYou are so lucky you didn't pick up that Sword.\nWho needs a life of adventure?\nNot you.\n\nYou are just a ridiculously normal person,\ndedicating your life to slightly above-average achievement,\ndespite your aggressive and all-consuming mundanity!\n\n`,highlightedWords
     );
     process.exit();
   } else {
@@ -299,9 +286,8 @@ async function locationMove() {
   let newLocation = "";
 
   while (newLocation !== "Exit") {
-    newLocation = await ask(
-      `You are currently standing in the ${currentLocation}.\nWhere would you like to go?\n\n`
-    );
+    colorChangeWords(`You are currently standing in the ${currentLocation}.`, highlightedWords)
+    newLocation = await ask(`Where would you like to go?\n>_`);
     newLocation = capitalizePlayerInput(newLocation);
     locationUpdate(newLocation);
   }
@@ -315,15 +301,15 @@ function locationUpdate(newLocation) {
   if (possibleOptionsToUpdateLocation.includes(newLocation) === true) {
     // Found a match and we are able to update the state in the function "locationMove"
     currentLocation = newLocation;
-    computerResponse("\nYou have moved state!\n");
+    colorChangeWords("\nYou have moved state!\n",highlightedWords);
   } else if (newLocation === "Exit") {
     process.exit();
   } else {
     // If the player tries to move to an invalid location they get the following response
-    computerResponse(
+    colorChangeWords(
       `\nSorry hero, but you can't go there. From your current location you can go to the ${possibleOptionsToUpdateLocation.join(
         ", or the "
-      )}\n`
+      )}\n`,highlightedWords
     );
   }
 }
@@ -345,17 +331,19 @@ function capitalizePlayerInput(myString) {
     .join(" "));
 }
 
-//Color Changing Text
-// Taken from state.js lesson
-function computerResponse(string) {
+//Color Changing Text so some words pop out easier
+function colorChangeWords(string, highlightedWords) {
   let white = "\033[0;39m";
   let yellow = "\033[0;33m";
-  console.log(yellow + string + white);
+  highlightedWords.forEach(word => {
+    string = string.replaceAll(word, yellow+word+white)
+  });
+  console.log(white + string + white);
 }
 
 // Help Menue
 function helpMenu(){
-  console.log(`You may perform any of the following actions:\n     Move to a new location (type "Move" or "m")\n     Interact with a Person or Item (type "Interact" or "i")\n     Check your Backpack's Inventory (type "Backpack" or "b")\n     Take an Item (type "Take" or "t")\n     Drop an Item (type "Drop" or "d")\n     Open the Help Screen (type "Help" or "h")\n     To Exit the Game at any time (type "Exit" or "e")\n\n`)
+  colorChangeWords(`You may perform any of the following actions:\n     Move to a Nearby Location (type "Move" or "m")\n     Interact with a Person or Item (type "Interact" or "i")\n     Check your Backpack's Inventory (type "Backpack" or "b")\n     Take an Item from this Location (type "Take" or "t")\n     Drop an Item to this Location (type "Drop" or "d")\n     Open the Help Screen (type "Help" or "h")\n     Exit the Game at any time (type "Exit" or "e")\n`,highlightedWords)
 }
 
 // Function to Generate a Random Number
@@ -366,5 +354,5 @@ function randomNum(min, max) {
 
 //For when the Player's input does NOT makes sense.
 function unknownPrompt(input) {
-  console.log(`Sorry, I don't know how to ${input}.\n`);
+  colorChangeWords(`\nSorry, I don't know how to ${input}.\n`, highlightedWords);
 }
