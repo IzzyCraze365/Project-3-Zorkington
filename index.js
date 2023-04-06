@@ -24,6 +24,7 @@ let locations = {
     "Forlorn Forest Of Fatality",
   ],
   "Idiot's Inspiring Inn": ["Town Triangle", "Upstairs Room"],
+
   "Upstairs Room": ["Idiot's Inspiring Inn"],
 
   "Forlorn Forest Of Fatality": ["Town Triangle", "Deep Woods Of Certain Doom"],
@@ -35,7 +36,7 @@ let locations = {
   ],
   "Hag's Horrid Hoval": ["Deep Woods Of Certain Doom"],
   "Dragon's Keep": ["Deep Woods Of Certain Doom"],
-  "The Underworld": [""],
+  "Underworld": [""],
 };
 
 async function start() {
@@ -73,6 +74,50 @@ function updateLocation(newLocation) {
   }
 }
 //TODO END OF TRAFFIC CODE
+
+//TODO START OF CLASSES 'Pantry Example'
+class LocationItems {
+  constructor(initialItems) {
+    this.inventory = initialItems;
+  }
+
+  // Prints the current Inventory
+  displayInventory() {
+    console.log(
+      "The current items are " + this.inventory
+    );
+  }
+
+  //Adds an item to the inventory
+  addInventory(itemToBeAdded) {
+    this.inventory.push(itemToBeAdded);
+  }
+
+  //This checks to see if something was removed by comparing the length before and after
+  removeInventory(itemToBeRemoved) {
+    let snapshotInventorySize = this.inventory.length;
+    this.inventory = this.inventory.filter((item) => item !== itemToBeRemoved);
+    return snapshotInventorySize === this.inventory.length
+      ? "No Items were removed"
+      : "Item was removed";
+  }
+}
+
+let playerBackpack = new LocationItems([""]);
+let itemsTownTriangle = new LocationItems(["Sword Of A Hero"]);
+let itemsIdiotsInspiringInn = new LocationItems(["Food","Black Eye"]);
+let itemsUpstairsRoom = new LocationItems(["Map","Pie"]);
+let itemsForlornForestOfFatality = new LocationItems([""]);
+let itemsDeepWoodsOfCeertainDoom = new LocationItems([""]);
+let itemsHagsHorridHoval = new LocationItems(["Witch's Name"]);
+let itemsDragonsKeep = new LocationItems(["Treasure"]);
+let itemUnderworld = new LocationItems(["Immortal Scythe"]);
+
+
+playerBackpack.addInventory("fries");
+console.log(playerBackpack.removeInventory("beanz")); // "beanz" will not remove anything
+playerBackpack.displayInventory();
+//TODO END OF CLASSES
 
 
 start();
