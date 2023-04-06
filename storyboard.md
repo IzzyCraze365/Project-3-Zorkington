@@ -8,7 +8,7 @@ Storyboard for my Project 3
 # Ideas
 ## Locations
 1. `Town Triangle`
-2. `Izzy's Inspiring Inn`
+2. `Idiot's Inspiring Inn`
 3. `Upstairs Room`
 4. `Forlorn Forest of Fatality`
 5. `Hag's Horrid Hoval`
@@ -26,7 +26,7 @@ You go over and pick up the sword "Welcome Adventurer"
 They can input their name on this welcome screen
 
 #### Possible Travel Locations
-1. `Izzy's Inspiring Inn`
+1. `Idiot's Inspiring Inn`
 2. `Forlorn Forest of Fatality`
 
 #### Interactable Items
@@ -34,7 +34,7 @@ They can input their name on this welcome screen
 2. `Villagers`
 
 
-### 2. `Izzy's Inspiring Inn`
+### 2. `Idiot's Inspiring Inn`
 Warm interior, bar area, can lead upstairs
 
 #### Possible Travel Locations
@@ -55,11 +55,11 @@ if you dropped the sword and he killed you => `The Underworld`
 
 3. `Inkeeper` you can `Order Food` from the Bar or the Inkeeper can `Hold Items for you`
 
-### 3 `Upstairs Room`
+### 3. `Upstairs Room`
 People waiting outside, sick child laying on a bed
 
 #### Possible Travel Locations
-1. `Izzy's Inspiring Inn`
+1. `Idiot's Inspiring Inn`
 
 #### Interactable Items
 1. `Sleeping Child` - does nothing
@@ -82,7 +82,7 @@ Gloomy forest with thick underbrush
 
 #### Possible Travel Locations
 1. `Town Triangle`
-2. `Head deeper into the forest`
+2. `Deep Woods Of Certain Doom`
 
 (if no map, you get lost and die) => send to `The Underworld`
 
