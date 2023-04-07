@@ -334,9 +334,12 @@ async function heroAction(heroName) {
       `${locations[currentLocation].description}`,
       highlightedWords
     );
-    if ((locations[currentLocation].inventory).length > 0) {// checks to see if there is anything in the inventory in the room
+    if (locations[currentLocation].inventory.length > 0) {
+      // checks to see if there is anything in the inventory in the room
       colorChangeWords(
-        `Looking around, you see: ${locations[currentLocation].inventory.join(", ")}`,
+        `Looking around, you see: ${locations[currentLocation].inventory.join(
+          ", "
+        )}`,
         highlightedWords
       );
     } else {
