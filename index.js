@@ -16,7 +16,41 @@ function ask(questionText) {
 // Above is the provided code
 
 //! Classes Go Here = FIRST THING!!!
-//Here is a list of all the Locations in this Adventure, containing everything they have.
+// A List of All Interactable Items
+class Commodity {
+  constructor({
+    name,
+    interact
+  }) {
+    this.name = name;
+    this.interact = interact;
+  }
+}
+
+// A List of All Interactable People
+class Person {
+  constructor({
+    name,
+    inventory,
+    interact,
+    status
+  }) {
+    this.interact = interact;
+    this.inventory = inventory;
+    this.name = name;
+    this.status = status;
+  }
+}
+
+// Player's Backpack Inventory Management
+class Player {
+  constructor(inventory, status) {
+    this.inventory = inventory;
+    this.status = status;
+  }
+}
+
+//List of all the Locations in this Adventure, containing everything they have.
 class Room {
   constructor({
     name,
@@ -32,14 +66,6 @@ class Room {
     this.inventory = inventory;
     this.name = name;
     this.possibleLocations = possibleLocations;
-  }
-}
-
-// Player's Backpack Inventory Management
-class Player {
-  constructor(inventory, status) {
-    this.inventory = inventory;
-    this.status = status;
   }
 }
 
@@ -71,8 +97,8 @@ switch (randomNumber) {
 //Player Inventory
 let hero = new Player(
   ["Bucket", "Sword", "Premium Horse Manure"],
-  "You are Healthy."
-); // Starts with a Sword and useless Junk
+  "Healthy."
+); // Starts with a Sword & useless Junk, Status is Healthy
 
 // The following is a list of Objects that define our rooms.
 let townTriangle = new Room({
@@ -88,16 +114,16 @@ let townTriangle = new Room({
 let idiotsInspiringInn = new Room({
   name: "Idiot's Inspiring Inn",
   doorLock: false,
-  inventory: ["Food", "Bags of Jewels"],
-  interact: ["Inkeeper", "Obnoxious Patron", "Man With A Broken Arm"], //"Black Eye" from interaction puzzle
+  inventory: ["Bags Of Jewels"],
+  interact: ["Inkeeper", "Obnoxious Patron", "Musician With A Broken Arm"], //"Black Eye" from interaction puzzle
   possibleLocations: ["Town Triangle", "Upstairs Room"],
   description:
-    "The most popular tavern in the Placeholder Village, \nprimarily because it is the only tavern in Placeholder Village. \nThe Innkeeper behind the bar is preparing a meal for a Man with a Broken Arm. \nIn the back of the room, an Obnoxious Patron is slovenly eating a meal.\nBags of Jewels are scattered across the patron's table.",
+    "The most popular tavern in the Placeholder Village, \nprimarily because it is the only tavern in Placeholder Village. \nThe Innkeeper behind the bar is preparing a meal for a Musician With A Broken Arm. \nIn the back of the room, an Obnoxious Patron is slovenly eating a meal.\nBags Of Jewels are scattered across the patron's table.",
 });
 let upstairsRoom = new Room({
   name: "Upstairs Room",
   doorLock: false,
-  inventory: ["Map"], //"Warm Apple Pie" is a reward for the puzzle
+  inventory: [],
   interact: ["Sleeping Child", "Exhausted Parents"],
   possibleLocations: ["Idiot's Inspiring Inn"],
   description:
@@ -107,11 +133,11 @@ let upstairsRoom = new Room({
 let forlornForestOfFatality = new Room({
   name: "Forlorn Forest Of Fatality",
   doorLock: false,
-  inventory: ["Discarded Amulet"],
-  interact: ["Broken Sign"],
+  inventory: ["Damaged Lute"],
+  interact: ["Crooked Sign"],
   possibleLocations: ["Town Triangle", "Deep Woods Of Certain Doom"],
   description:
-    "The edge of the forest seems welcoming enough.\nAs you travel down the overgrown path\nyou see a Broken Sign hanging on a post.",
+    "The edge of the forest seems welcoming enough.\nAs you travel down the overgrown path\nyou see a Crooked Sign hanging on a weatherbeaten post.",
 });
 
 let deepWoodsOfCertainDoom = new Room({
@@ -128,30 +154,170 @@ let hagsHorridHoval = new Room({
   name: "Hag's Horrid Hoval",
   doorLock: false,
   inventory: [],
-  interact: ["Mailbox"], //Read from mailbox "Pariah's Name"
+  interact: ["Letterbox"], //Read from Letterbox "Pariah's Name"
   possibleLocations: ["Deep Woods Of Certain Doom"],
   description:
-    "A gnarled pile of sticks and mud twist together to form a makeshift shelter.\n Out of the braided husk of a dying tree sits a Mailbox void of letters.",
+    "A gnarled pile of sticks and mud twist together to form a makeshift shelter.\n Out of the braided husk of a dying tree sits a simple Letterbox.",
 });
 
 let dragonsKeep = new Room({
   name: "Dragon's Keep",
   doorLock: false,
   inventory: ["Dragon's Treasure"],
-  interact: ["Dragon", "Mounds Of Gold", "Heaps Of Silver", "Pile of Bones"],
+  interact: ["Dragon", "Mounds Of Gold", "Heaps Of Silver", "Pile Of Bones"],
   possibleLocations: ["Deep Woods Of Certain Doom"],
   description:
-    "The air smells of ash, as you approach a dark cave.\nYou can see the light being reflected off of shimmering Mounds Of Gold, Heaps Of Silver.\nIn the back of the cave you spot a large red Dragon,resting upon a massive Pile of Bones.",
+    "The air smells of ash, as you approach a dark cave.\nYou can see the light being reflected off of shimmering Mounds Of Gold, Heaps Of Silver.\nIn the back of the cave you spot a large red Dragon,resting upon a massive Pile Of Bones.",
 });
 
 let underworld = new Room({
   name: "Underworld",
   doorLock: true,
-  inventory: [], //"Death's Scythe" is a reward for the puzzle
+  inventory: [],
   interact: ["Grim Reaper"],
   possibleLocations: [],
   description:
     "You could feel your consciousness leave your body.\nThen suddenly without warning you were here.\nInside a dark cavern.  The only source of light...\na flickering torch held by a robed figure\nwhom you instinctually know is the personification of death, the Grim Reaper.",
+});
+
+// List of Interactable Persons (People b/c Grammar)
+let retiredAdventurer = new Person({
+  name: "Retired Adventurer",
+  inventory: ["Death's Scythe"],
+  interact: "Something",//TODO
+  status: "Normal"
+});
+
+let simpleVillager = new Person({
+  name: "Simple Villager",
+  inventory: [],
+  interact: "Something",//TODO
+  status: "Normal"
+});
+
+let inkeeper = new Person({
+  name: "Inkeeper",
+  inventory: ["A Warm Meal"],
+  interact: "Something",//TODO
+  status: "Normal"
+});
+
+let obnoxiousPatron = new Person({
+  name: "Obnoxious Patron",
+  inventory: ["Black Eye"], //Reward for Solving Puzzle
+  interact: "Something",//TODO
+  status: "Normal"
+});
+
+let musicianWithABrokenArm = new Person({
+  name: "Musician With A Broken Arm",
+  inventory: [],
+  interact: "Something",//TODO
+  status: "Normal"
+});
+
+let sleepingChild = new Person({
+  name: "Sleeping Child",
+  inventory: ["Warm Apple Pie"], //Reward for Solving Puzzle
+  interact: "Something",//TODO
+  status: "Normal"
+});
+
+let exhaustedParents = new Person({
+  name: "Exhausted Parents",
+  inventory: ["Town Map"],// Trade for Food
+  interact: "Something",//TODO
+  status: "Normal"
+});
+
+let dragon = new Person({
+  name: "Dragon",
+  inventory: [],
+  interact: "Something",//TODO
+  status: "Normal"
+});
+
+let grimReaper = new Person({
+  name: "Grim Reaper",
+  inventory: ["Death's Scythe"], //Reward for Solving Puzzle
+  interact: "Something",//TODO
+  status: "Normal"
+});
+
+// List of Interactable Items
+let sword = new Commodity({
+  name: "Sword",
+  interact: "The sword of an adventurer.\nThe blade is very sharp.\nA lethal weapon, to be sure."
+});
+
+let bucket = new Commodity({
+  name: "Bucket",
+  interact: "A simple bucket, with a hole in the bottom."
+});
+
+let premiumHorseManure = new Commodity({
+  name: "Premium Horse Manure",
+  interact: "If it looks like shit,\nsmells like shit,\nand tastes like shit...\nIt'll make the crops grow tall!"
+});
+
+let aWarmMeal = new Commodity({
+  name: "A Warm Meal",
+  interact: "The meal consists of a plain gruel.\nTasteless but still comforting."
+});
+
+let BagsOfJewels = new Commodity({
+  name: "Bags Of Jewels",
+  interact: "Something"//TODO
+});
+
+let townMap = new Commodity({
+  name: "Town Map",
+  interact: "A Map of Placeholder Village and the surrounding forest.\nYou can't get lost with this in hand."
+});
+
+let warmApplePie = new Commodity({
+  name: "Warm Apple Pie",
+  interact: "Fresh baked pie is the best.\nEveryone loves apple pie.\nAnd people do crazy, death-defying things when they are in love."
+});
+
+let damagedLute = new Commodity({
+  name: "Damaged Lute",
+  interact: "A musical instrument that has seen better days."
+});
+
+let crookedSign = new Commodity({
+  name: "Crooked Sign",
+  interact: `A worn sign at the intersection of two paths.\nIt reads:\n    "Abandon hope all yee who enter here!\n     This forest are a living maze that you'll not want to be lost in.\n     There be deadly monsters within these trees."`
+});
+
+let pointlessRock = new Commodity({
+  name: "Pointless Rock",
+  interact: "A simple rock that has no innate value."
+});
+
+let letterbox = new Commodity({
+  name: "Letterbox",
+  interact: `A plain wooded box that is void of all letters.\nThe name "${secretName}" is carved into it.`
+});
+
+let moundsOfGold = new Commodity({
+  name: "Mounds Of Gold",
+  interact: "A simple rock that has no innate value."//TODO
+});
+
+let heapsOfSilver = new Commodity({
+  name: "Heaps Of Silver",
+  interact: "A simple rock that has no innate value."//TODO
+});
+
+let pileOfBones = new Commodity({
+  name: "Pile Of Bones",
+  interact: "A simple rock that has no innate value."//TODO
+});
+
+let deathsScythe = new Commodity({
+  name: "Death's Scythe",
+  interact: "The immortal weapon of the manifestation of Death.\nA single scratch would cause any creature to immediately perish.\nUse with caution."
 });
 
 // Variables
@@ -203,27 +369,27 @@ let highlightedWords = [
   `Simple Villager`,
   `Innkeeper`,
   `Obnoxious Patron`,
-  `Man With A Broken Arm`,
+  `Musician With A Broken Arm`,
   `Sleeping Child`,
   `Exhausted Parents`,
-  `Broken Sign`,
-  `Mailbox`,
+  `Crooked Sign`,
+  `Letterbox`,
   `Dragon`,
   `Mounds Of Gold`,
   `Heaps Of Silver`,
-  `Pile of Bones`,
+  `Pile Of Bones`,
   `Grim Reaper`,
   /*Inventory Items*/
   `Sword`,
   `Gold`,
   `Premium Horse Manure`,
   `Bucket`,
-  `Bags of Jewels`,
-  `Food`,
+  `Bags Of Jewels`,
+  `A Warm Meal`,
   `Black Eye`,
-  `Map`,
+  `Town Map`,
   `Warm Apple Pie`,
-  `Discarded Amulet`,
+  `Damaged Lute`,
   `Pointless Rock`,
   `Dragon's Treasure`,
   `Death's Scythe`,
@@ -386,7 +552,7 @@ function speakFriendAndEnter(password) {
 
 async function introduction() {
   colorChangeWords(
-    `\nThe sun rises peacefully on the small hamlet of Placeholder Village.\nThe birds are singing sweetly in the tress.\nThe morning dew glistens on the grass as the first rays of the sun reach the still earth below.\nA gentle breeze caresses your face as you briskly walk to the Town Triangle, hoping to get a jump on our morning chores.\n\nUpon entering the Town Triangle you see the village's heroic Adventurer in a rather bad temper.\nThe Adventurer groans loudly, before throwing his Sword down upon the ground.\n    "I has't hadith enough!\n     Yee all kepeth requesting too much.\n     Th're is nary a way f'r me to slayeth a dragon with this steel!\n     I art to retire."\n\nIt appears the village is in need of a new heroic Adventurer...\n\nDo you pick up the Sword?`,
+    `\nThe sun rises peacefully on the small hamlet of Placeholder Village.\nThe birds are singing sweetly in the tress.\nThe morning dew glistens on the grass as the first rays of the sun reach the still earth below.\nA gentle breeze caresses your face as you briskly walk to the Town Triangle, hoping to get a jump on our morning chores.\n\nUpon entering the Town Triangle you see the village's heroic Adventurer in a rather bad temper.\nThe Adventurer groans loudly, before throwing his Sword down upon the ground.\n    "I has't hadith enough!\n     Yee all kepeth requesting too much.\n     Th're is nary a way f'r me to slayeth a Dragon with this steel!\n     I art to retire."\n\nIt appears the village is in need of a new heroic Adventurer...\n\nDo you pick up the Sword?`,
     highlightedWords
   );
   const welcomeMessage = `Yes (y) or No (n)\n>_ `;
@@ -465,7 +631,7 @@ function locationUpdate(newLocation) {
   } else {
     // If the player tries to move to an invalid location they get the following response
     colorChangeWords(
-      `\nSorry hero, but you can't go there.\nFrom your current location you can go to\nthe ${possibleOptionsToUpdateLocation.join(
+      `\nSorry ${heroName}, but you can't go there.\nFrom your current location you can go to\nthe ${possibleOptionsToUpdateLocation.join(
         ", or the "
       )}\n`,
       highlightedWords
@@ -524,7 +690,7 @@ function unknownPrompt(input) {
 
 
 //! Premium Functions
-//This is a Function that Prints Test Art at Game Start
+//This is a Function that Shows the Game Start Screen
 // Used " https://fsymbols.com/generators/carty/ "
 async function titleScreen() {
   console.log(`From the mind of John I.
