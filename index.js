@@ -239,7 +239,7 @@ let highlightedWords = [
   `Underworld`,
 ];
 
-start();
+titleScreen(); // Title Screen & Art
 
 //! Function List
 // This is the function that Plays the Game
@@ -405,7 +405,7 @@ async function introduction() {
     return heroName;
   } else if (answer === "No" || answer === "N") {
     colorChangeWords(
-      `\nYou ignore the obvious call to adventure and go about your day.\nYou manage to finsih your chores early and have enough time to explore the woods near of town.\nThat is when you met ${secretName}, your soulmate.\nThe two of you began spending more and more time together.\neventually you were married, and moved into the lovliest cottage together by the outskirts of Placeholder Village.\nYou had 3 children, 2 dogs and a hampster.\nIt was an incredibly average and boring life.\n\nYou are so lucky you didn't pick up that Sword.\nWho needs a life of adventure?\nNot you.\n\nYou are just a ridiculously normal person,\ndedicating your life to slightly above-average achievement,\ndespite your aggressive and all-consuming mundanity!\n\n`,
+      `\nYou ignore the obvious call to adventure and go about your day.\nYou manage to finsih your chores early and have enough time to explore the woods near of town.\nThat is when you met ${secretName}, your soulmate.\n\nThe two of you began spending more and more time together.\neventually you were married, and moved into the lovliest cottage together by the outskirts of Placeholder Village.\nYou had 3 children, 2 dogs and a hampster.\nIt was an incredibly average and boring life.\n\nYou are so lucky you didn't pick up that Sword.\nWho needs a life of adventure?\nNot you.\n\nYou are just a ridiculously normal person,\ndedicating your life to slightly above-average achievement,\ndespite your aggressive and all-consuming mundanity!\n\n`,
       highlightedWords
     );
     process.exit();
@@ -520,4 +520,46 @@ function unknownPrompt(input) {
     `\nSorry ${heroName}, you don't know how to ${input}.\n`,
     highlightedWords
   );
+}
+
+
+//! Premium Functions
+//This is a Function that Prints Test Art at Game Start
+// Used " https://fsymbols.com/generators/carty/ "
+async function titleScreen() {
+  console.log(`From the mind of John I.
+
+░██╗░░░░░░░██╗███████╗██╗░░░░░░█████╗░░█████╗░███╗░░░███╗███████╗  ████████╗░█████╗░
+░██║░░██╗░░██║██╔════╝██║░░░░░██╔══██╗██╔══██╗████╗░████║██╔════╝  ╚══██╔══╝██╔══██╗
+░╚██╗████╗██╔╝█████╗░░██║░░░░░██║░░╚═╝██║░░██║██╔████╔██║█████╗░░  ░░░██║░░░██║░░██║
+░░████╔═████║░██╔══╝░░██║░░░░░██║░░██╗██║░░██║██║╚██╔╝██║██╔══╝░░  ░░░██║░░░██║░░██║
+░░╚██╔╝░╚██╔╝░███████╗███████╗╚█████╔╝╚█████╔╝██║░╚═╝░██║███████╗  ░░░██║░░░╚█████╔╝
+░░░╚═╝░░░╚═╝░░╚══════╝╚══════╝░╚════╝░░╚════╝░╚═╝░░░░░╚═╝╚══════╝  ░░░╚═╝░░░░╚════╝░
+
+ ██████╗░░█████╗░██████╗░██╗░░██╗██╗███╗░░██╗░██████╗░████████╗░█████╗░███╗░░██╗
+ ██╔══██╗██╔══██╗██╔══██╗██║░██╔╝██║████╗░██║██╔════╝░╚══██╔══╝██╔══██╗████╗░██║
+ ██║░░██║██║░░██║██████╔╝█████═╝░██║██╔██╗██║██║░░██╗░░░░██║░░░██║░░██║██╔██╗██║
+ ██║░░██║██║░░██║██╔══██╗██╔═██╗░██║██║╚████║██║░░╚██╗░░░██║░░░██║░░██║██║╚████║
+ ██████╔╝╚█████╔╝██║░░██║██║░╚██╗██║██║░╚███║╚██████╔╝░░░██║░░░╚█████╔╝██║░╚███║
+ ╚═════╝░░╚════╝░╚═╝░░╚═╝╚═╝░░╚═╝╚═╝╚═╝░░╚══╝░╚═════╝░░░░╚═╝░░░░╚════╝░╚═╝░░╚══╝
+`);
+colorChangeWords(
+  `\nWould you like to Play this Game?`,
+  highlightedWords
+);
+const titleQuestion = `Yes (y) or No (n)\n>_ `;
+let playGame = await ask(titleQuestion);
+playGame = capitalizePlayerInput(playGame);
+if (playGame === "Yes" || playGame === "Y") {
+  start();
+} else if (playGame === "No" || playGame === "N") {
+  colorChangeWords(
+    `\nA Grand Adventure Awaits You...\nNext Time You Choose to Play!\nGood-bye.\n`,
+    highlightedWords
+  );
+  process.exit();
+} else {
+  unknownPrompt(answer);
+  process.exit();
+}
 }
