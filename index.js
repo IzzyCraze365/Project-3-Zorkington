@@ -108,7 +108,7 @@ let townTriangle = new Room({
   interact: ["Retired Adventurer", "Simple Villager"],
   possibleLocations: ["Idiot's Inspiring Inn", "Forlorn Forest Of Fatality"],
   description:
-    "The center of a rustic hamlet of Placeholder Village in the shape of a triangle.\nIt is usually a vibrant hub of activity, but most people are still asleep. \nThe only inhabitants, presently present, are the Simple Villager and the Retired Adventurer.\n",
+    "The Town Triangle\nThe center of a rustic hamlet of Placeholder Village in the shape of a triangle.\nIt is usually a vibrant hub of activity, but most people are still asleep. \nThe only inhabitants, presently present, are the Simple Villager and the Retired Adventurer.\n\nFrom here you can go to the Idiot's Inspiring Inn or travel into the Forlorn Forest Of Fatality.\n",
 });
 
 let idiotsInspiringInn = new Room({
@@ -118,7 +118,7 @@ let idiotsInspiringInn = new Room({
   interact: ["Inkeeper", "Obnoxious Patron", "Musician With A Broken Arm"], //"Black Eye" from interaction puzzle
   possibleLocations: ["Town Triangle", "Upstairs Room"],
   description:
-    "The most popular tavern in the Placeholder Village, \nprimarily because it is the only tavern in Placeholder Village. \nThe Innkeeper behind the bar is preparing a meal for a Musician With A Broken Arm. \nIn the back of the room, an Obnoxious Patron is slovenly eating a meal.\nBags Of Jewels are scattered across the patron's table.",
+    "The Idiot's Inspiring Inn\nThe most popular tavern in the Placeholder Village, \nprimarily because it is the only tavern in Placeholder Village. \nThe Innkeeper behind the bar is preparing a meal for a Musician With A Broken Arm. \nIn the back of the room, an Obnoxious Patron is slovenly eating a meal.\nBags Of Jewels are scattered across the patron's table.\n\nFrom here you can head outside to the Town Triangle or go to the Upstairs Room.\n",
 });
 let upstairsRoom = new Room({
   name: "Upstairs Room",
@@ -127,7 +127,7 @@ let upstairsRoom = new Room({
   interact: ["Sleeping Child", "Exhausted Parents"],
   possibleLocations: ["Idiot's Inspiring Inn"],
   description:
-    "Heading up the stairs you come across\na pair of Exhausted Parents reading just outside of a room.\nInside the room, a Sleeping Child lays motionless on the bed.",
+    "The Upstairs Room\nHeading up the stairs you come across\na pair of Exhausted Parents reading just outside of a room.\nInside the room, a Sleeping Child lays motionless on the bed.\n\nFrom here you can head back downstairs to the Idiot's Inspiring Inn.\n",
 });
 
 let forlornForestOfFatality = new Room({
@@ -137,18 +137,18 @@ let forlornForestOfFatality = new Room({
   interact: ["Crooked Sign"],
   possibleLocations: ["Town Triangle", "Deep Woods Of Certain Doom"],
   description:
-    "The edge of the forest seems welcoming enough.\nAs you travel down the overgrown path\nyou see a Crooked Sign hanging on a weatherbeaten post.",
+    "The Forlorn Forest Of Fatality\nThe edge of the forest seems welcoming enough.\nAs you travel down the overgrown path\nyou see a Crooked Sign hanging on a weatherbeaten post.\n\nFrom here you can head back to safety in the Town Triangle or venture onward into the Deep Woods Of Certain Doom.\n",
 });
 
 let deepWoodsOfCertainDoom = new Room({
   name: "Deep Woods Of Certain Doom",
-  doorLock: true,
+  doorLock: true,//TODO Locked Area
   inventory: ["Pointless Rock"],
   interact: [],
-  possibleLocations: ["Town Triangle", "Hag's Horrid Hoval", "Dragon's Keep"],
+  possibleLocations: ["Forlorn Forest Of Fatality", "Hag's Horrid Hoval", "Dragon's Keep"],
   description:
-    "As soon as you step into the shadows of the trees,you can feel the warmth pulled from your body,\nas if by an unnatural force.\nYou know that this is the point of no return.\nYou steel as you continue to march onward.",
-});
+    "The Deep Woods Of Certain Doom\nAs soon as you step into the shadows of the trees,you can feel the warmth pulled from your body,\nas if by an unnatural force.\nYou know that this is the point of no return.\nYou steel as you continue to march onward.",
+});//\n\nFrom here you can head back to the Forlorn Forest Of Fatality, follow the path to the Hag's Horrid Hoval or trek towards the Dragon's Keep.\n
 
 let hagsHorridHoval = new Room({
   name: "Hag's Horrid Hoval",
@@ -157,7 +157,7 @@ let hagsHorridHoval = new Room({
   interact: ["Letterbox"], //Read from Letterbox "Pariah's Name"
   possibleLocations: ["Deep Woods Of Certain Doom"],
   description:
-    "A gnarled pile of sticks and mud twist together to form a makeshift shelter.\n Out of the braided husk of a dying tree sits a simple Letterbox.",
+    "The Hag's Horrid Hoval\nA gnarled pile of sticks and mud twist together to form a makeshift shelter.\n Out of the braided husk of a dying tree sits a simple Letterbox.\n\nFrom here you can follow the path back to the Deep Woods Of Certain Doom.\n",
 });
 
 let dragonsKeep = new Room({
@@ -167,7 +167,7 @@ let dragonsKeep = new Room({
   interact: ["Dragon", "Mounds Of Gold", "Heaps Of Silver", "Pile Of Bones"],
   possibleLocations: ["Deep Woods Of Certain Doom"],
   description:
-    "The air smells of ash, as you approach a dark cave.\nYou can see the light being reflected off of shimmering Mounds Of Gold, Heaps Of Silver.\nIn the back of the cave you spot a large red Dragon,resting upon a massive Pile Of Bones.",
+    "Dragon's Keep\nThe air smells of ash, as you approach a dark cave.\nYou can see the light being reflected off of shimmering Mounds Of Gold, Heaps Of Silver.\nIn the back of the cave you spot a large red Dragon,resting upon a massive Pile Of Bones.\n\nFrom here you can run away and end up in the Deep Woods Of Certain Doom.\n",
 });
 
 let underworld = new Room({
@@ -177,7 +177,7 @@ let underworld = new Room({
   interact: ["Grim Reaper"],
   possibleLocations: [],
   description:
-    "You could feel your consciousness leave your body.\nThen suddenly without warning you were here.\nInside a dark cavern.  The only source of light...\na flickering torch held by a robed figure\nwhom you instinctually know is the personification of death, the Grim Reaper.",
+    "You could feel your consciousness leave your body.\nThen suddenly without warning you were here.\nYou know without a shadow of a doubt that you are in the Underworld.\nInside a dark cavern.  The only source of light...\na flickering torch held by a robed figure\nwhom you instinctually know is the personification of death, the Grim Reaper.",
 });
 
 // List of Interactable Persons (People b/c Grammar)
