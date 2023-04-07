@@ -15,6 +15,96 @@ function ask(questionText) {
 }
 // Above is the provided code
 
+// Randomly assigns the number to be used by the secretName
+let randomNumber = randomNum(1, 4);
+//console.log("The Random Number is", randomNumber); //! TEST
+
+// The options for our Secret Name (Key Puzzle) can change thanks to the switch
+let secretName = "";
+switch (randomNumber) {
+  case 1:
+    secretName = "Rob Vanarsdall";
+    break; // This allows it to exit the switch, otherwise it will check the entire switch
+  case 2:
+    secretName = "Mary Reagan";
+    break;
+  case 3:
+    secretName = "Henry Dufour";
+    break;
+  case 4:
+    secretName = "John Isabella";
+    break;
+  default:
+    secretName = "unknown";
+}
+//console.log("The Secret Name is", secretName); //! TEST
+
+// A list of words that I want to have in Yellow Text
+let highlightedWords = [
+  secretName,
+  /*Hero Actions*/
+  `"Move"`,
+  `"m"`,
+  `"Backpack"`,
+  `"b"`,
+  `"Look"`,
+  `"l"`,
+  `Items`,
+  `"Status"`,
+  `"s"`,
+  `Healthy`,
+  `"Interact"`,
+  `"i"`,
+  `"Take"`,
+  `"t"`,
+  `"Drop"`,
+  `"d"`,
+  `"Help"`,
+  `"h"`,
+  `"Exit"`,
+  `"e"`,
+  /*Characters & Interact spots*/
+  `Adventurer`,
+  `Retired`,
+  `Simple Villager`,
+  `Innkeeper`,
+  `Obnoxious Patron`,
+  `Musician With A Broken Arm`,
+  `Sleeping Child`,
+  `Exhausted Parents`,
+  `Crooked Sign`,
+  `Letterbox`,
+  `Dragon`,
+  `Mounds Of Gold`,
+  `Heaps Of Silver`,
+  `Pile Of Bones`,
+  `Grim Reaper`,
+  /*Inventory Items*/
+  `Sword`,
+  `Gold`,
+  `Premium Horse Manure`,
+  `Bucket`,
+  `Bags Of Jewels`,
+  `A Warm Meal`,
+  `Black Eye`,
+  `Town Map`,
+  `Warm Apple Pie`,
+  `Damaged Lute`,
+  `Pointless Rock`,
+  `Dragon's Treasure`,
+  `Death's Scythe`,
+  /*Locations*/
+  `Placeholder Village`,
+  `Town Triangle`,
+  `Idiot's Inspiring Inn`,
+  `Upstairs Room`,
+  `Forlorn Forest Of Fatality`,
+  `Deep Woods Of Certain Doom`,
+  `Hag's Horrid Hoval`,
+  `Dragon's Keep`,
+  `Underworld`,
+];
+
 //! Classes Go Here = FIRST THING!!!
 // A List of All Interactable Items
 class Commodity {
@@ -69,37 +159,10 @@ class Room {
   }
 }
 
-// Randomly assigns the number to be used by the secretName
-let randomNumber = randomNum(1, 4);
-//console.log("The Random Number is", randomNumber); //! TEST
-
-// The options for our Secret Name (Key Puzzle) can change thanks to the switch
-let secretName = "";
-switch (randomNumber) {
-  case 1:
-    secretName = "Rob Vanarsdall";
-    break; // This allows it to exit the switch, otherwise it will check the entire switch
-  case 2:
-    secretName = "Mary Reagan";
-    break;
-  case 3:
-    secretName = "Henry Dufour";
-    break;
-  case 4:
-    secretName = "John Isabella";
-    break;
-  default:
-    secretName = "unknown";
-}
-//console.log("The Secret Name is", secretName); //! TEST
-
-
-
-
 //! Object Definition
 //Player Inventory
 let hero = new Player(
-  ["Bucket", "Sword", "Premium Horse Manure","Town Map"],
+  ["Bucket", "Sword", "Premium Horse Manure"],
   "Healthy."
 ); // Starts with a Sword & useless Junk, Status is Healthy
 
@@ -170,7 +233,7 @@ let dragonsKeep = new Room({
   interact: ["Dragon", "Mounds Of Gold", "Heaps Of Silver", "Pile Of Bones"],
   possibleLocations: ["Deep Woods Of Certain Doom"],
   description:
-    "\nDragon's Keep\nThe air smells of ash, as you approach a dark cave.\nYou can see the light being reflected off of shimmering Mounds Of Gold, Heaps Of Silver.\nIn the back of the cave you spot a large red Dragon,resting upon a massive Pile Of Bones.\n\nFrom here you can run away and end up in the Deep Woods Of Certain Doom.\n",
+    "\nDragon's Keep\nThe air smells of ash, as you approach a dark cave.\nYou can see the light being reflected off of shimmering Mounds Of Gold, Heaps Of Silver.\nIn the back of the cave you spot a large red Dragon,sleeping upon a massive Pile Of Bones.\n\nFrom here you can run away and end up in the Deep Woods Of Certain Doom.\n",
 });
 
 let underworld = new Room({
@@ -182,6 +245,26 @@ let underworld = new Room({
   description:
     `\nYou could feel your consciousness leave your body.\nThen suddenly without warning you were here.\nYou know without a shadow of a doubt that you are in the Underworld.\n\nInside a dark cavern.  The only source of light...\na flickering torch held by a robed figure\nwhom you instinctually know is the personification of death, the Grim Reaper.`,
 });
+
+// Variables
+let currentLocation = "Town Triangle"; // This updates as the player moves
+let heroName = ""; // Currently their is no input
+let userInput = ""; // Currently their is no input
+
+//! State Machine, Keeps track of where the Player can Go
+// See functions "locationMove" & "locationUpdate" to see how you move
+//The following are all the locations the player can travel to
+let locations = {
+  "Town Triangle": townTriangle,
+  "Idiot's Inspiring Inn": idiotsInspiringInn,
+  "Upstairs Room": upstairsRoom,
+  "Forlorn Forest Of Fatality": forlornForestOfFatality,
+  "Deep Woods Of Certain Doom": deepWoodsOfCertainDoom,
+  "Hag's Horrid Hoval": hagsHorridHoval,
+  "Dragon's Keep": dragonsKeep,
+  Underworld: underworld
+};
+
 
 // List of Interactable Persons (People b/c Grammar)
 let retiredAdventurer = new Person({
@@ -247,6 +330,19 @@ let grimReaper = new Person({
   status: "Normal"
 });
 
+//All the Person's you can interact with
+let interactPeople = {
+  "Retired Adventurer": retiredAdventurer,
+  "Simple Villager": simpleVillager,
+  "Inkeeper": inkeeper,
+  "Obnoxious Patron": obnoxiousPatron,
+  "Musician With A Broken Arm":musicianWithABrokenArm,
+  "Sleeping Child":sleepingChild,
+  "Exhausted Parents":exhaustedParents,
+  "Dragon":dragon,
+  "Grim Reaper":grimReaper
+}
+
 // List of Interactable Items
 let sword = new Commodity({
   name: "Sword",
@@ -305,55 +401,23 @@ let letterbox = new Commodity({
 
 let moundsOfGold = new Commodity({
   name: "Mounds Of Gold",
-  interact: "\nA simple rock that has no innate value."//TODO
+  interact: `\nYour eyes don't deceive you.  There are piles upon piles of Gold in this cave.\nIt is more wealth than you have ever dreamed of.\nCertainly enough to rebuild the town's broken bridge.\n\nYou daydream about the heroic feast the village will throw you.\n     The cooked meats assorted deserts.\n     The dancing into the night with an attractive villager.\n     Turns out that villager was your soulmate!\n     Eventually the two of you will be married\n     and have 3 children, 2 dogs and a hampster.\n     It was an incredibly wonderful life!\n\nOr it would have been...\nYou were so busy daydreaming you did not realize\nthe Dragon had stirred from its slumber.\nIt attacked you while you were not paying attention...\n\n`
 });
 
 let heapsOfSilver = new Commodity({
   name: "Heaps Of Silver",
-  interact: "\nA simple rock that has no innate value."//TODO
+  interact: "\nA simple rock that has no innate value."//TODO no if statement just end
 });
 
 let pileOfBones = new Commodity({
   name: "Pile Of Bones",
-  interact: "\nA simple rock that has no innate value."//TODO
+  interact: "\nA simple rock that has no innate value."//TODO no if statement just end
 });
 
 let deathsScythe = new Commodity({
   name: "Death's Scythe",
   interact: "\nThe immortal weapon of the manifestation of Death.\nA single scratch would cause any creature to immediately perish.\nUse with caution."
 });
-
-// Variables
-let currentLocation = "Town Triangle"; // This updates as the player moves
-let heroName = ""; // Currently their is no input
-let userInput = ""; // Currently their is no input
-
-//! State Machine, Keeps track of where the Player can Go
-// See functions "locationMove" & "locationUpdate" to see how you move
-//The following are all the locations the player can travel to
-let locations = {
-  "Town Triangle": townTriangle,
-  "Idiot's Inspiring Inn": idiotsInspiringInn,
-  "Upstairs Room": upstairsRoom,
-  "Forlorn Forest Of Fatality": forlornForestOfFatality,
-  "Deep Woods Of Certain Doom": deepWoodsOfCertainDoom,
-  "Hag's Horrid Hoval": hagsHorridHoval,
-  "Dragon's Keep": dragonsKeep,
-  Underworld: underworld
-};
-
-//All the Person's you can interact with
-let interactPeople = {
-  "Retired Adventurer": retiredAdventurer,
-  "Simple Villager": simpleVillager,
-  "Inkeeper": inkeeper,
-  "Obnoxious Patron": obnoxiousPatron,
-  "Musician With A Broken Arm":musicianWithABrokenArm,
-  "Sleeping Child":sleepingChild,
-  "Exhausted Parents":exhaustedParents,
-  "Dragon":dragon,
-  "Grim Reaper":grimReaper
-}
 
 //All the Items you can interact with
 let interactCommodity = {
@@ -374,73 +438,6 @@ let interactCommodity = {
   "Death's Scythe":deathsScythe
 }
 
-
-
-// A list of words that I want to have in Yellow Text
-let highlightedWords = [
-  secretName,
-  /*Hero Actions*/
-  `"Move"`,
-  `"m"`,
-  `"Backpack"`,
-  `"b"`,
-  `"Look"`,
-  `"l"`,
-  `Items`,
-  `"Status"`,
-  `"s"`,
-  `Healthy`,
-  `"Interact"`,
-  `"i"`,
-  `"Take"`,
-  `"t"`,
-  `"Drop"`,
-  `"d"`,
-  `"Help"`,
-  `"h"`,
-  `"Exit"`,
-  `"e"`,
-  /*Characters & Interact spots*/
-  `Adventurer`,
-  `Retired`,
-  `Simple Villager`,
-  `Innkeeper`,
-  `Obnoxious Patron`,
-  `Musician With A Broken Arm`,
-  `Sleeping Child`,
-  `Exhausted Parents`,
-  `Crooked Sign`,
-  `Letterbox`,
-  `Dragon`,
-  `Mounds Of Gold`,
-  `Heaps Of Silver`,
-  `Pile Of Bones`,
-  `Grim Reaper`,
-  /*Inventory Items*/
-  `Sword`,
-  `Gold`,
-  `Premium Horse Manure`,
-  `Bucket`,
-  `Bags Of Jewels`,
-  `A Warm Meal`,
-  `Black Eye`,
-  `Town Map`,
-  `Warm Apple Pie`,
-  `Damaged Lute`,
-  `Pointless Rock`,
-  `Dragon's Treasure`,
-  `Death's Scythe`,
-  /*Locations*/
-  `Placeholder Village`,
-  `Town Triangle`,
-  `Idiot's Inspiring Inn`,
-  `Upstairs Room`,
-  `Forlorn Forest Of Fatality`,
-  `Deep Woods Of Certain Doom`,
-  `Hag's Horrid Hoval`,
-  `Dragon's Keep`,
-  `Underworld`,
-];
 
 titleScreen(); // Title Screen & Art
 
