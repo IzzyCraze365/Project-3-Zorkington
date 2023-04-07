@@ -93,10 +93,13 @@ switch (randomNumber) {
 }
 //console.log("The Secret Name is", secretName); //! TEST
 
+
+
+
 //! Object Definition
 //Player Inventory
 let hero = new Player(
-  ["Bucket", "Sword", "Premium Horse Manure"],
+  ["Bucket", "Sword", "Premium Horse Manure","Town Map"],
   "Healthy."
 ); // Starts with a Sword & useless Junk, Status is Healthy
 
@@ -108,7 +111,7 @@ let townTriangle = new Room({
   interact: ["Retired Adventurer", "Simple Villager"],
   possibleLocations: ["Idiot's Inspiring Inn", "Forlorn Forest Of Fatality"],
   description:
-    "The Town Triangle\nThe center of a rustic hamlet of Placeholder Village in the shape of a triangle.\nIt is usually a vibrant hub of activity, but most people are still asleep. \nThe only inhabitants, presently present, are the Simple Villager and the Retired Adventurer.\n\nFrom here you can go to the Idiot's Inspiring Inn or travel into the Forlorn Forest Of Fatality.\n",
+    "\nThe Town Triangle\nThe center of a rustic hamlet of Placeholder Village in the shape of a triangle.\nIt is usually a vibrant hub of activity, but most people are still asleep. \nThe only inhabitants, presently present, are the Simple Villager and the Retired Adventurer.\n\nFrom here you can go to the Idiot's Inspiring Inn or travel into the Forlorn Forest Of Fatality.\n",
 });
 
 let idiotsInspiringInn = new Room({
@@ -118,7 +121,7 @@ let idiotsInspiringInn = new Room({
   interact: ["Inkeeper", "Obnoxious Patron", "Musician With A Broken Arm"], //"Black Eye" from interaction puzzle
   possibleLocations: ["Town Triangle", "Upstairs Room"],
   description:
-    "The Idiot's Inspiring Inn\nThe most popular tavern in the Placeholder Village, \nprimarily because it is the only tavern in Placeholder Village. \nThe Innkeeper behind the bar is preparing a meal for a Musician With A Broken Arm. \nIn the back of the room, an Obnoxious Patron is slovenly eating a meal.\nBags Of Jewels are scattered across the patron's table.\n\nFrom here you can head outside to the Town Triangle or go to the Upstairs Room.\n",
+    "\nThe Idiot's Inspiring Inn\nThe most popular tavern in the Placeholder Village, \nprimarily because it is the only tavern in Placeholder Village. \nThe Innkeeper behind the bar is preparing a meal for a Musician With A Broken Arm. \nIn the back of the room, an Obnoxious Patron is slovenly eating a meal.\nBags Of Jewels are scattered across the patron's table.\n\nFrom here you can head outside to the Town Triangle or go to the Upstairs Room.\n",
 });
 let upstairsRoom = new Room({
   name: "Upstairs Room",
@@ -137,18 +140,18 @@ let forlornForestOfFatality = new Room({
   interact: ["Crooked Sign"],
   possibleLocations: ["Town Triangle", "Deep Woods Of Certain Doom"],
   description:
-    "The Forlorn Forest Of Fatality\nThe edge of the forest seems welcoming enough.\nAs you travel down the overgrown path\nyou see a Crooked Sign hanging on a weatherbeaten post.\n\nFrom here you can head back to safety in the Town Triangle or venture onward into the Deep Woods Of Certain Doom.\n",
+    "\nThe Forlorn Forest Of Fatality\nThe edge of the forest seems welcoming enough.\nAs you travel down the overgrown path\nyou see a Crooked Sign hanging on a weatherbeaten post.\n\nFrom here you can head back to safety in the Town Triangle or venture onward into the Deep Woods Of Certain Doom.\n",
 });
 
 let deepWoodsOfCertainDoom = new Room({
   name: "Deep Woods Of Certain Doom",
-  doorLock: true,//TODO Locked Area
+  doorLock: true,
   inventory: ["Pointless Rock"],
   interact: [],
   possibleLocations: ["Forlorn Forest Of Fatality", "Hag's Horrid Hoval", "Dragon's Keep"],
   description:
-    "The Deep Woods Of Certain Doom\nAs soon as you step into the shadows of the trees,you can feel the warmth pulled from your body,\nas if by an unnatural force.\nYou know that this is the point of no return.\nYou steel as you continue to march onward.",
-});//\n\nFrom here you can head back to the Forlorn Forest Of Fatality, follow the path to the Hag's Horrid Hoval or trek towards the Dragon's Keep.\n
+    "\nThe Deep Woods Of Certain Doom\nAs soon as you step into the shadows of the trees,\nyou can feel the warmth pulled from your body,\nas if by an unnatural force.\nYou know that this is the point of no return.\nYou steel as you continue to march onward.\n\nFrom here you can head back to the Forlorn Forest Of Fatality, follow the path to the Hag's Horrid Hoval or trek towards the Dragon's Keep.\n",
+});
 
 let hagsHorridHoval = new Room({
   name: "Hag's Horrid Hoval",
@@ -157,7 +160,7 @@ let hagsHorridHoval = new Room({
   interact: ["Letterbox"], //Read from Letterbox "Pariah's Name"
   possibleLocations: ["Deep Woods Of Certain Doom"],
   description:
-    "The Hag's Horrid Hoval\nA gnarled pile of sticks and mud twist together to form a makeshift shelter.\n Out of the braided husk of a dying tree sits a simple Letterbox.\n\nFrom here you can follow the path back to the Deep Woods Of Certain Doom.\n",
+    "\nThe Hag's Horrid Hoval\nA gnarled pile of sticks and mud twist together to form a makeshift shelter.\n Out of the braided husk of a dying tree sits a simple Letterbox.\n\nFrom here you can follow the path back to the Deep Woods Of Certain Doom.\n",
 });
 
 let dragonsKeep = new Room({
@@ -167,17 +170,17 @@ let dragonsKeep = new Room({
   interact: ["Dragon", "Mounds Of Gold", "Heaps Of Silver", "Pile Of Bones"],
   possibleLocations: ["Deep Woods Of Certain Doom"],
   description:
-    "Dragon's Keep\nThe air smells of ash, as you approach a dark cave.\nYou can see the light being reflected off of shimmering Mounds Of Gold, Heaps Of Silver.\nIn the back of the cave you spot a large red Dragon,resting upon a massive Pile Of Bones.\n\nFrom here you can run away and end up in the Deep Woods Of Certain Doom.\n",
+    "\nDragon's Keep\nThe air smells of ash, as you approach a dark cave.\nYou can see the light being reflected off of shimmering Mounds Of Gold, Heaps Of Silver.\nIn the back of the cave you spot a large red Dragon,resting upon a massive Pile Of Bones.\n\nFrom here you can run away and end up in the Deep Woods Of Certain Doom.\n",
 });
 
 let underworld = new Room({
   name: "Underworld",
-  doorLock: true,
+  doorLock: "No Escape",
   inventory: [],
   interact: ["Grim Reaper"],
-  possibleLocations: [],
+  possibleLocations: ["... funny there are no exits.","There is nowhere to go, there is no escape."],
   description:
-    "You could feel your consciousness leave your body.\nThen suddenly without warning you were here.\nYou know without a shadow of a doubt that you are in the Underworld.\nInside a dark cavern.  The only source of light...\na flickering torch held by a robed figure\nwhom you instinctually know is the personification of death, the Grim Reaper.",
+    `\nYou could feel your consciousness leave your body.\nThen suddenly without warning you were here.\nYou know without a shadow of a doubt that you are in the Underworld.\n\nInside a dark cavern.  The only source of light...\na flickering torch held by a robed figure\nwhom you instinctually know is the personification of death, the Grim Reaper.`,
 });
 
 // List of Interactable Persons (People b/c Grammar)
@@ -247,77 +250,77 @@ let grimReaper = new Person({
 // List of Interactable Items
 let sword = new Commodity({
   name: "Sword",
-  interact: "The sword of an adventurer.\nThe blade is very sharp.\nA lethal weapon, to be sure."
+  interact: "\nThe sword of an adventurer.\nThe blade is very sharp.\nA lethal weapon, to be sure."
 });
 
 let bucket = new Commodity({
   name: "Bucket",
-  interact: "A simple bucket, with a hole in the bottom."
+  interact: "\nA simple bucket, with a hole in the bottom."
 });
 
 let premiumHorseManure = new Commodity({
   name: "Premium Horse Manure",
-  interact: "If it looks like shit,\nsmells like shit,\nand tastes like shit...\nIt'll make the crops grow tall!"
+  interact: "\nIf it looks like shit,\nsmells like shit,\nand tastes like shit...\nIt'll make the crops grow tall!"
 });
 
 let aWarmMeal = new Commodity({
   name: "A Warm Meal",
-  interact: "The meal consists of a plain gruel.\nTasteless but still comforting."
+  interact: "\nThe meal consists of a plain gruel.\nTasteless but still comforting."
 });
 
 let BagsOfJewels = new Commodity({
   name: "Bags Of Jewels",
-  interact: "Something"//TODO
+  interact: "\n Event Goes here"//TODO
 });
 
 let townMap = new Commodity({
   name: "Town Map",
-  interact: "A Map of Placeholder Village and the surrounding forest.\nYou can't get lost with this in hand."
+  interact: "\nA Map of Placeholder Village and the surrounding forest.\nYou can't get lost with this in hand."
 });
 
 let warmApplePie = new Commodity({
   name: "Warm Apple Pie",
-  interact: "Fresh baked pie is the best.\nEveryone loves apple pie.\nAnd people do crazy, death-defying things when they are in love."
+  interact: "\nFresh baked pie is the best.\nEveryone loves apple pie.\nAnd people do crazy, death-defying things when they are in love."
 });
 
 let damagedLute = new Commodity({
   name: "Damaged Lute",
-  interact: "A musical instrument that has seen better days."
+  interact: "\nA musical instrument that has seen better days."
 });
 
 let crookedSign = new Commodity({
   name: "Crooked Sign",
-  interact: `A worn sign at the intersection of two paths.\nIt reads:\n    "Abandon hope all yee who enter here!\n     This forest are a living maze that you'll not want to be lost in.\n     There be deadly monsters within these trees."`
+  interact: `\nA worn sign at the intersection of two paths.\nIt reads:\n    "Abandon hope all yee who enter here!\n     This forest are a living maze that you'll not want to be lost in.\n     There be deadly monsters within these trees."`
 });
 
 let pointlessRock = new Commodity({
   name: "Pointless Rock",
-  interact: "A simple rock that has no innate value."
+  interact: "\nA simple rock that has no innate value."
 });
 
 let letterbox = new Commodity({
   name: "Letterbox",
-  interact: `A plain wooded box that is void of all letters.\nThe name "${secretName}" is carved into it.`
+  interact: `\nA plain wooded box that is void of all letters.\nThe name "${secretName}" is carved into it.`
 });
 
 let moundsOfGold = new Commodity({
   name: "Mounds Of Gold",
-  interact: "A simple rock that has no innate value."//TODO
+  interact: "\nA simple rock that has no innate value."//TODO
 });
 
 let heapsOfSilver = new Commodity({
   name: "Heaps Of Silver",
-  interact: "A simple rock that has no innate value."//TODO
+  interact: "\nA simple rock that has no innate value."//TODO
 });
 
 let pileOfBones = new Commodity({
   name: "Pile Of Bones",
-  interact: "A simple rock that has no innate value."//TODO
+  interact: "\nA simple rock that has no innate value."//TODO
 });
 
 let deathsScythe = new Commodity({
   name: "Death's Scythe",
-  interact: "The immortal weapon of the manifestation of Death.\nA single scratch would cause any creature to immediately perish.\nUse with caution."
+  interact: "\nThe immortal weapon of the manifestation of Death.\nA single scratch would cause any creature to immediately perish.\nUse with caution."
 });
 
 // Variables
@@ -336,8 +339,42 @@ let locations = {
   "Deep Woods Of Certain Doom": deepWoodsOfCertainDoom,
   "Hag's Horrid Hoval": hagsHorridHoval,
   "Dragon's Keep": dragonsKeep,
-  Underworld: underworld,
+  Underworld: underworld
 };
+
+//All the Person's you can interact with
+let interactPeople = {
+  "Retired Adventurer": retiredAdventurer,
+  "Simple Villager": simpleVillager,
+  "Inkeeper": inkeeper,
+  "Obnoxious Patron": obnoxiousPatron,
+  "Musician With A Broken Arm":musicianWithABrokenArm,
+  "Sleeping Child":sleepingChild,
+  "Exhausted Parents":exhaustedParents,
+  "Dragon":dragon,
+  "Grim Reaper":grimReaper
+}
+
+//All the Items you can interact with
+let interactCommodity = {
+  "Sword":sword,
+  "Bucket":bucket,
+  "Premium Horse Manure":premiumHorseManure,
+  "A Warm Meal":aWarmMeal,
+  "Bags Of Jewels":BagsOfJewels,
+  "Town Map":townMap,
+  "Warm Apple Pie":warmApplePie,
+  "Damaged Lute":damagedLute,
+  "Crooked Sign":crookedSign,
+  "Pointless Rock":pointlessRock,
+  "Letterbox":letterbox,
+  "Mounds Of Gold":moundsOfGold,
+  "Heaps Of Silver":heapsOfSilver,
+  "Pile Of Bones":pileOfBones,
+  "Death's Scythe":deathsScythe
+}
+
+
 
 // A list of words that I want to have in Yellow Text
 let highlightedWords = [
@@ -412,10 +449,7 @@ titleScreen(); // Title Screen & Art
 async function start() {
   heroName = await introduction(); //The player will have to name themselves;
   //console.log(heroName, userInput, "Before Loop of Function\n"); //! TEST
-  colorChangeWords(
-    `(type "Help" to see a list of available actions.)`,
-    highlightedWords
-  );
+  colorChangeWords(`\nYou, ${heroName} find yourself at the Beginning of a Grand Adventure!\nAnd it all starts right here in this quaint little village.\nIt is probably a good idea to "Look" around.\n(type "Help" to see a list of available actions.)`,highlightedWords);
   while (userInput !== "Exit") {
     colorChangeWords(
       `\nYou are currently in the ${currentLocation}.`,
@@ -438,19 +472,19 @@ async function heroAction(heroName) {
     process.exit();
   } else if (action === "Help" || action === "H") {
     //Brings up the Help Menu
-    console.log(`\nHELP\n`); //! Test
+    //console.log(`\nHELP\n`); //! Test
     helpMenu();
   } else if (action === "Move" || action === "M") {
-    console.log(`\nMOVE\n`); //! Test
+    //console.log(`\nMOVE\n`); //! Test
     await locationMove();
   } else if (action === "Backpack" || action === "B") {
     // Displays inventory
-    console.log(`\nBACKPACK\n`); //! Test
+    //console.log(`\nBACKPACK\n`); //! Test
     itemDisplay(hero.inventory);
   } else if (action === "Drop" || action === "D") {
     // Removes item from Backpack, Adds item to Current Room
-    console.log(`\nDROP\n`); //! Test
-    let dropItem = await ask(`What item would you like to drop?\n>_ `);
+    //console.log(`\nDROP\n`); //! Test
+    let dropItem = await ask(`\nWhat would you like to drop?\n>_ `);
     droppingItem = capitalizePlayerInput(dropItem);
     if (hero.inventory.includes(droppingItem) === true) {
       ItemExchange(
@@ -458,8 +492,7 @@ async function heroAction(heroName) {
         locations[currentLocation].inventory,
         droppingItem
       );
-      colorChangeWords(
-        `You have dropped the ${droppingItem}.\n`,
+      colorChangeWords(`\nYou have dropped the ${droppingItem}.\n`,
         highlightedWords
       );
     } else {
@@ -470,8 +503,8 @@ async function heroAction(heroName) {
     }
   } else if (action === "Take" || action === "T") {
     // Adds item to Backpack, Removes item from Current Room
-    console.log(`\nTAKE\n`); //! Test
-    let takeItem = await ask(`What item would you like to take?\n>_ `);
+    //console.log(`\nTAKE\n`); //! Test
+    let takeItem = await ask(`\nWhat would you like to take?\n>_ `);
     tookenItem = capitalizePlayerInput(takeItem);
     if (locations[currentLocation].inventory.includes(tookenItem) === true) {
       ItemExchange(
@@ -480,9 +513,14 @@ async function heroAction(heroName) {
         tookenItem
       );
       colorChangeWords(
-        `You have picked up the ${tookenItem}.\n`,
+        `\nYou have picked up the ${tookenItem}.\n`,
         highlightedWords
       );
+      }else if (locations[currentLocation].interact.includes(tookenItem) === true) { //Immovable Object example
+        colorChangeWords(
+          `\nWait ${heroName}!\nYou can't pick up the ${tookenItem}.\nWhat would the other townsfolk think if they saw you?\n`,
+          highlightedWords
+        );
     } else {
       colorChangeWords(
         `\nSorry ${heroName}, there is no ${takeItem} for you to take.\n`,
@@ -491,11 +529,20 @@ async function heroAction(heroName) {
     }
   } else if (action === "Interact" || action === "I") {
     //Let's player Interact with an Object or person
-    console.log(`\nINTERACT\n`); //! Test
-    let npc = await ask(`What are you going to interact with?\n`);
+    //console.log(`\nINTERACT\n`); //! Test
+    let interactObject = await ask(`\nWhat do you want to interact with?\n>_ `);
+    interactableObject = capitalizePlayerInput(interactObject);
+    if ((locations[currentLocation].inventory.includes(interactableObject) === true) ||(hero.inventory.includes(interactableObject))===true) {
+      colorChangeWords(`${interactCommodity[interactableObject].interact}`, highlightedWords);}
+      else if ((locations[currentLocation].interact.includes(interactableObject) === true)) {
+        colorChangeWords(`${interactPeople[interactableObject].interact}`, highlightedWords);}
+        else {
+          colorChangeWords(
+            `\nSorry ${heroName}.  You can't interact with ${interactObject}.\n`,highlightedWords);
+        }
   } else if (action === "Look" || action === "L") {
     //Let's player get a description of the area they are in
-    console.log(`\nLOOK\n`); //! Test
+    //console.log(`\nLOOK\n`); //! Test
     colorChangeWords(
       `${locations[currentLocation].description}`,
       highlightedWords
@@ -505,7 +552,7 @@ async function heroAction(heroName) {
       colorChangeWords(
         `Looking around, you see: ${locations[currentLocation].inventory.join(
           ", "
-        )}`,
+        )}\n`,
         highlightedWords
       );
     } else {
@@ -516,7 +563,7 @@ async function heroAction(heroName) {
     }
   } else if (action === "Status" || action === "S") {
     //Gives the player a quick check of character health
-    console.log(`\nSTATUS\n`); //! Test
+    //console.log(`\nSTATUS\n`); //! Test
     colorChangeWords(`Status: ${hero.status}\n`, highlightedWords);
   } else {
     unknownPrompt(action);
@@ -525,19 +572,6 @@ async function heroAction(heroName) {
 
 // TODO Modify this function
 // Response if the Player tries to take something they shouldn't
-function immovableObject() {
-  colorChangeWords(
-    `That would be selfish. How will other students find their way?`,
-    highlightedWords
-  );
-}
-
-function lockedOut() {
-  colorChangeWords(
-    `The door is locked. There is a keypad on the door handle.`,
-    highlightedWords
-  );
-}
 
 function speakFriendAndEnter(password) {
   if (secretName === password) {
@@ -591,21 +625,20 @@ function itemDisplay(player) {
 
 // This is what allows "Take" and "Drop" to work with items
 function ItemExchange(giver, receiver, itemToBeExchanged) {
-  console.log("The Giver's Items before", giver); //! TEST
-  console.log("The Receiver's Items before", receiver); //! TEST
+  //console.log("The Giver's Items before", giver); //! TEST
+  //console.log("The Receiver's Items before", receiver); //! TEST
   let index = giver.indexOf(itemToBeExchanged);
-  console.log(`The ${itemToBeExchanged} is in position ${index}`); //! TEST
+  //console.log(`The ${itemToBeExchanged} is in position ${index}`); //! TEST
   giver.splice(index, 1);
   receiver.push(itemToBeExchanged);
-  console.log("The Giver's Items after", giver); //! TEST
-  console.log("The Receiver's Items after", receiver); //! TEST
+  //console.log("The Giver's Items after", giver); //! TEST
+  //console.log("The Receiver's Items after", receiver); //! TEST
 }
 
 // This function allows the player to change locations
 async function locationMove() {
   let newLocation = "";
-  colorChangeWords(
-    `You are currently standing in the ${currentLocation}.`,
+  colorChangeWords(`You are currently standing in the ${currentLocation}.`,
     highlightedWords
   );
   newLocation = await ask(`Where would you like to go?\n>_ `);
@@ -617,15 +650,37 @@ async function locationMove() {
 function locationUpdate(newLocation) {
   let possibleOptionsToUpdateLocation =
     locations[currentLocation].possibleLocations;
-  if (possibleOptionsToUpdateLocation.includes(newLocation) === true) {
-    // Found a match and we are able to update the state in the function "locationMove"
+  if (possibleOptionsToUpdateLocation.includes(newLocation) === true) {// Found a match and we are able to update the state in the function "locationMove"
+    if(locations[newLocation].doorLock === false){
+    
     currentLocation = newLocation;
     //console.log("\nYou have moved state!\n"); //! TEST
-    colorChangeWords(
-      `\n${locations[currentLocation].description}`,
-      highlightedWords
-    ); //Gives a description when you enter a new location.
+    colorChangeWords(`\n${locations[currentLocation].description}`,highlightedWords); //Gives a description when you enter a new location.
     return currentLocation;
+    }else{ //This is my Lock and Key Puzzle
+      if(hero.inventory.includes("Sword")!==true){
+        colorChangeWords(`\nYou venture into the darkness of the woodlands.\nTravelling around the forest without a weapon was a big mistake.\nYou quickly find yourself cornered by the shadowy monsters of the woodls.\nIt doesn't take them long to gobble you up.\n\nIf only you had a Sword with you.`,
+        highlightedWords
+      );
+      currentLocation = "Underworld";
+
+      colorChangeWords(`\n${locations[currentLocation].description}`,highlightedWords); //Gives a description when you enter a new location.
+      return currentLocation;
+      }else{
+      if(hero.inventory.includes("Town Map")===true){
+        colorChangeWords(`\nYou follow the Town Map and find a hidden trail.`,
+        highlightedWords
+      );
+      currentLocation = newLocation;
+      colorChangeWords(`\n${locations[currentLocation].description}`,highlightedWords); //Gives a description when you enter a new location.
+      return currentLocation;
+      }else{
+      colorChangeWords(`\nIn the darkness of the woods you get turned around...\n     Did you turn left or right?\n     What is that strange noise?\n     It sounds close!\nYou swing your Sword at a nearby bush!\n     It must have been the wind...\n     Haven't you already passed that skull-shaped rock five times?\n     You are lost in the woods!!!\n     And you end up right back where you began.\nA Town Map would be really useful in this situation.`,
+        highlightedWords
+      );
+      return currentLocation;
+    }
+  }}
   } else if (newLocation === "Exit") {
     process.exit();
   } else {
@@ -669,7 +724,7 @@ function colorChangeWords(string, highlightedWords) {
 // Help Menue
 function helpMenu() {
   colorChangeWords(
-    `You may perform any of the following actions:\n     Move to a Nearby Location (type "Move" or "m")\n     Look around the Area for Items (type "Look" or "l")\n     Interact with a Person or Item (type "Interact" or "i")\n     Check your General Wellbeing (type "Status" or "s")\n     Check your Backpack's Inventory (type "Backpack" or "b")\n     Take an Item from this Location (type "Take" or "t")\n     Drop an Item to this Location (type "Drop" or "d")\n     Open the Help Screen (type "Help" or "h")\n     Exit the Game at any time (type "Exit" or "e")\n`,
+    `\nYou may perform any of the following actions:\n     Type "Move" or "m" = Move to a Nearby Location.\n     Type "Look" or "l" = Look around for Clues and Items.\n     Type "Interact" or "i" = Interact with a Person or Item\n     Type "Status" or "s" = Check your General Wellbeing \n     Type "Backpack" or "b" = Check your Backpack's Inventory\n     Type "Take" or "t" = Pick up an Item from this Location\n     Type "Drop" or "d" = Drop an Item to this Location\n     Type "Help" or "h" = Open the Help Screen\n     Type "Exit" or "e" = Exit the Game at any time`,
     highlightedWords
   );
 }
