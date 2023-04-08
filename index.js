@@ -37,7 +37,7 @@ switch (randomNumber) {
   default:
     secretName = "unknown";
 }
-//console.log("The Secret Name is", secretName); //! TEST
+console.log("The Secret Name is", secretName); //! TEST
 
 // A list of words that I want to have in Yellow Text
 let highlightedWords = [
@@ -305,6 +305,7 @@ let simpleVillager = new Person({
 let innkeeper = new Person({
   name: "Innkeeper",
   inventory: ["A Warm Meal"],
+  // The interaction changes after the first time you speak
   interact: `Innkeeper\n    "Hallooo there, Adventurer!\n     Welcome to the Idiot's Inspring Inn where our hospitality is as warm as our food.\n     Don't believe me?\n     Help yourself to A Warm Meal, and feel free to talk to anybody round these parts.\n     We're all the friendly sort,\n     of course the Musician With A Broken Arm seems a tad jumpy,\n     and the Obnoxious Patron back there is a strange one\nwhos fixing to get into a tussel.`,
   followUp: ()=>{itemExchange(innkeeper.inventory, locations[currentLocation].inventory, "A Warm Meal");
     innkeeper.interact = `Innkeeper\n    "Welcome to the Idiot's Inspring Inn where our hospitality is as warm as our food.\n     Good to see you again, ${heroName}!\n     Feel free to talk to anybody round these parts.\n     We're the friendly sort of folk,\n     and we all have some nuggets of useful information.`},
@@ -315,6 +316,7 @@ let obnoxiousPatron = new Person({
   name: "Obnoxious Patron",
   inventory: [], //Reward for Solving Puzzle
   interact: `As you approach the individual at the far end of the room,`,
+  //FollowUp changes based off the this.status
   followUp: ()=>{
     if(obnoxiousPatron.status === "Happy"){colorChangeWords(`the Obnoxious Patron grins at you with a split lip.\n\nObnoxious Patron\n    "That was a good fight, bub.\n     You make an excellent sparring partner.\n     Listen up, if you wanna stay alive.\n     Don't go into the Deep Woods Of Certain Doom without a Sword.\n     Doesn't matter how good you fight, you need a weapon."\n`,highlightedWords);}
     else if(obnoxiousPatron.status === "Beaten"){colorChangeWords(`the Obnoxious Patron sits back using their spoon-fists to eat their meal.\n\nObnoxious Patron\n    "Look at you with your fancy weapon, bub.\n     I have no idea where you got soemthing like that,\n     But it won't do you any good in the Deep Woods Of Certain Doom.\n     You need a Sword to survive out there."\n`,highlightedWords);}
@@ -327,34 +329,35 @@ let musicianWithABrokenArm = new Person({
   name: "Musician With A Broken Arm",
   inventory: [],
   interact: `\nMusician With A Broken Arm\n    "You... who are you?!?!?!?!\n     It doesn't matter, you can't help me.\n     I was attacked by many a foul beast out in the Forlorn Forest Of Fatality!\n     They broke my arm, causing me to drop my Damaged Lute.\n     That will teach me to go out into the woods without a weapon.\n     I wish my instrument could be returned to me.\n     Music brings comfort.\n     Especially in these dark times where monsters hide amoung us...\n`,
-  followUp: async ()=>{if(hero.inventory.includes("Damaged Lute")===true){
+  //if the hero has the Damaged Lute the interaction changes
+  followUp: ()=>{if(hero.inventory.includes("Damaged Lute")===true){
     colorChangeWords(`\nYou reach into your backpack and pull out the Musician's Damaged Lute.\nTears of joy appear in the Musician's eyes.\n\nMusician With A Broken Arm.\n    "My Broke Lute!\n    I never thought I would see it again!\n    Thank you so much, ${heroName}.\n    I shall use the power of music to fight against the darkness."\n\nThe musician plucks the one string on the lute that hasn't snapped.\nAn an eerie sound resonates through the room.\n\n    "I should tell you, one of the foul beasts from the woods has infiltrated out humble hamlet.\n    A creature of darkness has possessed the Sleeping Child.\n     But it will only make itself known to people like myself whom have been injured.\n`, highlightedWords);
     itemExchange(hero.inventory, musicianWithABrokenArm.inventory, "Damaged Lute");
     musicianWithABrokenArm.interact = `\nMusician With A Broken Arm.\n    "Thank you so much, ${heroName} for returning my Damaged Lute to me.\n     I should tell you, a creature of darkness has possessed the Sleeping Child.\n     But it will only make itself known to people, like myself, whom have been injured.\n`
+    musicianWithABrokenArm.interact = "Singing";
   }
   },
-  status: "Normal"
+  status: "Normal" //Options "Normal" "Singing"
 });
 
 let sleepingChild = new Person({
   name: "Sleeping Child",
   inventory: ["Warm Apple Pie"], //Reward for Solving Puzzle
-  interact: "A motionless child laying on an oversized bed.",
+  interact: "A motionless child lays asleep on an oversized bed.",
+  //Locked Door & puzzle challenge threshold
   followUp: ()=>{
     if (sleepingChild.status === "Freed"){
       colorChangeWords(`It looks as though the Sleeping Child is finally resting peacfully.`, highlightedWords
       );
     }
     else if (sleepingChild.status === "Possessed"){
-      colorChangeWords(`Suddenly, the child's body snaps upright!\nThe heada of the Sleeping Child begins to spin in a circle as vomit is spewed in every direction.\n\nDemonic Voice\n    "Look who's back!\n     Let me guess, ${heroName}.\n     You think you know what my name is.`,highlightedWords
+      colorChangeWords(`Suddenly, the child's body snaps upright!\nThe head of the Sleeping Child begins to spin in a circle as vomit is spewed in every direction.\n\nDemonic Voice\n    "Look who's back!\n     Let me guess, ${heroName}.\n     You think you know what my name is.`,highlightedWords
         );
-      sayMyName();
     }
     else if(hero.status === "Black Eye"){
-      colorChangeWords(`Your Black Eye throbs as you look upon the still form of the Sleeping Child.\nSuddenly, the child's body snaps upright,\neyes flashing wide open!\nThe Sleeping Child opens their mouth makes an otherworldly sounds!\n\nDemonic Voice\n    "Well, well well,\n     What have we here?\n     Its little ${heroName} pretending to be an Adventurer.\n     You simple fool, you have no idea how powerful names are.\n     And I will stay locked inside this Sleeping Child unless you say my name.`,highlightedWords
+      colorChangeWords(`Your Black Eye begins to throb as you look upon the still form of the Sleeping Child.\nSuddenly, the child's body snaps upright, eyes flashing wide open!\nThe Sleeping Child opens their mouth makes an otherworldly sound!\n\nDemonic Voice\n    "Well, well well,\n     What have we here?\n     Its little ${heroName}, pretending to be an Adventurer.\n     You simple fool, you have no idea how powerful names are.\n     And I will stay locked inside this Sleeping Child unless you say my name.`,highlightedWords
         );
-        sleepingChild.status === "Possessed";
-        sayMyName();
+        sleepingChild.status = "Possessed";
     }else{}
   },
   status: "Normal" //Options Normal, Possessed, Freed
@@ -364,9 +367,11 @@ let exhaustedParents = new Person({
   name: "Exhausted Parents",
   inventory: ["Town Map"],// Trade for Food
   interact: "\nA pair of weary parents are looking over a Town Map.\nThey are talking in hushed voices to about where to send their Sleeping Child to school.\nYou can barely hear their voices over the rumbling stomaches.\nThey should probably eat something.\n",
+  //Follow up changes based on item presents.
   followUp: ()=>{
     if(hero.inventory.includes("A Warm Meal")){
-      colorChangeWords(`\nAs you approach them with food in hand the two look up at you.\n\nExhausted Parents\n    "Thank you for bringing us A Warm Meal, ${heroName}.\n     We have been so busy that we haven't had a chance to eat."\nThe Exhausted Parents drop the Town Map in the Upstairs Room.`, highlightedWords);
+      colorChangeWords(`\nAs you approach them, with food in hand, the two look up at you.\n\nExhausted Parents\n    "Thank you for bringing us A Warm Meal, ${heroName}.\n     We have been so busy that we haven't had a chance to eat."\n
+      \nThe Exhausted Parents drop the Town Map in the Upstairs Room.`, highlightedWords);
       itemExchange(hero.inventory, exhaustedParents.inventory, "A Warm Meal");
       itemExchange(exhaustedParents.inventory, locations[currentLocation].inventory, "Town Map");
       exhaustedParents.interact = `Exhausted Parents\n    "Thank you for bringing us A Warm Meal, ${heroName}.\n     We have been so busy that we haven't had a chance to eat."\nThe pair continue to eat their food, oblivious to the world around them.`
@@ -378,6 +383,7 @@ let dragon = new Person({
   name: "Dragon",
   inventory: ["Dragon's Treasure"],
   interact: `\nYou dash forward, hoping to attack the Dragon while it slumbered.\nBut it was all a ploy.\nAs you closed in on the monster,\nits eyes snapped opened and it let out a mighty roar.\nIt was merely pretending to sleep to gain the advantage.`,
+  //Followup changes based on inventory
   followUp: ()=>{if(hero.inventory.includes("Death's Scythe")===true){
     colorChangeWords(`\nBut that advantages will not be enough to save the beast.\nYou trivially dodge its attacks before jumping high in the air.\nYou raise Death's Scythe aloft and slice it across the Dragon's body.\nThe Dragon immediately perished.\nLeaving behind its horde of loot to the taking.\n`, highlightedWords);
     itemExchange(dragon.inventory, dragonsKeep.inventory, "Dragon's Treasure");
@@ -398,6 +404,7 @@ let grimReaper = new Person({
   name: "Grim Reaper",
   inventory: ["Death's Scythe"], //Reward for Solving Puzzle
   interact: "You approach the Grim Reaper.\nEvery step closer to the cloaked figure chilles you to your bones.\nAs you approach you see the skeletal face of Death\nwatching your every move with the piercing gaze of red eyes.",
+  //Followup changes based on inventroy
   followUp: ()=>{
     if(hero.inventory.includes("Warm Apple Pie")===true){
       colorChangeWords(`\n\nGrim Reaper\n    "Welcome to the Underwold, ${heroName}.\n     What's that delicious aroma in the air?\n     Do you have a freshly-baked Warm Apple Pie with you?\n     I haven't had one of those in a millennium.\n     Tell you what, if you give me your dessert,\n     I will give you a second chance at life.\n     I will even give you my weapon to sweeten the deal."\n\nYou receive Death's Scythe.\n`, highlightedWords);
@@ -453,7 +460,7 @@ let BagOfJewels = new Commodity({
   interact: "A bag of priceless gems.",
   followUp: ()=>{
     if(obnoxiousPatron.status === "Normal"){
-      colorChangeWords(`As you reach for the Bag Of Jewels, the table next you you is slammed into a wall.\n\nObnoxious Patron\n    "I warned you to stay away from my Bag Of Jewels, bub!\n     Now, I'm gonna beat you to a pulp!\n\nThe Obnoxious Patron hands become balled into fists and they assume a fighting stance.\nSuddenly, spoons erupt from the Obnoxious Patron's fists, three spoons per fist, right between each knuckle.`,highlightedWords);}
+      colorChangeWords(`\nAs you reach for the Bag Of Jewels, the table next you you is slammed into a wall.\n\nObnoxious Patron\n    "I warned you to stay away from my Bag Of Jewels, bub!\n     Now, I'm gonna beat you to a pulp!"\n\nThe Obnoxious Patron hands become balled into fists and they assume a fighting stance.\nSuddenly, spoons erupt from the Obnoxious Patron's fists, three spoons per fist, right between each knuckle.`,highlightedWords);}
       if(hero.inventory.includes("Death's Scythe")===true){
         colorChangeWords(`\nSpoons?!\nThat's an odd choice of weapon.\nYou pull out Death's Scythe, the weapon radiates an unnatural energy in the room.\nUpon seeing this the Obnocious Patron holds his hands up in defeat\n\nObnoxious Patron\n    "Easy there, bub.\n     This is my Bag Of Jewels.\n     No need to cause trouble."\n\nThe Obnoxious Patron sits back down at the table,\npocketing the Bag Of Jewels.\nYou smile on the inside.\nClearly you are getting the hang of being and Adventurer.\nYou twirl Death's Scythe in a fancy flourish,\nfeeling its power,\nbefore smacking yourself in the face with it's blunt end.\n     Ow, that hurt.\n     Clearly you need more practice.\n     You can already feel your face starting to swell.\n     Looks like you've given yourself a Black Eye.\n `,highlightedWords);
         hero.status = "Black Eye";
@@ -468,7 +475,7 @@ let BagOfJewels = new Commodity({
         hero.status = "Dead";
         locationUpdate("HERO-DEATH");
       }else{
-        colorChangeWords(`\nThe Obnoxious Patron charges at you with the ferocity of a Were-verine!!!\nWith no weapons around the two of you duke it our in fisticuffs.\nThe other villagers in the inn watch the free entertainment before them.\nAfter tussling for a few minutes, you stand victorious.\nBoth you and the Obnoxious Patron are beaten and bruised.\n\nObnoxious Patron\n    "I like you, bub.\n     But this here is my Bag Of Jewels"\n\nThe Obnoxious Patron sits back down at the table,\npocketing the Bag Of Jewels.\nYou smile on the inside.\nLooks like you made a friend.\nAnd it looks like that friend has give you a Black Eye.`,highlightedWords);
+        colorChangeWords(`\nThe Obnoxious Patron charges at you with the ferocity of a Were-verine!!!\nWith no weapons around the two of you duke it our in fisticuffs.\nThe other villagers in the inn watch the free entertainment before them.\nAfter tussling for a few minutes, you stand victorious.\nBoth you and the Obnoxious Patron are beaten and bruised.\n\nObnoxious Patron\n    "I like you, bub.\n     But this here is my Bag Of Jewels"\n\nThe Obnoxious Patron sits back down at the table,\npocketing the Bag Of Jewels.\nYou smile on the inside.  Looks like you made a friend.\nAnd it looks like that friend has given you a Black Eye.`,highlightedWords);
       hero.status = "Black Eye";
       obnoxiousPatron.status = "Happy";
       itemExchange(locations[currentLocation].inventory, obnoxiousPatron.inventory, "Bag Of Jewels");
@@ -575,7 +582,7 @@ titleScreen(); // Title Screen & Art
 async function start() {
   heroName = await introduction(); //The player will have to name themselves;
   //console.log(heroName, userInput, "Before Loop of Function\n"); //! TEST
-  colorChangeWords(`\nYou, ${heroName} find yourself at the Beginning of a Grand Adventure!\nAnd it all starts right here in this quaint little village.\nIt is probably a good idea to "Look" around.\n(type "Help" to see a list of available actions.)`,highlightedWords);
+  colorChangeWords(`\n${heroName}, you find yourself at the Beginning of a Grand Adventure!\nAnd it all starts right here in this quaint little hamlet of Placeholder Village.\nIt is probably a good idea to "Look" around.\n(type "Help" to see a list of available actions.)`,highlightedWords);
   while (userInput !== "Exit") {
     colorChangeWords(
       `\n${heroName} is currently in the ${currentLocation}.`,
@@ -628,7 +635,9 @@ async function heroAction(heroName) {
     //console.log(`\nTAKE\n`); //! Test
     let takeItem = await ask(`\nWhat would you like to take?\n>_ `);
     tookenItem = capitalizePlayerInput(takeItem);
-    if (locations[currentLocation].inventory.includes(tookenItem) === true) {
+    if ((locations[currentLocation].inventory.includes(tookenItem) === true) && (tookenItem === "Bag Of Jewels")) {
+      BagOfJewels.followUp();
+    }else if (locations[currentLocation].inventory.includes(tookenItem) === true) {
       itemExchange(
         locations[currentLocation].inventory,
         hero.inventory,
@@ -654,7 +663,17 @@ async function heroAction(heroName) {
     //console.log(`\nINTERACT\n`); //! Test
     let interactObject = await ask(`\nWhat do you want to interact with?\n>_ `);
     interactableObject = capitalizePlayerInput(interactObject);
-    if ((locations[currentLocation].inventory.includes(interactableObject) === true) ||(hero.inventory.includes(interactableObject))===true) {
+    if ((locations[currentLocation].inventory.includes(interactableObject) === true) && (interactableObject === "Sleeping Child")) {
+      if(sleepingChild.status === "Possessed"){
+        sleepingChild.interact();
+        sleepingChild.followUp();  
+    }else{
+      sleepingChild.interact();
+      sleepingChild.followUp();
+      await sayMyName();
+      }
+    }
+    else if ((locations[currentLocation].inventory.includes(interactableObject) === true) ||(hero.inventory.includes(interactableObject))===true) {
       colorChangeWords(`\n${interactCommodity[interactableObject].interact}`, highlightedWords);
       interactCommodity[interactableObject].followUp();}
       else if ((locations[currentLocation].interact.includes(interactableObject) === true)) {
@@ -823,16 +842,18 @@ function locationUpdate(newLocation) {
 
 // Password Name Gane
 async function sayMyName() {
-  let nameGuess = await ask(`Come on,\nSay my name!\n>_ `);
+  let nameGuess = await ask(`\n     Come on,\n     Say my name!\n>_ `);
+  nameGuess = capitalizePlayerInput(nameGuess);
+  //highlightedWords.push(nameGuess);
   if (secretName === nameGuess) {
     colorChangeWords(
       `\nDemonic Voice\n     "What?!\n     No!!!!\n     How could you possibly know that my name is ${secretName}.\nThe body of the Sleeping Child contorts\nas the Demonic Voice screams in agony.\n\nSleeping Child\n    "Than you for freeing my spirit, ${heroName}.\n     Now I can finally get some much needed rest.\n     Please, accept this small token of my appreciation."\n\nThe Sleeping Child reaches under the bedsheets and presents you with a freshly-baked Warm Apple Pie,\nplacing it on the foot of the bed before returning to a peaceful sleep.`,highlightedWords
       );
       itemExchange(sleepingChild.inventory, locations[currentLocation].inventory, "Warm Apple Pie");
-      sleepingChild.status = "Freed"
-
+      sleepingChild.status = "Freed";
   } else {
-    colorChangeWords(`\nDemonic Voice\n     "Hahahahahahaha\n     Wrong!!!\n     You are a fool ${heroName}.\n     My name is not ${nameGuess}.\n     I will remain inside this Sleeping Child until the end of days.\n     Mwahahahahahaha.\n\nThe Demonic Voice mocks you as the body of the Sleeping Child goes rigid\nand returns to its peaceful state.`,highlightedWords);
+    colorChangeWords(`\nDemonic Voice\n    "Hahahahahahaha\n     Wrong!!!\n     You are a fool ${heroName}.\n     My name is not ${nameGuess}.\n     I will remain inside this Sleeping Child until the end of days.\n     Mwahahahahahaha.\n\nThe Demonic Voice mocks you as the body of the Sleeping Child goes rigid\nand returns to its peaceful state.`,highlightedWords);
+    sleepingChild.status = "Possessed";
   }
 }
 
