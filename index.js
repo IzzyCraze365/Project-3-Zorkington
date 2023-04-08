@@ -166,7 +166,7 @@ class Room {
 //! Object Definition
 //Player Inventory
 let hero = new Player(
-  ["Bucket", "Sword", "Premium Horse Manure"],
+  ["Bucket", "Sword", "Premium Horse Manure","Mounds Of Gold"],
   "Healthy."
 ); // Starts with a Sword & useless Junk, Status is Healthy
 
@@ -247,7 +247,7 @@ let underworld = new Room({
   interact: ["Grim Reaper"],
   possibleLocations: ["... funny there are no exits.","There is nowhere to go, there is no escape."],
   description:
-    `\nYou could feel your consciousness leave your body.\nThen suddenly without warning you were here.\nYou know without a shadow of a doubt that you are in the Underworld.\n\nInside a dark cavern.  The only source of light...\na flickering torch held by a robed figure\nwhom you instinctually know is the personification of death, the Grim Reaper.`,
+    `\nYou could feel your consciousness leave your body.\nThen suddenly without warning you were here.\nYou know without a shadow of a doubt that you are in the Underworld.\n\nInside a dark cavern.  The only source of light...\na flickering torch held by a robed figure\nwhom you instinctually know is the personification of death, the Grim Reaper.\n`,
 });
 
 // Variables
@@ -431,20 +431,26 @@ let letterbox = new Commodity({
 
 let moundsOfGold = new Commodity({
   name: "Mounds Of Gold",
-  interact: `\nYour eyes don't deceive you.  There are piles upon piles of Gold in this cave.\nIt is more wealth than you have ever dreamed of.\nCertainly enough to rebuild the town's broken bridge.\n\nYou daydream about the heroic feast the village will throw you.\n     The cooked meats assorted deserts.\n     The dancing into the night with an attractive villager.\n     Turns out that villager was your soulmate!\n     Eventually the two of you will be married\n     and have 3 children, 2 dogs and a hampster.\n     It was an incredibly wonderful life!\n\nOr it would have been...\nYou were so busy daydreaming you did not realize\nthe Dragon had stirred from its slumber.\nIt attacked you while you were not paying attention...\n\n`,
-  followUp: ()=>{},//TODO
+  interact: `\nYour eyes don't deceive you.  There are piles upon piles of Gold in this cave.\nIt is more wealth than you have ever dreamed of.\nCertainly enough to rebuild the town's broken bridge.\n\nYou daydream about the heroic feast the village will throw you.\n     The cooked meats assorted deserts.\n     The dancing into the night with an attractive villager.\n     Turns out that villager was your soulmate!\n     Eventually the two of you will be married\n     and have 3 children, 2 dogs and a hampster.\n     It was an incredibly wonderful life!\n\nOr it would have been...\nYou were so busy daydreaming about the Mounds Of Gold you did not realize\nthe Dragon had stirred from its slumber.\nIt attacked you while you were not paying attention...\n`,
+  followUp: ()=>{
+    hero.status = "Dead";
+    locationUpdate("HERO-DEATH");},
 });
 
 let heapsOfSilver = new Commodity({
   name: "Heaps Of Silver",
-  interact: "\nA simple rock that has no innate value.",//TODO no if statement just end
-  followUp: ()=>{},//TODO
+  interact: `\nSilver!  You have never seen so many glittering coins.\nThere are heaps upon heaps of silver in this cave.\nIt is more wealth than you have ever dreamed of.\n\nYou daydream all that you could do with this silver.\n     Buy fancy armor and weapons.\n     Melt it down and have a statue crafted in your image.\n     You could make a large pile of coins and just go swimming in it!\n     There is nothing better than having all that silver in at your fingertips.\n     You will live like a king!\n\nOr you would have...\nSadly, you were so distracted by the Heaps Of Silver you did not realize\nthe Dragon had stirred from its slumber.\nIt attacked you while you were not paying attention...\n`,
+  followUp: ()=>{
+    hero.status = "Dead";
+    locationUpdate("HERO-DEATH");},
 });
 
 let pileOfBones = new Commodity({
   name: "Pile Of Bones",
-  interact: "\nA simple rock that has no innate value.",//TODO no if statement just end
-  followUp: ()=>{},//TODO
+  interact: `\nAs you approach the back of the cave you see the massive Pile Of Bones littering the Dragon's Keep.\n  You look closely at the bones, and your heart starts to sink.\n     You get the feeling that you have been here before...\n     That you have tried to fight the Dragon and failed...\n     You realize that the bones on the floor are your bones!!!\n     You have gotten to this point so many times!!!\n     This is where you die!\n     Over and over again, as though your life is some twisted game\n\nYou push these thoughts out of your head.\n     "You are "${heroName} the Mighty" and you will succed!"\n Are your last thoughts as you turn to face the now awake Dragon.\nIt roars inches from your face.\nIts breath hot upon your face/\nThe roar was so loud and so sudden that you were scared to death...`, 
+  followUp: ()=>{
+    hero.status = "Dead (again)";
+    locationUpdate("HERO-DEATH");},
 });
 
 let deathsScythe = new Commodity({
@@ -683,6 +689,11 @@ async function locationMove() {
 
 // This function keeps track of where the player has moved to
 function locationUpdate(newLocation) {
+  if(newLocation === "HERO-DEATH"){
+    currentLocation = "Underworld";
+    colorChangeWords(`\n${locations[currentLocation].description}`,highlightedWords); //Gives a description when you enter a new location.
+    return currentLocation;
+  }else{
   let possibleOptionsToUpdateLocation =
     locations[currentLocation].possibleLocations;
   if (possibleOptionsToUpdateLocation.includes(newLocation) === true) {// Found a match and we are able to update the state in the function "locationMove"
@@ -727,6 +738,7 @@ function locationUpdate(newLocation) {
       highlightedWords
     );
   }
+}
 }
 
 //! Helper Function List (Alphabetical Order) - Bonus functions
