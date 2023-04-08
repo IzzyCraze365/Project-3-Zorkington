@@ -110,10 +110,12 @@ let highlightedWords = [
 class Commodity {
   constructor({
     name,
-    interact
+    interact,
+    followUp
   }) {
     this.name = name;
     this.interact = interact;
+    this.followUp = followUp;
   }
 }
 
@@ -123,11 +125,13 @@ class Person {
     name,
     inventory,
     interact,
+    followUp,
     status
   }) {
     this.interact = interact;
     this.inventory = inventory;
     this.name = name;
+    this.followUp = followUp;
     this.status = status;
   }
 }
@@ -181,7 +185,7 @@ let idiotsInspiringInn = new Room({
   name: "Idiot's Inspiring Inn",
   doorLock: false,
   inventory: ["Bags Of Jewels"],
-  interact: ["Inkeeper", "Obnoxious Patron", "Musician With A Broken Arm"], //"Black Eye" from interaction puzzle
+  interact: ["Innkeeper", "Obnoxious Patron", "Musician With A Broken Arm"], //"Black Eye" from interaction puzzle
   possibleLocations: ["Town Triangle", "Upstairs Room"],
   description:
     "\nThe Idiot's Inspiring Inn\nThe most popular tavern in the Placeholder Village, \nprimarily because it is the only tavern in Placeholder Village. \nThe Innkeeper behind the bar is preparing a meal for a Musician With A Broken Arm. \nIn the back of the room, an Obnoxious Patron is slovenly eating a meal.\nBags Of Jewels are scattered across the patron's table.\n\nFrom here you can head outside to the Town Triangle or go to the Upstairs Room.\n",
@@ -270,21 +274,24 @@ let locations = {
 let retiredAdventurer = new Person({
   name: "Retired Adventurer",
   inventory: ["Death's Scythe"],
-  interact: "Something",//TODO
+  interact: `The Retired Adventurer looks you up and down.\n    "I daresay, I hath been retired only since morn.\n     Tis good of yee to taketh the mantle up.\n     Dost thou even hoist, ${heroName}?\n     Alas, I shalth spend me retirment plalying my favorite game...\n     Guess the Number.\n     Doth thou wisheth to play?\n     Nay? Then begone with yee!`,
+  followUp: ()=>{},//TODO
   status: "Normal"
 });
 
 let simpleVillager = new Person({
   name: "Simple Villager",
   inventory: [],
-  interact: "Something",//TODO
+  interact: `Simple Villager\n    "Thank you for all your assistance brave adventurer.\n     Your services are invaluable to us here in Placeholder Village.\n     Only you can save us from the horros that plague us.\n     Being stranded in a cozy little hamlet with no Gold fix our broken bridge.\n     We lead a truly cursed life."`,
+  followUp: ()=>{},//TODO
   status: "Normal"
 });
 
-let inkeeper = new Person({
-  name: "Inkeeper",
+let innkeeper = new Person({
+  name: "Innkeeper",
   inventory: ["A Warm Meal"],
   interact: "Something",//TODO
+  followUp: ()=>{itemExchange(innkeeper.inventory, locations[currentLocation].inventory, "A Warm Meal");},//TODO
   status: "Normal"
 });
 
@@ -292,6 +299,7 @@ let obnoxiousPatron = new Person({
   name: "Obnoxious Patron",
   inventory: ["Black Eye"], //Reward for Solving Puzzle
   interact: "Something",//TODO
+  followUp: ()=>{},//TODO
   status: "Normal"
 });
 
@@ -299,6 +307,7 @@ let musicianWithABrokenArm = new Person({
   name: "Musician With A Broken Arm",
   inventory: [],
   interact: "Something",//TODO
+  followUp: ()=>{},//TODO
   status: "Normal"
 });
 
@@ -306,13 +315,21 @@ let sleepingChild = new Person({
   name: "Sleeping Child",
   inventory: ["Warm Apple Pie"], //Reward for Solving Puzzle
   interact: "Something",//TODO
+  followUp: ()=>{},//TODO
   status: "Normal"
 });
 
 let exhaustedParents = new Person({
   name: "Exhausted Parents",
   inventory: ["Town Map"],// Trade for Food
-  interact: "Something",//TODO
+  interact: "A pair of weary parents are looking over a Town Map.\nThey are talking in hushed voices to about where to send their Sleeping Child to school.\nYou can barely hear their voices over the rumbling stomaches.\nThey should probably eat something.",
+  followUp: ()=>{
+    if(hero.inventory.includes("A Warm Meal")){
+      colorChangeWords(`\nAs you approach them with food in hand the two look up at you.\n\nExhausted Parents\n    "Thank you for bringing us A Warm Meal, ${heroName}.\n     We have been so busy that we haven't had a chance to eat."\nThe Exhausted Parents drop the Town Map in the Upstairs Room.`, highlightedWords);
+      itemExchange(hero.inventory, exhaustedParents.inventory, "A Warm Meal");
+      itemExchange(exhaustedParents.inventory, locations[currentLocation].inventory, "Town Map");
+      exhaustedParents.interact = `Exhausted Parents\n    "Thank you for bringing us A Warm Meal, ${heroName}.\n     We have been so busy that we haven't had a chance to eat."\nThe pair continue to eat their food, oblivious to the world around them.`
+    }},
   status: "Normal"
 });
 
@@ -320,6 +337,7 @@ let dragon = new Person({
   name: "Dragon",
   inventory: [],
   interact: "Something",//TODO
+  followUp: ()=>{},//TODO
   status: "Normal"
 });
 
@@ -327,6 +345,7 @@ let grimReaper = new Person({
   name: "Grim Reaper",
   inventory: ["Death's Scythe"], //Reward for Solving Puzzle
   interact: "Something",//TODO
+  followUp: ()=>{},//TODO
   status: "Normal"
 });
 
@@ -334,7 +353,7 @@ let grimReaper = new Person({
 let interactPeople = {
   "Retired Adventurer": retiredAdventurer,
   "Simple Villager": simpleVillager,
-  "Inkeeper": inkeeper,
+  "Innkeeper": innkeeper,
   "Obnoxious Patron": obnoxiousPatron,
   "Musician With A Broken Arm":musicianWithABrokenArm,
   "Sleeping Child":sleepingChild,
@@ -346,77 +365,92 @@ let interactPeople = {
 // List of Interactable Items
 let sword = new Commodity({
   name: "Sword",
-  interact: "\nThe sword of an adventurer.\nThe blade is very sharp.\nA lethal weapon, to be sure."
+  interact: "\nThe sword of an adventurer.\nThe blade is very sharp.\nA lethal weapon, to be sure.",
+  followUp: ()=>{},//TODO
 });
 
 let bucket = new Commodity({
   name: "Bucket",
-  interact: "\nA simple bucket, with a hole in the bottom."
+  interact: "\nA simple bucket, with a hole in the bottom.",
+  followUp: ()=>{},//TODO
 });
 
 let premiumHorseManure = new Commodity({
   name: "Premium Horse Manure",
-  interact: "\nIf it looks like shit,\nsmells like shit,\nand tastes like shit...\nIt'll make the crops grow tall!"
+  interact: "\nIf it looks like shit,\nsmells like shit,\nand tastes like shit...\nIt'll make the crops grow tall!",
+  followUp: ()=>{},//TODO
 });
 
 let aWarmMeal = new Commodity({
   name: "A Warm Meal",
-  interact: "\nThe meal consists of a plain gruel.\nTasteless but still comforting."
+  interact: "\nThe meal consists of a plain gruel.\nTasteless but still comforting.",
+  followUp: ()=>{},//TODO
 });
 
 let BagsOfJewels = new Commodity({
   name: "Bags Of Jewels",
-  interact: "\n Event Goes here"//TODO
+  interact: "\n Event Goes here",//TODO
+  followUp: ()=>{},//TODO
 });
 
 let townMap = new Commodity({
   name: "Town Map",
-  interact: "\nA Map of Placeholder Village and the surrounding forest.\nYou can't get lost with this in hand."
+  interact: "\nA Map of Placeholder Village and the surrounding forest.\nYou can't get lost with this in hand.",
+  followUp: ()=>{},//TODO
 });
 
 let warmApplePie = new Commodity({
   name: "Warm Apple Pie",
-  interact: "\nFresh baked pie is the best.\nEveryone loves apple pie.\nAnd people do crazy, death-defying things when they are in love."
+  interact: "\nFresh baked pie is the best.\nEveryone loves apple pie.\nAnd people do crazy, death-defying things when they are in love.",
+  followUp: ()=>{},//TODO
 });
 
 let damagedLute = new Commodity({
   name: "Damaged Lute",
-  interact: "\nA musical instrument that has seen better days."
+  interact: "\nA musical instrument that has seen better days.",
+  followUp: ()=>{},//TODO
 });
 
 let crookedSign = new Commodity({
   name: "Crooked Sign",
-  interact: `\nA worn sign at the intersection of two paths.\nIt reads:\n    "Abandon hope all yee who enter here!\n     This forest are a living maze that you'll not want to be lost in.\n     There be deadly monsters within these trees."`
+  interact: `\nA worn sign at the intersection of two paths.\nIt reads:\n    "Abandon hope all yee who enter here!\n     This forest are a living maze that you'll not want to be lost in.\n     There be deadly monsters within these trees."`,
+  followUp: ()=>{},//TODO
 });
 
 let pointlessRock = new Commodity({
   name: "Pointless Rock",
-  interact: "\nA simple rock that has no innate value."
+  interact: "\nA simple rock that has no innate value.",
+  followUp: ()=>{},//TODO
 });
 
 let letterbox = new Commodity({
   name: "Letterbox",
-  interact: `\nA plain wooded box that is void of all letters.\nThe name "${secretName}" is carved into it.`
+  interact: `\nA plain wooded box that is void of all letters.\nThe name "${secretName}" is carved into it.`,
+  followUp: ()=>{},//TODO
 });
 
 let moundsOfGold = new Commodity({
   name: "Mounds Of Gold",
-  interact: `\nYour eyes don't deceive you.  There are piles upon piles of Gold in this cave.\nIt is more wealth than you have ever dreamed of.\nCertainly enough to rebuild the town's broken bridge.\n\nYou daydream about the heroic feast the village will throw you.\n     The cooked meats assorted deserts.\n     The dancing into the night with an attractive villager.\n     Turns out that villager was your soulmate!\n     Eventually the two of you will be married\n     and have 3 children, 2 dogs and a hampster.\n     It was an incredibly wonderful life!\n\nOr it would have been...\nYou were so busy daydreaming you did not realize\nthe Dragon had stirred from its slumber.\nIt attacked you while you were not paying attention...\n\n`
+  interact: `\nYour eyes don't deceive you.  There are piles upon piles of Gold in this cave.\nIt is more wealth than you have ever dreamed of.\nCertainly enough to rebuild the town's broken bridge.\n\nYou daydream about the heroic feast the village will throw you.\n     The cooked meats assorted deserts.\n     The dancing into the night with an attractive villager.\n     Turns out that villager was your soulmate!\n     Eventually the two of you will be married\n     and have 3 children, 2 dogs and a hampster.\n     It was an incredibly wonderful life!\n\nOr it would have been...\nYou were so busy daydreaming you did not realize\nthe Dragon had stirred from its slumber.\nIt attacked you while you were not paying attention...\n\n`,
+  followUp: ()=>{},//TODO
 });
 
 let heapsOfSilver = new Commodity({
   name: "Heaps Of Silver",
-  interact: "\nA simple rock that has no innate value."//TODO no if statement just end
+  interact: "\nA simple rock that has no innate value.",//TODO no if statement just end
+  followUp: ()=>{},//TODO
 });
 
 let pileOfBones = new Commodity({
   name: "Pile Of Bones",
-  interact: "\nA simple rock that has no innate value."//TODO no if statement just end
+  interact: "\nA simple rock that has no innate value.",//TODO no if statement just end
+  followUp: ()=>{},//TODO
 });
 
 let deathsScythe = new Commodity({
   name: "Death's Scythe",
-  interact: "\nThe immortal weapon of the manifestation of Death.\nA single scratch would cause any creature to immediately perish.\nUse with caution."
+  interact: "\nThe immortal weapon of the manifestation of Death.\nA single scratch would cause any creature to immediately perish.\nUse with caution.",
+  followUp: ()=>{},//TODO
 });
 
 //All the Items you can interact with
@@ -484,7 +518,7 @@ async function heroAction(heroName) {
     let dropItem = await ask(`\nWhat would you like to drop?\n>_ `);
     droppingItem = capitalizePlayerInput(dropItem);
     if (hero.inventory.includes(droppingItem) === true) {
-      ItemExchange(
+      itemExchange(
         hero.inventory,
         locations[currentLocation].inventory,
         droppingItem
@@ -504,7 +538,7 @@ async function heroAction(heroName) {
     let takeItem = await ask(`\nWhat would you like to take?\n>_ `);
     tookenItem = capitalizePlayerInput(takeItem);
     if (locations[currentLocation].inventory.includes(tookenItem) === true) {
-      ItemExchange(
+      itemExchange(
         locations[currentLocation].inventory,
         hero.inventory,
         tookenItem
@@ -530,9 +564,11 @@ async function heroAction(heroName) {
     let interactObject = await ask(`\nWhat do you want to interact with?\n>_ `);
     interactableObject = capitalizePlayerInput(interactObject);
     if ((locations[currentLocation].inventory.includes(interactableObject) === true) ||(hero.inventory.includes(interactableObject))===true) {
-      colorChangeWords(`${interactCommodity[interactableObject].interact}`, highlightedWords);}
+      colorChangeWords(`\n${interactCommodity[interactableObject].interact}`, highlightedWords);
+      interactCommodity[interactableObject].followUp();}
       else if ((locations[currentLocation].interact.includes(interactableObject) === true)) {
-        colorChangeWords(`${interactPeople[interactableObject].interact}`, highlightedWords);}
+        colorChangeWords(`\n${interactPeople[interactableObject].interact}`, highlightedWords);
+        interactPeople[interactableObject].followUp();}
         else {
           colorChangeWords(
             `\nSorry ${heroName}.  You can't interact with ${interactObject}.\n`,highlightedWords);
@@ -621,13 +657,15 @@ function itemDisplay(player) {
 }
 
 // This is what allows "Take" and "Drop" to work with items
-function ItemExchange(giver, receiver, itemToBeExchanged) {
+function itemExchange(giver, receiver, itemToBeExchanged) {
   //console.log("The Giver's Items before", giver); //! TEST
   //console.log("The Receiver's Items before", receiver); //! TEST
   let index = giver.indexOf(itemToBeExchanged);
   //console.log(`The ${itemToBeExchanged} is in position ${index}`); //! TEST
+  if(index !== -1){
   giver.splice(index, 1);
   receiver.push(itemToBeExchanged);
+  }
   //console.log("The Giver's Items after", giver); //! TEST
   //console.log("The Receiver's Items after", receiver); //! TEST
 }
