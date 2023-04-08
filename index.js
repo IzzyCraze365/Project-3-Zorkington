@@ -166,7 +166,7 @@ class Room {
 //! Object Definition
 //Player Inventory
 let hero = new Player(
-  ["Bucket", "Sword", "Premium Horse Manure","Mounds Of Gold"],
+  ["Bucket", "Sword", "Premium Horse Manure","Mounds Of Gold","Damaged Lute"],
   "Healthy."
 ); // Starts with a Sword & useless Junk, Status is Healthy
 
@@ -282,16 +282,17 @@ let retiredAdventurer = new Person({
 let simpleVillager = new Person({
   name: "Simple Villager",
   inventory: [],
-  interact: `Simple Villager\n    "Thank you for all your assistance brave adventurer.\n     Your services are invaluable to us here in Placeholder Village.\n     Only you can save us from the horros that plague us.\n     Being stranded in a cozy little hamlet with no Gold fix our broken bridge.\n     We lead a truly cursed life."`,
-  followUp: ()=>{},//TODO
+  interact: `Simple Villager\n    "Thank you for all your assistance brave adventurer.\n     Your services are invaluable to us here in Placeholder Village.\n     Only you can save us from the horros that plague us.\n     Being stranded in a cozy little hamlet with no Gold to fix our broken bridge.\n     We lead a truly cursed life."`,
+  followUp: ()=>{},
   status: "Normal"
 });
 
 let innkeeper = new Person({
   name: "Innkeeper",
   inventory: ["A Warm Meal"],
-  interact: "Something",//TODO
-  followUp: ()=>{itemExchange(innkeeper.inventory, locations[currentLocation].inventory, "A Warm Meal");},//TODO
+  interact: `Innkeeper\n    "Hallooo there, ${heroName}!\n     Welcome to the Idiot's Inspring Inn where our hospitality is as warm as our food.\n     Don't believe me?\n     Help yourself to A Warm Meal, and feel free to talk to anybody round these parts.\n     We're all the friendly sort,\n     of course the Musician With A Broken Arm seems a tad jumpy,\n     and the Obnoxious Patron back there is fixing to get into a tussel.`,
+  followUp: ()=>{itemExchange(innkeeper.inventory, locations[currentLocation].inventory, "A Warm Meal");
+    innkeeper.interact = `Innkeeper\n    "Welcome to the Idiot's Inspring Inn where our hospitality is as warm as our food.\n     Good to see you again, ${heroName}!\n     Feel free to talk to anybody round these parts.\n     We're the friendly sort of folk,\n     and we all have some nuggets of useful information.`},
   status: "Normal"
 });
 
@@ -306,8 +307,13 @@ let obnoxiousPatron = new Person({
 let musicianWithABrokenArm = new Person({
   name: "Musician With A Broken Arm",
   inventory: [],
-  interact: "Something",//TODO
-  followUp: ()=>{},//TODO
+  interact: `\nMusician With A Broken Arm\n    "You... who are you?!?!?!?!\n     It doesn't matter, you can't help me.\n     I was attacked by many a foul beast out in the Forlorn Forest Of Fatality!\n     They broke my arm, causing me to drop my Damaged Lute.\n     That will teach me to go out into the woods without a weapon.\n     I wish my instrument could be returned to me.\n     Music brings comfort.\n     Especially in these dark times where monsters hide amoung us...\n`,
+  followUp: async ()=>{if(hero.inventory.includes("Damaged Lute")===true){
+    colorChangeWords(`\nYou reach into your backpack and pull out the Musician's Damaged Lute.\nTears of joy appear in the Musician's eyes.\n\nMusician With A Broken Arm.\n    "My Broke Lute!\n    I never thought I would see it again!\n    Thank you so much, ${heroName}.\n    I shall use the power of music to fight against the darkness."\n\nThe musician plucks the one string on the lute that hasn't snapped.\nAn an eerie sound resonates through the room.\n\n    "I should tell you, one of the foul beasts from the woods has infiltrated out humble hamlet.\n    A creature of darkness has possessed the Sleeping Child.\n     But it will only make itself know to people like myself whom have been injured.\n`, highlightedWords);
+    itemExchange(hero.inventory, musicianWithABrokenArm.inventory, "Damaged Lute");
+    musicianWithABrokenArm.interact = `\nMusician With A Broken Arm.\n    "Thank you so much, ${heroName} for returning my Damaged Lute to me.\n     I should tell you, a creature of darkness has possessed the Sleeping Child.\n     But it will only make itself know to people, like myself, whom have been injured.\n`
+  }
+  },
   status: "Normal"
 });
 
@@ -322,7 +328,7 @@ let sleepingChild = new Person({
 let exhaustedParents = new Person({
   name: "Exhausted Parents",
   inventory: ["Town Map"],// Trade for Food
-  interact: "A pair of weary parents are looking over a Town Map.\nThey are talking in hushed voices to about where to send their Sleeping Child to school.\nYou can barely hear their voices over the rumbling stomaches.\nThey should probably eat something.",
+  interact: "\nA pair of weary parents are looking over a Town Map.\nThey are talking in hushed voices to about where to send their Sleeping Child to school.\nYou can barely hear their voices over the rumbling stomaches.\nThey should probably eat something.\n",
   followUp: ()=>{
     if(hero.inventory.includes("A Warm Meal")){
       colorChangeWords(`\nAs you approach them with food in hand the two look up at you.\n\nExhausted Parents\n    "Thank you for bringing us A Warm Meal, ${heroName}.\n     We have been so busy that we haven't had a chance to eat."\nThe Exhausted Parents drop the Town Map in the Upstairs Room.`, highlightedWords);
@@ -366,67 +372,67 @@ let interactPeople = {
 let sword = new Commodity({
   name: "Sword",
   interact: "\nThe sword of an adventurer.\nThe blade is very sharp.\nA lethal weapon, to be sure.",
-  followUp: ()=>{},//TODO
+  followUp: ()=>{},
 });
 
 let bucket = new Commodity({
   name: "Bucket",
   interact: "\nA simple bucket, with a hole in the bottom.",
-  followUp: ()=>{},//TODO
+  followUp: ()=>{},
 });
 
 let premiumHorseManure = new Commodity({
   name: "Premium Horse Manure",
   interact: "\nIf it looks like shit,\nsmells like shit,\nand tastes like shit...\nIt'll make the crops grow tall!",
-  followUp: ()=>{},//TODO
+  followUp: ()=>{},
 });
 
 let aWarmMeal = new Commodity({
   name: "A Warm Meal",
   interact: "\nThe meal consists of a plain gruel.\nTasteless but still comforting.",
-  followUp: ()=>{},//TODO
+  followUp: ()=>{},
 });
 
 let BagsOfJewels = new Commodity({
   name: "Bags Of Jewels",
-  interact: "\n Event Goes here",//TODO
-  followUp: ()=>{},//TODO
+  interact: "A bag of priceless gems.",
+  followUp: ()=>{},//TODO event goes here
 });
 
 let townMap = new Commodity({
   name: "Town Map",
   interact: "\nA Map of Placeholder Village and the surrounding forest.\nYou can't get lost with this in hand.",
-  followUp: ()=>{},//TODO
+  followUp: ()=>{},
 });
 
 let warmApplePie = new Commodity({
   name: "Warm Apple Pie",
   interact: "\nFresh baked pie is the best.\nEveryone loves apple pie.\nAnd people do crazy, death-defying things when they are in love.",
-  followUp: ()=>{},//TODO
+  followUp: ()=>{},
 });
 
 let damagedLute = new Commodity({
   name: "Damaged Lute",
-  interact: "\nA musical instrument that has seen better days.",
+  interact: "\nA musical instrument that has seen better days.\nIt appears to have been damaged by some kind of wild animal.",
   followUp: ()=>{},//TODO
 });
 
 let crookedSign = new Commodity({
   name: "Crooked Sign",
   interact: `\nA worn sign at the intersection of two paths.\nIt reads:\n    "Abandon hope all yee who enter here!\n     This forest are a living maze that you'll not want to be lost in.\n     There be deadly monsters within these trees."`,
-  followUp: ()=>{},//TODO
+  followUp: ()=>{},
 });
 
 let pointlessRock = new Commodity({
   name: "Pointless Rock",
   interact: "\nA simple rock that has no innate value.",
-  followUp: ()=>{},//TODO
+  followUp: ()=>{},
 });
 
 let letterbox = new Commodity({
   name: "Letterbox",
   interact: `\nA plain wooded box that is void of all letters.\nThe name "${secretName}" is carved into it.`,
-  followUp: ()=>{},//TODO
+  followUp: ()=>{},
 });
 
 let moundsOfGold = new Commodity({
@@ -456,7 +462,7 @@ let pileOfBones = new Commodity({
 let deathsScythe = new Commodity({
   name: "Death's Scythe",
   interact: "\nThe immortal weapon of the manifestation of Death.\nA single scratch would cause any creature to immediately perish.\nUse with caution.",
-  followUp: ()=>{},//TODO
+  followUp: ()=>{},
 });
 
 //All the Items you can interact with
@@ -657,7 +663,7 @@ async function introduction() {
 // This is what allows "Take" and "Drop" to work with items
 function itemDisplay(player) {
   colorChangeWords(
-    `Your backpack contains the following items: ${player.join(", ")}`,
+    `\nYour backpack contains the following items: ${player.join(", ")}`,
     highlightedWords
   );
 }
@@ -705,7 +711,7 @@ function locationUpdate(newLocation) {
     return currentLocation;
     }else{ //This is my Lock and Key Puzzle
       if(hero.inventory.includes("Sword")!==true){
-        colorChangeWords(`\nYou venture into the darkness of the woodlands.\nTravelling around the forest without a weapon was a big mistake.\nYou quickly find yourself cornered by the shadowy monsters of the woodls.\nIt doesn't take them long to gobble you up.\n\nIf only you had a Sword with you.`,
+        colorChangeWords(`\nYou venture into the darkness of the woodlands.\nTravelling around the forest without a weapon was a big mistake.\nYou quickly find yourself cornered by lions, tigers and bears in the woods.\n    "Oh My"\nIt doesn't take them long to gobble you up.\n\nIf only you had a Sword with you.`,
         highlightedWords
       );
       currentLocation = "Underworld";
