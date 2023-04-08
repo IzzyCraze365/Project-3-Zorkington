@@ -86,7 +86,6 @@ let highlightedWords = [
   `Bucket`,
   `Bag Of Jewels`,
   `A Warm Meal`,
-  `Black Eye`,
   `Town Map`,
   `Warm Apple Pie`,
   `Damaged Lute`,
@@ -103,6 +102,17 @@ let highlightedWords = [
   `Hag's Horrid Hoval`,
   `Dragon's Keep`,
   `Underworld`,
+  /*Status*/
+  `Black Eye`,
+  `Dead`,
+  `Justly Deceased`,
+  `Dead (again)`,
+  `Alive Once More & Healthier than Ever`
+  /*Other*/
+  `Were-verine`,
+  `Town Guards`,
+  `Murder`,
+  `justice`
 ];
 
 //! Classes Go Here = FIRST THING!!!
@@ -187,7 +197,7 @@ let idiotsInspiringInn = new Room({
   name: "Idiot's Inspiring Inn",
   doorLock: false,
   inventory: ["Bag Of Jewels"],
-  interact: ["Innkeeper", "Obnoxious Patron", "Musician With A Broken Arm"], //"Black Eye" from interaction puzzle
+  interact: ["Innkeeper", "Obnoxious Patron", "Musician With A Broken Arm"],
   possibleLocations: ["Town Triangle", "Upstairs Room"],
   description:
     "\nThe Idiot's Inspiring Inn\nThe most popular tavern in the Placeholder Village, \nprimarily because it is the only tavern in Placeholder Village. \nThe Innkeeper behind the bar is preparing a meal for a Musician With A Broken Arm. \nIn the back of the room, an Obnoxious Patron is slovenly eating a meal.\nA Bag Of Jewels is scattered across the patron's table.\n\nFrom here you can head outside to the Town Triangle or go to the Upstairs Room.\n",
@@ -249,7 +259,7 @@ let underworld = new Room({
   interact: ["Grim Reaper"],
   possibleLocations: ["... funny there are no exits.","There is nowhere to go, there is no escape."],
   description:
-    `\nYou could feel your consciousness leave your body.\nThen suddenly without warning you were here.\nYou know without a shadow of a doubt that you are in the Underworld.\n\nInside a dark cavern.  The only source of light...\na flickering torch held by a robed figure\nwhom you instinctually know is the personification of death, the Grim Reaper.\n`,
+    `\nYou could feel your consciousness leave your body.\nThen suddenly without warning you were here.\nYou know without a shadow of a doubt that you are in the Underworld.\n\nInside a dark cavern.  The only source of light...\na flickering torch held by a robed figure\nwhom you instinctually know is the personification of Death, the Grim Reaper.\n`,
 });
 
 // Variables
@@ -292,7 +302,7 @@ let simpleVillager = new Person({
 let innkeeper = new Person({
   name: "Innkeeper",
   inventory: ["A Warm Meal"],
-  interact: `Innkeeper\n    "Hallooo there, ${heroName}!\n     Welcome to the Idiot's Inspring Inn where our hospitality is as warm as our food.\n     Don't believe me?\n     Help yourself to A Warm Meal, and feel free to talk to anybody round these parts.\n     We're all the friendly sort,\n     of course the Musician With A Broken Arm seems a tad jumpy,\n     and the Obnoxious Patron back there is fixing to get into a tussel.`,
+  interact: `Innkeeper\n    "Hallooo there, ${heroName}!\n     Welcome to the Idiot's Inspring Inn where our hospitality is as warm as our food.\n     Don't believe me?\n     Help yourself to A Warm Meal, and feel free to talk to anybody round these parts.\n     We're all the friendly sort,\n     of course the Musician With A Broken Arm seems a tad jumpy,\n     and the Obnoxious Patron back there is a strange one\nwhos fixing to get into a tussel.`,
   followUp: ()=>{itemExchange(innkeeper.inventory, locations[currentLocation].inventory, "A Warm Meal");
     innkeeper.interact = `Innkeeper\n    "Welcome to the Idiot's Inspring Inn where our hospitality is as warm as our food.\n     Good to see you again, ${heroName}!\n     Feel free to talk to anybody round these parts.\n     We're the friendly sort of folk,\n     and we all have some nuggets of useful information.`},
   status: "Normal"
@@ -300,10 +310,14 @@ let innkeeper = new Person({
 
 let obnoxiousPatron = new Person({
   name: "Obnoxious Patron",
-  inventory: ["Black Eye"], //Reward for Solving Puzzle
-  interact: `As you approach the individual at the far end of the room,\nyou are taken aback by the sheer quantity of food\nbeing shovelling down their gullet.\n\nObnoxious Patron\n    "What are you lookin at bub?\n     Stay away from my Bag Of Jewels\nOr I'll beat you to a pulp.`,
-  followUp: ()=>{},//TODO
-  status: "Normal"
+  inventory: [], //Reward for Solving Puzzle
+  interact: `As you approach the individual at the far end of the room,\n`,
+  followUp: ()=>{
+    if(obnoxiousPatron.status === "Happy"){colorChangeWords(`the Obnoxious Patron grins at you with a split lip.\n\nObnoxious Patron\n    "That was a good fight, bub.\n     You make an excellent sparring partner.\n     Listen up, if you wanna stay alive.\n     Don't go into the Deep Woods Of Certain Doom without a Sword.\n     Doesn't matter how good you fight, you need a weapon."\n`,highlightedWords);}
+    else if(obnoxiousPatron.status === "Beaten"){colorChangeWords(`the Obnoxious Patron sits back using their spoon-fists to eat their meal.\n\nObnoxious Patron\n    "Look at you with your fancy weapon, bub.\n     I have no idea where you got soemthing like that,\n     But it won't do you any good in the Deep Woods Of Certain Doom.\n     You need a Sword to survive out there."\n`,highlightedWords);}
+    else{colorChangeWords(`you are taken aback by the sheer quantity of food\nbeing shovelling down their gullet.\n\nObnoxious Patron\n    "What are you lookin at bub?\n     Stay away from my Bag Of Jewels\n     Or I'll beat you to a pulp."\n`,highlightedWords);}
+  },
+  status: "Normal"//Options Normal, Happy, Beaten
 });
 
 let musicianWithABrokenArm = new Person({
@@ -368,7 +382,7 @@ let grimReaper = new Person({
   followUp: ()=>{
     if(hero.inventory.includes("Warm Apple Pie")===true){
       colorChangeWords(`\n\nGrim Reaper\n    "What's that delicious aroma in the air?\n     Do you have a freshly baked Warm Apple Pie with you?\n     I haven't had one of those in a millennium.\n     Tell you what, if you give me your dessert,\n     I will give you a second chance at life.\n     I will even give you my weapon to sweeten the deal."\n\nYou receive Death's Scythe.\n`, highlightedWords);
-      hero.status = "Alive Again & Healthy";
+      hero.status = "Alive Once More & Healthier than Ever";
       locationUpdate("HERO-UNDEATH");
     }else{
       colorChangeWords(`\n\nGrim Reaper\n    "Welcome to the Underwold, ${heroName}.\n     Sadly, you won't be staying for very long.\n     You see I am incredibly hungry and you are the only thing on the menu."\n\nWith no where to turn and no hope of escape,\nYou are resigned to your fate.\nThe Grim Reaper bakes you into a pie and eats you.\nAt least you left the world knowing that you are delicious.\n\nYOU DIED\nGAME OVER\n`, highlightedWords);
@@ -418,7 +432,28 @@ let aWarmMeal = new Commodity({
 let BagOfJewels = new Commodity({
   name: "Bag Of Jewels",
   interact: "A bag of priceless gems.",
-  followUp: ()=>{},//TODO event goes here
+  followUp: ()=>{
+    if(obnoxiousPatron.status === Normal){
+      colorChangeWords(`As you reach for the Bag Of Jewels, the table next you you is slammed into a wall.\n\nObnoxious Patron\n    "I warned you to stay away from my Bag Of Jewels, bub!\n     Now, I'm gonna beat you to a pulp!\n\nThe Obnoxious Patron hands become balled into fists and they assume a fighting stance.\nSuddenly, spoons erupt from the Obnoxious Patron's fists,\nthree spoons per fist, right between each knuckle.`,highlightedWords);}
+      if(hero.inventory.includes("Death's Scythe")===true){
+        colorChangeWords(`\nSpoons?!\nThat's an odd choice of weapon.\nYou pull out Death's Scythe, the weapon radiates an unnatural energy in the room.\nUpon seeing this the Obnocious Patron holds his hands up in defeat\n\nObnoxious Patron\n    "Easy there, bub.\n     This is my Bag Of Jewels.\n     No need to cause trouble."\n\nThe Obnoxious Patron sits back down at the table,\npocketing the Bag Of Jewels.\nYou smile on the inside.\nClearly you are getting the hang of being and Adventurer.\nYou twirl Death's Scythe in a fancy flourish,\nfeeling its power,\nbefore smacking yourself in the face with it's blunt end.\n     Ow, that hurt.\n     Clearly you need more practice.\n     You can already feel your face starting to swell.\n     Looks like you've given yourself a Black Eye.\n `,highlightedWords);
+        hero.status = "Black Eye";
+        obnoxiousPatron.status = "Beaten";
+        itemExchange(locations[currentLocation].inventory, obnoxiousPatron.inventory, "Bag Of Jewels");
+      }else if(hero.inventory.includes("Sword")===true){
+        colorChangeWords(`\nSpoons?!\nYou were not expecting that.\nNor were you expecting the Obnoxious Patron to charge at you with the ferocity of a Were-verine!!!\n\nYou drew your Sword just in time to defend yourself.\nThe Obnoxious Patron charged!\n You closed your eyes...\nWhen you opened them again the Obnoxious Patron was impaled on your blade, Dead.\n\nIn the distance you hear the rapid approach of footsteps.\nThe Town Guards rush into the inn.\n\nTown Guards\n    "${heroName}, you have committed the crime of Murder in our peaceful hamlet.\n     The punishment for which...\n     is death!"\n\nThe Town Guards attack you, and justice is served.`,highlightedWords);
+        hero.status = "Justly Deceased";
+        locationUpdate("HERO-DEATH");
+      }else if(locations[currentLocation].inventory.includes("Sword")===true){
+        colorChangeWords(`\nThe Obnoxious Patron charges at you with the ferocity of a Were-verine!!!\nCircling around you, and heading right for...\nThe Sword you dropped in the room.\nAs the Obnoxious Patron picks up the blade they stare at you with bloodshot eyes!\n\nObnoxious Patron\n    "No one touches my family jewels with my concent!"\n\nYou didn't last long after that.\nAt least you died with dignity.\nDying by the Sword and not by the spoon.\n`,highlightedWords);
+        hero.status = "Dead";
+        locationUpdate("HERO-DEATH");
+      }else{
+        colorChangeWords(`\nThe Obnoxious Patron charges at you with the ferocity of a Were-verine!!!\nWith no weapons around the two of you duke it our in fisticuffs.\nThe other villagers in the inn watch the free entertainment before them.\nAfter tussling for a few minutes, you stand victorious.\nBoth you and the Obnoxious Patron are beaten and bruised.\n\nObnoxious Patron\n    "I like you, bub.\n     But this here is my Bag Of Jewels"\n\nThe Obnoxious Patron sits back down at the table,\npocketing the Bag Of Jewels.\nYou smile on the inside.\nLooks like you made a friend.\nAnd it looks like that friend has give you a Black Eye.`,highlightedWords);
+      hero.status = "Black Eye";
+      obnoxiousPatron.status = "Happy";
+      itemExchange(locations[currentLocation].inventory, obnoxiousPatron.inventory, "Bag Of Jewels");
+      }}
 });
 
 let townMap = new Commodity({
