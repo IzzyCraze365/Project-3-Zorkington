@@ -16,7 +16,7 @@ function ask(questionText) {
 // Above is the provided code
 
 // Randomly assigns the number to be used by the secretName
-let randomNumber = randomNum(1, 4);
+let randomNumber = randomNum(1, 5);
 //console.log("The Random Number is", randomNumber); //! TEST
 
 // The options for our Secret Name (Key Puzzle) can change thanks to the switch
@@ -34,10 +34,13 @@ switch (randomNumber) {
   case 4:
     secretName = "John Isabella";
     break;
+  case 5:
+    secretName = "Eli The Warlock";
+    break;
   default:
     secretName = "unknown";
 }
-console.log("The Secret Name is", secretName); //! TEST
+//console.log("The Secret Name is", secretName); //! TEST
 
 // A list of words that I want to have in Yellow Text
 let highlightedWords = [
@@ -115,7 +118,8 @@ let highlightedWords = [
   `Town Guards`,
   `Murder`,
   `justice`,
-  `Demonic Voice`
+  `Demonic Voice`,
+  `Demonic Spirit`
 ];
 
 //! Classes Go Here = FIRST THING!!!
@@ -343,7 +347,7 @@ let musicianWithABrokenArm = new Person({
 let sleepingChild = new Person({
   name: "Sleeping Child",
   inventory: ["Warm Apple Pie"], //Reward for Solving Puzzle
-  interact: "A motionless child lays asleep on an oversized bed.",
+  interact: "\nA motionless child lays asleep on an oversized bed.",
   //Locked Door & puzzle challenge threshold
   followUp: ()=>{
     if (sleepingChild.status === "Freed"){
@@ -355,7 +359,7 @@ let sleepingChild = new Person({
         );
     }
     else if(hero.status === "Black Eye"){
-      colorChangeWords(`Your Black Eye begins to throb as you look upon the still form of the Sleeping Child.\nSuddenly, the child's body snaps upright, eyes flashing wide open!\nThe Sleeping Child opens their mouth makes an otherworldly sound!\n\nDemonic Voice\n    "Well, well well,\n     What have we here?\n     Its little ${heroName}, pretending to be an Adventurer.\n     You simple fool, you have no idea how powerful names are.\n     And I will stay locked inside this Sleeping Child unless you say my name.`,highlightedWords
+      colorChangeWords(`Your Black Eye begins to throb as you look upon the still form of the Sleeping Child.\nSuddenly, the child's body snaps upright, eyes flashing wide open!\nThe Sleeping Child opens their mouth makes an otherworldly sound!\n\nDemonic Voice\n    "Well, well well,\n     What have we here?\n     Its little ${heroName}, pretending to be an Adventurer.\n     You simple fool, you have no idea how powerful names are.\n     And I will stay locked inside this Sleeping Child unless you say my name."\n\nWith that the body of the Sleeping Child twists and contorts,\nbefore flopping back into the bed, asleep.\n`,highlightedWords
         );
         sleepingChild.status = "Possessed";
     }else{}
@@ -663,15 +667,9 @@ async function heroAction(heroName) {
     //console.log(`\nINTERACT\n`); //! Test
     let interactObject = await ask(`\nWhat do you want to interact with?\n>_ `);
     interactableObject = capitalizePlayerInput(interactObject);
-    if ((locations[currentLocation].inventory.includes(interactableObject) === true) && (interactableObject === "Sleeping Child")) {
-      if(sleepingChild.status === "Possessed"){
-        sleepingChild.interact();
-        sleepingChild.followUp();  
-    }else{
-      sleepingChild.interact();
-      sleepingChild.followUp();
-      await sayMyName();
-      }
+    if ((locations[currentLocation].interact.includes(interactableObject) === true) && (interactableObject === "Sleeping Child")) {
+      //console.log("I am in the INTERACTION"); //!TEST
+      await sleepingChildInteraction();
     }
     else if ((locations[currentLocation].inventory.includes(interactableObject) === true) ||(hero.inventory.includes(interactableObject))===true) {
       colorChangeWords(`\n${interactCommodity[interactableObject].interact}`, highlightedWords);
@@ -741,11 +739,10 @@ async function introduction() {
     process.exit();
   } else {
     colorChangeWords(
-      `\nSorry, I don't know how to ${answer}.\n\n`,
+      `\nSorry, I don't know how to ${answer}.\nBut it sounds like you are very non-decisive.\nEither that or bad at followinig instructions.\nIts okay, someone else will pick up the Sword.\nProbably someone who knows how to type in "Yes" or "No" and not rubbish like ${answer}.\n\n`,
       highlightedWords
     );
-    tryAgain();
-    introduction();
+    process.exit();
   }
 }
 
@@ -842,20 +839,33 @@ function locationUpdate(newLocation) {
 
 // Password Name Gane
 async function sayMyName() {
-  let nameGuess = await ask(`\n     Come on,\n     Say my name!\n>_ `);
-  nameGuess = capitalizePlayerInput(nameGuess);
+  let demonName = await ask(`     Come on,\n     Say my name!"\n>_ `);
+  demonName = capitalizePlayerInput(demonName);
+  return demonName;
   //highlightedWords.push(nameGuess);
-  if (secretName === nameGuess) {
-    colorChangeWords(
-      `\nDemonic Voice\n     "What?!\n     No!!!!\n     How could you possibly know that my name is ${secretName}.\nThe body of the Sleeping Child contorts\nas the Demonic Voice screams in agony.\n\nSleeping Child\n    "Than you for freeing my spirit, ${heroName}.\n     Now I can finally get some much needed rest.\n     Please, accept this small token of my appreciation."\n\nThe Sleeping Child reaches under the bedsheets and presents you with a freshly-baked Warm Apple Pie,\nplacing it on the foot of the bed before returning to a peaceful sleep.`,highlightedWords
-      );
-      itemExchange(sleepingChild.inventory, locations[currentLocation].inventory, "Warm Apple Pie");
-      sleepingChild.status = "Freed";
-  } else {
-    colorChangeWords(`\nDemonic Voice\n    "Hahahahahahaha\n     Wrong!!!\n     You are a fool ${heroName}.\n     My name is not ${nameGuess}.\n     I will remain inside this Sleeping Child until the end of days.\n     Mwahahahahahaha.\n\nThe Demonic Voice mocks you as the body of the Sleeping Child goes rigid\nand returns to its peaceful state.`,highlightedWords);
-    sleepingChild.status = "Possessed";
-  }
 }
+
+//This handles the Logic of the Sleeping Child
+async function sleepingChildInteraction(){
+  if(sleepingChild.status === "Possessed"){
+    //console.log("TEST 1") //!TEST
+    colorChangeWords(sleepingChild.interact,highlightedWords);
+    sleepingChild.followUp();
+    let nameGuess = await sayMyName();
+    if (secretName === nameGuess) {
+      colorChangeWords(
+        `\nDemonic Voice\n    "What?!\n     No!!!!\n     How could you possibly know that my name is ${secretName}?"\n\nThe body of the Sleeping Child contorts as the Demonic Voice screams in agony.\nThe room goes quiet as the Demonic Spirit leaves the Sleeping Child.\n\nSleeping Child\n    "Than you for freeing my spirit, ${heroName}.\n     Now I can finally get some much needed rest.\n     Please, accept this small token of my appreciation."\n\nThe Sleeping Child reaches under the bedsheets and presents you with a freshly-baked Warm Apple Pie,\nplacing it on the foot of the bed before laying back and returning to a peaceful slumber.`,highlightedWords
+        );
+        itemExchange(sleepingChild.inventory, locations[currentLocation].inventory, "Warm Apple Pie");
+        sleepingChild.status = "Freed";
+    } else {
+      colorChangeWords(`\nDemonic Voice\n    "Hahahahahahaha\n     Wrong!!!\n     You are a fool ${heroName}.\n     My name is not ${nameGuess}.\n     I will remain inside this Sleeping Child until the end of days.\n     Mwahahahahahaha."\n\nThe Demonic Voice mocks you as the body of the Sleeping Child goes rigid\nand returns to its peaceful state.`,highlightedWords);
+    }
+  }else{
+    //console.log("TEST 2"); //!TEST
+    colorChangeWords(sleepingChild.interact,highlightedWords);
+  sleepingChild.followUp();
+  }}
 
 //! Helper Function List (Alphabetical Order) - Bonus functions
 // Capitolize the first letter of a word, and make the rest lower case
@@ -905,7 +915,9 @@ async function playAgain() {
   );
   restart = capitalizeFirstLetter(restart);
   if (restart === ("P" || "Play")) {
-    start(); // Runs the game from the Introduction
+    //start(); // Runs the game from the Introduction //! Currently does NOT reset the Class values
+    console.log(`type "node index" in the terminal to Play Again`)
+    quitGame();
   } else if (restart === "E" || round2 === "Exit") {
     quitGame();
   } else {
@@ -968,7 +980,7 @@ if (playGame === "Yes" || playGame === "Y") {
   process.exit();
 } else {
   colorChangeWords(
-    `\nSorry, I don't know how to ${playGame}.\n\n`,
+    `\n${playGame} is not a recognized command.\n\n`,
     highlightedWords
   );
   tryAgain();
