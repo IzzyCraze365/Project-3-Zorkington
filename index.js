@@ -107,15 +107,27 @@ let highlightedWords = [
   `Dead`,
   `Justly Deceased`,
   `Dead (again)`,
-  `Alive Once More & Healthier than Ever`
+  `Alive Once More & Healthier than Ever`,
   /*Other*/
+  `the Mighty`,
+  `the Mightier`,
   `Were-verine`,
   `Town Guards`,
   `Murder`,
-  `justice`
+  `justice`,
+  `Demonic Voice`
 ];
 
 //! Classes Go Here = FIRST THING!!!
+// Player's Backpack Inventory Management
+class Player {
+  constructor(name, inventory, status) {
+    this.name = name,
+    this.inventory = inventory;
+    this.status = status;
+  }
+}
+
 // A List of All Interactable Items
 class Commodity {
   constructor({
@@ -142,15 +154,6 @@ class Person {
     this.inventory = inventory;
     this.name = name;
     this.followUp = followUp;
-    this.status = status;
-  }
-}
-
-// Player's Backpack Inventory Management
-class Player {
-  constructor(name, inventory, status) {
-    this.name = name,
-    this.inventory = inventory;
     this.status = status;
   }
 }
@@ -257,9 +260,9 @@ let underworld = new Room({
   doorLock: "No Escape",
   inventory: [],
   interact: ["Grim Reaper"],
-  possibleLocations: ["... funny there are no exits.","There is nowhere to go, there is no escape."],
+  possibleLocations: [`... \nFunny there are no exits...\nThere is nowhere to go,\nthere is no escape.`],
   description:
-    `\nYou could feel your consciousness leave your body.\nThen suddenly without warning you were here.\nYou know without a shadow of a doubt that you are in the Underworld.\n\nInside a dark cavern.  The only source of light...\na flickering torch held by a robed figure\nwhom you instinctually know is the personification of Death, the Grim Reaper.\n`,
+    `-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X\n\nYou could feel your consciousness leave your body.\nThen suddenly without warning you were here.\nYou know without a shadow of a doubt that you are in the Underworld.\n\nInside a dark cavern.  The only source of light...\nA flickering torch held by a robed figure,\nwhom you instinctually know is the personification of Death, the Grim Reaper.\n`,
 });
 
 // Variables
@@ -286,7 +289,7 @@ let locations = {
 let retiredAdventurer = new Person({
   name: "Retired Adventurer",
   inventory: ["Death's Scythe"],
-  interact: `The Retired Adventurer looks you up and down.\n    "I daresay, I hath been retired only since morn.\n     Tis good of yee to taketh the mantle up.\n     Dost thou even hoist ${heroName}?\n     Alas, I shalth spend me retirment plalying my favorite game...\n     Guess the Number.\n     Doth thou wisheth to play?\n     Nay? Then begone with yee!`,
+  interact: `The Retired Adventurer looks you up and down.\n    "I daresay, I hath been retired only since morn.\n     Tis good of yee to taketh the mantle up.\n     Dost thou even hoist?\n     Alas, I shalth spend me retirment playing me favorite game...\n     "Guess the Number."\n     Doth thou wisheth to play?\n     Nay? Then begone with yee!`,
   followUp: ()=>{},//TODO Guess the Number
   status: "Normal"
 });
@@ -302,7 +305,7 @@ let simpleVillager = new Person({
 let innkeeper = new Person({
   name: "Innkeeper",
   inventory: ["A Warm Meal"],
-  interact: `Innkeeper\n    "Hallooo there, ${heroName}!\n     Welcome to the Idiot's Inspring Inn where our hospitality is as warm as our food.\n     Don't believe me?\n     Help yourself to A Warm Meal, and feel free to talk to anybody round these parts.\n     We're all the friendly sort,\n     of course the Musician With A Broken Arm seems a tad jumpy,\n     and the Obnoxious Patron back there is a strange one\nwhos fixing to get into a tussel.`,
+  interact: `Innkeeper\n    "Hallooo there, Adventurer!\n     Welcome to the Idiot's Inspring Inn where our hospitality is as warm as our food.\n     Don't believe me?\n     Help yourself to A Warm Meal, and feel free to talk to anybody round these parts.\n     We're all the friendly sort,\n     of course the Musician With A Broken Arm seems a tad jumpy,\n     and the Obnoxious Patron back there is a strange one\nwhos fixing to get into a tussel.`,
   followUp: ()=>{itemExchange(innkeeper.inventory, locations[currentLocation].inventory, "A Warm Meal");
     innkeeper.interact = `Innkeeper\n    "Welcome to the Idiot's Inspring Inn where our hospitality is as warm as our food.\n     Good to see you again, ${heroName}!\n     Feel free to talk to anybody round these parts.\n     We're the friendly sort of folk,\n     and we all have some nuggets of useful information.`},
   status: "Normal"
@@ -311,7 +314,7 @@ let innkeeper = new Person({
 let obnoxiousPatron = new Person({
   name: "Obnoxious Patron",
   inventory: [], //Reward for Solving Puzzle
-  interact: `As you approach the individual at the far end of the room,\n`,
+  interact: `As you approach the individual at the far end of the room,`,
   followUp: ()=>{
     if(obnoxiousPatron.status === "Happy"){colorChangeWords(`the Obnoxious Patron grins at you with a split lip.\n\nObnoxious Patron\n    "That was a good fight, bub.\n     You make an excellent sparring partner.\n     Listen up, if you wanna stay alive.\n     Don't go into the Deep Woods Of Certain Doom without a Sword.\n     Doesn't matter how good you fight, you need a weapon."\n`,highlightedWords);}
     else if(obnoxiousPatron.status === "Beaten"){colorChangeWords(`the Obnoxious Patron sits back using their spoon-fists to eat their meal.\n\nObnoxious Patron\n    "Look at you with your fancy weapon, bub.\n     I have no idea where you got soemthing like that,\n     But it won't do you any good in the Deep Woods Of Certain Doom.\n     You need a Sword to survive out there."\n`,highlightedWords);}
@@ -325,9 +328,9 @@ let musicianWithABrokenArm = new Person({
   inventory: [],
   interact: `\nMusician With A Broken Arm\n    "You... who are you?!?!?!?!\n     It doesn't matter, you can't help me.\n     I was attacked by many a foul beast out in the Forlorn Forest Of Fatality!\n     They broke my arm, causing me to drop my Damaged Lute.\n     That will teach me to go out into the woods without a weapon.\n     I wish my instrument could be returned to me.\n     Music brings comfort.\n     Especially in these dark times where monsters hide amoung us...\n`,
   followUp: async ()=>{if(hero.inventory.includes("Damaged Lute")===true){
-    colorChangeWords(`\nYou reach into your backpack and pull out the Musician's Damaged Lute.\nTears of joy appear in the Musician's eyes.\n\nMusician With A Broken Arm.\n    "My Broke Lute!\n    I never thought I would see it again!\n    Thank you so much, ${heroName}.\n    I shall use the power of music to fight against the darkness."\n\nThe musician plucks the one string on the lute that hasn't snapped.\nAn an eerie sound resonates through the room.\n\n    "I should tell you, one of the foul beasts from the woods has infiltrated out humble hamlet.\n    A creature of darkness has possessed the Sleeping Child.\n     But it will only make itself know to people like myself whom have been injured.\n`, highlightedWords);
+    colorChangeWords(`\nYou reach into your backpack and pull out the Musician's Damaged Lute.\nTears of joy appear in the Musician's eyes.\n\nMusician With A Broken Arm.\n    "My Broke Lute!\n    I never thought I would see it again!\n    Thank you so much, ${heroName}.\n    I shall use the power of music to fight against the darkness."\n\nThe musician plucks the one string on the lute that hasn't snapped.\nAn an eerie sound resonates through the room.\n\n    "I should tell you, one of the foul beasts from the woods has infiltrated out humble hamlet.\n    A creature of darkness has possessed the Sleeping Child.\n     But it will only make itself known to people like myself whom have been injured.\n`, highlightedWords);
     itemExchange(hero.inventory, musicianWithABrokenArm.inventory, "Damaged Lute");
-    musicianWithABrokenArm.interact = `\nMusician With A Broken Arm.\n    "Thank you so much, ${heroName} for returning my Damaged Lute to me.\n     I should tell you, a creature of darkness has possessed the Sleeping Child.\n     But it will only make itself know to people, like myself, whom have been injured.\n`
+    musicianWithABrokenArm.interact = `\nMusician With A Broken Arm.\n    "Thank you so much, ${heroName} for returning my Damaged Lute to me.\n     I should tell you, a creature of darkness has possessed the Sleeping Child.\n     But it will only make itself known to people, like myself, whom have been injured.\n`
   }
   },
   status: "Normal"
@@ -336,9 +339,25 @@ let musicianWithABrokenArm = new Person({
 let sleepingChild = new Person({
   name: "Sleeping Child",
   inventory: ["Warm Apple Pie"], //Reward for Solving Puzzle
-  interact: "Something",//TODO
-  followUp: ()=>{},//TODO
-  status: "Normal"
+  interact: "A motionless child laying on an oversized bed.",
+  followUp: ()=>{
+    if (sleepingChild.status === "Freed"){
+      colorChangeWords(`It looks as though the Sleeping Child is finally resting peacfully.`, highlightedWords
+      );
+    }
+    else if (sleepingChild.status === "Possessed"){
+      colorChangeWords(`Suddenly, the child's body snaps upright!\nThe heada of the Sleeping Child begins to spin in a circle as vomit is spewed in every direction.\n\nDemonic Voice\n    "Look who's back!\n     Let me guess, ${heroName}.\n     You think you know what my name is.`,highlightedWords
+        );
+      sayMyName();
+    }
+    else if(hero.status === "Black Eye"){
+      colorChangeWords(`Your Black Eye throbs as you look upon the still form of the Sleeping Child.\nSuddenly, the child's body snaps upright,\neyes flashing wide open!\nThe Sleeping Child opens their mouth makes an otherworldly sounds!\n\nDemonic Voice\n    "Well, well well,\n     What have we here?\n     Its little ${heroName} pretending to be an Adventurer.\n     You simple fool, you have no idea how powerful names are.\n     And I will stay locked inside this Sleeping Child unless you say my name.`,highlightedWords
+        );
+        sleepingChild.status === "Possessed";
+        sayMyName();
+    }else{}
+  },
+  status: "Normal" //Options Normal, Possessed, Freed
 });
 
 let exhaustedParents = new Person({
@@ -381,11 +400,11 @@ let grimReaper = new Person({
   interact: "You approach the Grim Reaper.\nEvery step closer to the cloaked figure chilles you to your bones.\nAs you approach you see the skeletal face of Death\nwatching your every move with the piercing gaze of red eyes.",
   followUp: ()=>{
     if(hero.inventory.includes("Warm Apple Pie")===true){
-      colorChangeWords(`\n\nGrim Reaper\n    "What's that delicious aroma in the air?\n     Do you have a freshly baked Warm Apple Pie with you?\n     I haven't had one of those in a millennium.\n     Tell you what, if you give me your dessert,\n     I will give you a second chance at life.\n     I will even give you my weapon to sweeten the deal."\n\nYou receive Death's Scythe.\n`, highlightedWords);
+      colorChangeWords(`\n\nGrim Reaper\n    "Welcome to the Underwold, ${heroName}.\n     What's that delicious aroma in the air?\n     Do you have a freshly-baked Warm Apple Pie with you?\n     I haven't had one of those in a millennium.\n     Tell you what, if you give me your dessert,\n     I will give you a second chance at life.\n     I will even give you my weapon to sweeten the deal."\n\nYou receive Death's Scythe.\n`, highlightedWords);
       hero.status = "Alive Once More & Healthier than Ever";
       locationUpdate("HERO-UNDEATH");
     }else{
-      colorChangeWords(`\n\nGrim Reaper\n    "Welcome to the Underwold, ${heroName}.\n     Sadly, you won't be staying for very long.\n     You see I am incredibly hungry and you are the only thing on the menu."\n\nWith no where to turn and no hope of escape,\nYou are resigned to your fate.\nThe Grim Reaper bakes you into a pie and eats you.\nAt least you left the world knowing that you are delicious.\n\nYOU DIED\nGAME OVER\n`, highlightedWords);
+      colorChangeWords(`\n\nGrim Reaper\n    "Welcome to the Underwold, ${heroName}.\n     Sadly, you won't be staying for very long.\n     You see, I am incredibly hungry and you are the only thing on the menu."\n\nWith no where to turn and no hope of escape,\nYou are resigned to your fate.\nThe Grim Reaper bakes you into a pie and eats you.\nAt least you left the world knowing that you were delicious.\n\nYOU DIED\nGAME OVER\n`, highlightedWords);
       playAgain();
   }},
   status: "Normal"
@@ -433,15 +452,15 @@ let BagOfJewels = new Commodity({
   name: "Bag Of Jewels",
   interact: "A bag of priceless gems.",
   followUp: ()=>{
-    if(obnoxiousPatron.status === Normal){
-      colorChangeWords(`As you reach for the Bag Of Jewels, the table next you you is slammed into a wall.\n\nObnoxious Patron\n    "I warned you to stay away from my Bag Of Jewels, bub!\n     Now, I'm gonna beat you to a pulp!\n\nThe Obnoxious Patron hands become balled into fists and they assume a fighting stance.\nSuddenly, spoons erupt from the Obnoxious Patron's fists,\nthree spoons per fist, right between each knuckle.`,highlightedWords);}
+    if(obnoxiousPatron.status === "Normal"){
+      colorChangeWords(`As you reach for the Bag Of Jewels, the table next you you is slammed into a wall.\n\nObnoxious Patron\n    "I warned you to stay away from my Bag Of Jewels, bub!\n     Now, I'm gonna beat you to a pulp!\n\nThe Obnoxious Patron hands become balled into fists and they assume a fighting stance.\nSuddenly, spoons erupt from the Obnoxious Patron's fists, three spoons per fist, right between each knuckle.`,highlightedWords);}
       if(hero.inventory.includes("Death's Scythe")===true){
         colorChangeWords(`\nSpoons?!\nThat's an odd choice of weapon.\nYou pull out Death's Scythe, the weapon radiates an unnatural energy in the room.\nUpon seeing this the Obnocious Patron holds his hands up in defeat\n\nObnoxious Patron\n    "Easy there, bub.\n     This is my Bag Of Jewels.\n     No need to cause trouble."\n\nThe Obnoxious Patron sits back down at the table,\npocketing the Bag Of Jewels.\nYou smile on the inside.\nClearly you are getting the hang of being and Adventurer.\nYou twirl Death's Scythe in a fancy flourish,\nfeeling its power,\nbefore smacking yourself in the face with it's blunt end.\n     Ow, that hurt.\n     Clearly you need more practice.\n     You can already feel your face starting to swell.\n     Looks like you've given yourself a Black Eye.\n `,highlightedWords);
         hero.status = "Black Eye";
         obnoxiousPatron.status = "Beaten";
         itemExchange(locations[currentLocation].inventory, obnoxiousPatron.inventory, "Bag Of Jewels");
       }else if(hero.inventory.includes("Sword")===true){
-        colorChangeWords(`\nSpoons?!\nYou were not expecting that.\nNor were you expecting the Obnoxious Patron to charge at you with the ferocity of a Were-verine!!!\n\nYou drew your Sword just in time to defend yourself.\nThe Obnoxious Patron charged!\n You closed your eyes...\nWhen you opened them again the Obnoxious Patron was impaled on your blade, Dead.\n\nIn the distance you hear the rapid approach of footsteps.\nThe Town Guards rush into the inn.\n\nTown Guards\n    "${heroName}, you have committed the crime of Murder in our peaceful hamlet.\n     The punishment for which...\n     is death!"\n\nThe Town Guards attack you, and justice is served.`,highlightedWords);
+        colorChangeWords(`\nSpoons?!\nYou were not expecting that.\nNor were you expecting the Obnoxious Patron to charge at you with the ferocity of a Were-verine!!!\n\nYou drew your Sword just in time to defend yourself.\nThe Obnoxious Patron charged!\nYou closed your eyes...\nWhen you opened them again the Obnoxious Patron was impaled on your blade, Dead.\n\nIn the distance you hear the rapid approach of footsteps.\nThe Town Guards rush into the inn.\n\nTown Guards\n    "${heroName}, you have committed the crime of Murder in our peaceful hamlet.\n     The punishment for which...\n     is death!"\n\nThe Town Guards attack you, and justice is served.`,highlightedWords);
         hero.status = "Justly Deceased";
         locationUpdate("HERO-DEATH");
       }else if(locations[currentLocation].inventory.includes("Sword")===true){
@@ -510,7 +529,7 @@ let heapsOfSilver = new Commodity({
 
 let pileOfBones = new Commodity({
   name: "Pile Of Bones",
-  interact: `\nAs you approach the back of the cave you see the massive Pile Of Bones littering the Dragon's Keep.\n  You look closely at the bones, and your heart starts to sink.\n     You get the feeling that you have been here before...\n     That you have tried to fight the Dragon and failed...\n     You realize that the bones on the floor are your bones!!!\n     You have gotten to this point so many times!!!\n     This is where you die!\n     Over and over again, as though your life is some twisted game\n\nYou push these thoughts out of your head.\n     "You are "${heroName} the Mighty" and you will succed!"\n Are your last thoughts as you turn to face the now awake Dragon.\nIt roars inches from your face.\nIts breath hot upon your face/\nThe roar was so loud and so sudden that you were scared to death...`, 
+  interact: `\nAs you approach the back of the cave you see the massive Pile Of Bones littering the Dragon's Keep.\n  You look closely at the bones, and your heart starts to sink.\n     You get the feeling that you have been here before...\n     That you have tried to fight the Dragon and failed...\n     You realize that the bones on the floor are your bones!!!\n     You have gotten to this point so many times!!!\n     This is where you die!\n     Over and over again, as though your life is some twisted game\n\nYou push these thoughts out of your head.\n     "You are "${heroName} the Mightier" and you will succed!"\n Are your last thoughts as you turn to face the now awake Dragon.\nIt roars inches from your face.\nIts breath hot upon your face/\nThe roar was so loud and so sudden that you were scared to death...`, 
   followUp: ()=>{
     hero.status = "Dead (again)";
     locationUpdate("HERO-DEATH");},
@@ -518,7 +537,7 @@ let pileOfBones = new Commodity({
 
 let dragonsTreasure = new Commodity({
   name: "Dragon's Treasure",
-  interact: `\nYour prize for slaying the Dragon!\nWealth beyond your wildest dreams.\nYou return to the hamlet, with all the Gold in tow.\nAll the villager's praise your efforts.\nThey will sing your praises from now until the end of time.\nAll will know your name:\n     "${heroName} the Mighty",the Adventurer of Placeholder Village!\n\nCongratulation, You Won!`,
+  interact: `\nYour prize for slaying the Dragon!\nWealth beyond your wildest dreams.\nYou return to the hamlet, with all the Gold in tow.\nAll the villager's praise your efforts.\nThey will sing your praises from now until the end of time.\nAll will know your name:\n     "${heroName} the Mightier",the Adventurer of Placeholder Village!\n\nCongratulation, You Won!`,
   followUp: ()=>{playAgain()},
 });
 
@@ -559,7 +578,7 @@ async function start() {
   colorChangeWords(`\nYou, ${heroName} find yourself at the Beginning of a Grand Adventure!\nAnd it all starts right here in this quaint little village.\nIt is probably a good idea to "Look" around.\n(type "Help" to see a list of available actions.)`,highlightedWords);
   while (userInput !== "Exit") {
     colorChangeWords(
-      `\nYou are currently in the ${currentLocation}.`,
+      `\n${heroName} is currently in the ${currentLocation}.`,
       highlightedWords
     );
     userInput = await heroAction(heroName);
@@ -568,7 +587,7 @@ async function start() {
 }
 
 async function heroAction(heroName) {
-  const heroAction = `What would you like to do, ${heroName}?\n>_ `;
+  const heroAction = `What would you like to do?\n>_ `;
   let action = await ask(heroAction);
   action = capitalizePlayerInput(action);
   if (action === "Exit" || action === "E") {
@@ -675,20 +694,6 @@ async function heroAction(heroName) {
   }
 }
 
-// TODO Modify this function
-// Response if the Player tries to take something they shouldn't
-
-function speakFriendAndEnter(password) {
-  if (secretName === password) {
-    colorChangeWords(
-      `Success! The door opens.\nYou enter the foyer and the door shuts behind you.`,
-      highlightedWords
-    );
-  } else {
-    colorChangeWords(`Bzzzzt! The door is still locked.`);
-  }
-}
-
 async function introduction() {
   colorChangeWords(
     `\nThe sun rises peacefully on the small hamlet of Placeholder Village.\nThe birds are singing sweetly in the tress.\nThe morning dew glistens on the grass as the first rays of the sun reach the still earth below.\nA gentle breeze caresses your face as you briskly walk to the Town Triangle, hoping to get a jump on your morning chores.\n\nUpon entering the Town Triangle you see the village's heroic Adventurer in a rather bad temper.\nThe Adventurer groans loudly, before throwing his Sword down upon the ground.\n    "I has't hadith enough!\n     Yee all kepeth requesting too much.\n     Th're is nary a way f'r me to slayeth a Dragon with this steel!\n     I art to retire."\n\nIt appears the village is in need of a new heroic Adventurer...\n\nDo you pick up the Sword?`,
@@ -703,8 +708,9 @@ async function introduction() {
       highlightedWords
     );
     let heroName = await ask(`     What is your name, adventurer?"\n>_ `);
+    highlightedWords.push(heroName);
     colorChangeWords(
-      `\nSimple Villager\n    "I see, your name is ${heroName},\n     Obviously, you were named after '${heroName} the Mighty,' the Hero of Legend\n     As I live and breathe, we are most fortunate for your arrival.\n\n     Recently, a missionary of rightous nuns was dispatched to aid our small hamlet.\n     However, as they were crossing a bridge over a ravine they were attacked by a horde of goblins.\n     The goblins cut the ropes of the bridge and the cart of nuns fell hundreds of feet into the sharp rocks below.\n\n     Your assistance is needed posthaste, ${heroName}!\n     Only you can raise enough Gold to help us rebuild that broken bridge."\n`,
+      `\nSimple Villager\n    "I see, your name is ${heroName},\n     Obviously, you were named after '${heroName} the Mighty' the Hero of Legend\n     As I live and breathe, we are most fortunate for your arrival.\n\n     Recently, a missionary of rightous nuns was dispatched to aid our small hamlet.\n     However, as they were crossing a bridge over a ravine they were attacked by a horde of goblins.\n     The goblins cut the ropes of the bridge and the cart of nuns fell hundreds of feet into the sharp rocks below.\n\n     Your assistance is needed posthaste, ${heroName}!\n     Only you can raise enough Gold to help us rebuild that broken bridge."\n`,
       highlightedWords
     );
     return heroName;
@@ -749,7 +755,7 @@ function itemExchange(giver, receiver, itemToBeExchanged) {
 // This function allows the player to change locations
 async function locationMove() {
   let newLocation = "";
-  colorChangeWords(`You are currently standing in the ${currentLocation}.`,
+  colorChangeWords(`\nYou are currently standing in the ${currentLocation}.`,
     highlightedWords
   );
   newLocation = await ask(`Where would you like to go?\n>_ `);
@@ -813,6 +819,21 @@ function locationUpdate(newLocation) {
     );
   }
 }
+}
+
+// Password Name Gane
+async function sayMyName() {
+  let nameGuess = await ask(`Come on,\nSay my name!\n>_ `);
+  if (secretName === nameGuess) {
+    colorChangeWords(
+      `\nDemonic Voice\n     "What?!\n     No!!!!\n     How could you possibly know that my name is ${secretName}.\nThe body of the Sleeping Child contorts\nas the Demonic Voice screams in agony.\n\nSleeping Child\n    "Than you for freeing my spirit, ${heroName}.\n     Now I can finally get some much needed rest.\n     Please, accept this small token of my appreciation."\n\nThe Sleeping Child reaches under the bedsheets and presents you with a freshly-baked Warm Apple Pie,\nplacing it on the foot of the bed before returning to a peaceful sleep.`,highlightedWords
+      );
+      itemExchange(sleepingChild.inventory, locations[currentLocation].inventory, "Warm Apple Pie");
+      sleepingChild.status = "Freed"
+
+  } else {
+    colorChangeWords(`\nDemonic Voice\n     "Hahahahahahaha\n     Wrong!!!\n     You are a fool ${heroName}.\n     My name is not ${nameGuess}.\n     I will remain inside this Sleeping Child until the end of days.\n     Mwahahahahahaha.\n\nThe Demonic Voice mocks you as the body of the Sleeping Child goes rigid\nand returns to its peaceful state.`,highlightedWords);
+  }
 }
 
 //! Helper Function List (Alphabetical Order) - Bonus functions
