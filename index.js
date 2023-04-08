@@ -84,7 +84,7 @@ let highlightedWords = [
   `Gold`,
   `Premium Horse Manure`,
   `Bucket`,
-  `Bags Of Jewels`,
+  `Bag Of Jewels`,
   `A Warm Meal`,
   `Black Eye`,
   `Town Map`,
@@ -138,7 +138,8 @@ class Person {
 
 // Player's Backpack Inventory Management
 class Player {
-  constructor(inventory, status) {
+  constructor(name, inventory, status) {
+    this.name = name,
     this.inventory = inventory;
     this.status = status;
   }
@@ -166,7 +167,8 @@ class Room {
 //! Object Definition
 //Player Inventory
 let hero = new Player(
-  ["Bucket", "Sword", "Premium Horse Manure","Mounds Of Gold","Damaged Lute"],
+  "Taran",// Placeholder Name
+  ["Bucket", "Sword", "Premium Horse Manure"],
   "Healthy."
 ); // Starts with a Sword & useless Junk, Status is Healthy
 
@@ -184,11 +186,11 @@ let townTriangle = new Room({
 let idiotsInspiringInn = new Room({
   name: "Idiot's Inspiring Inn",
   doorLock: false,
-  inventory: ["Bags Of Jewels"],
+  inventory: ["Bag Of Jewels"],
   interact: ["Innkeeper", "Obnoxious Patron", "Musician With A Broken Arm"], //"Black Eye" from interaction puzzle
   possibleLocations: ["Town Triangle", "Upstairs Room"],
   description:
-    "\nThe Idiot's Inspiring Inn\nThe most popular tavern in the Placeholder Village, \nprimarily because it is the only tavern in Placeholder Village. \nThe Innkeeper behind the bar is preparing a meal for a Musician With A Broken Arm. \nIn the back of the room, an Obnoxious Patron is slovenly eating a meal.\nBags Of Jewels are scattered across the patron's table.\n\nFrom here you can head outside to the Town Triangle or go to the Upstairs Room.\n",
+    "\nThe Idiot's Inspiring Inn\nThe most popular tavern in the Placeholder Village, \nprimarily because it is the only tavern in Placeholder Village. \nThe Innkeeper behind the bar is preparing a meal for a Musician With A Broken Arm. \nIn the back of the room, an Obnoxious Patron is slovenly eating a meal.\nA Bag Of Jewels is scattered across the patron's table.\n\nFrom here you can head outside to the Town Triangle or go to the Upstairs Room.\n",
 });
 let upstairsRoom = new Room({
   name: "Upstairs Room",
@@ -233,7 +235,7 @@ let hagsHorridHoval = new Room({
 let dragonsKeep = new Room({
   name: "Dragon's Keep",
   doorLock: false,
-  inventory: ["Dragon's Treasure"],
+  inventory: [],
   interact: ["Dragon", "Mounds Of Gold", "Heaps Of Silver", "Pile Of Bones"],
   possibleLocations: ["Deep Woods Of Certain Doom"],
   description:
@@ -274,8 +276,8 @@ let locations = {
 let retiredAdventurer = new Person({
   name: "Retired Adventurer",
   inventory: ["Death's Scythe"],
-  interact: `The Retired Adventurer looks you up and down.\n    "I daresay, I hath been retired only since morn.\n     Tis good of yee to taketh the mantle up.\n     Dost thou even hoist, ${heroName}?\n     Alas, I shalth spend me retirment plalying my favorite game...\n     Guess the Number.\n     Doth thou wisheth to play?\n     Nay? Then begone with yee!`,
-  followUp: ()=>{},//TODO
+  interact: `The Retired Adventurer looks you up and down.\n    "I daresay, I hath been retired only since morn.\n     Tis good of yee to taketh the mantle up.\n     Dost thou even hoist ${heroName}?\n     Alas, I shalth spend me retirment plalying my favorite game...\n     Guess the Number.\n     Doth thou wisheth to play?\n     Nay? Then begone with yee!`,
+  followUp: ()=>{},//TODO Guess the Number
   status: "Normal"
 });
 
@@ -299,7 +301,7 @@ let innkeeper = new Person({
 let obnoxiousPatron = new Person({
   name: "Obnoxious Patron",
   inventory: ["Black Eye"], //Reward for Solving Puzzle
-  interact: "Something",//TODO
+  interact: `As you approach the individual at the far end of the room,\nyou are taken aback by the sheer quantity of food\nbeing shovelling down their gullet.\n\nObnoxious Patron\n    "What are you lookin at bub?\n     Stay away from my Bag Of Jewels\nOr I'll beat you to a pulp.`,
   followUp: ()=>{},//TODO
   status: "Normal"
 });
@@ -341,17 +343,37 @@ let exhaustedParents = new Person({
 
 let dragon = new Person({
   name: "Dragon",
-  inventory: [],
-  interact: "Something",//TODO
-  followUp: ()=>{},//TODO
+  inventory: ["Dragon's Treasure"],
+  interact: `\nYou dash forward, hoping to attack the Dragon while it slumbered.\nBut it was all a ploy.\nAs you closed in on the monster,\nits eyes snapped opened and it let out a mighty roar.\nIt was merely pretending to sleep to gain the advantage.`,
+  followUp: ()=>{if(hero.inventory.includes("Death's Scythe")===true){
+    colorChangeWords(`\nBut that advantages will not be enough to save the beast.\nYou trivially dodge its attacks before jumping high in the air.\nYou raise Death's Scythe aloft and slice it across the Dragon's body.\nThe Dragon immediately perished.\nLeaving behind its horde of loot to the taking.\n`, highlightedWords);
+    itemExchange(dragon.inventory, dragonsKeep.inventory, "Dragon's Treasure");
+    dragonsKeep.interact = [];
+  }else if(hero.inventory.includes("Sword")===true){
+    colorChangeWords(`\nBut you will not be outwitted that easily.\nYou manage dodge the Dragon's attacks before closing the distance on the beast.\nNow standing right below the creatures heart you bring your Sword back and thrust it into Dragon's body.\n     clink\n\nThe Sword could not penetrate the Dragon's thick scales.\nYou recall the words of the Retired Adventurer from earlier today,\nas the Dragon rears back and roasts you to a crisp.\n`, highlightedWords);
+    hero.status = "Dead";
+    locationUpdate("HERO-DEATH");
+  }else{
+    colorChangeWords(`\nIt didn't need that much of an advantage to begin with...\nYou left all of your weapons beind.\n\n     That was a really stupid thing to do...\nYou didn't last long against the fire-breathing menace,\nand were gobbled up before you could escape.`, highlightedWords);
+    hero.status = "Dead";
+    locationUpdate("HERO-DEATH");
+  }},
   status: "Normal"
 });
 
 let grimReaper = new Person({
   name: "Grim Reaper",
   inventory: ["Death's Scythe"], //Reward for Solving Puzzle
-  interact: "Something",//TODO
-  followUp: ()=>{},//TODO
+  interact: "You approach the Grim Reaper.\nEvery step closer to the cloaked figure chilles you to your bones.\nAs you approach you see the skeletal face of Death\nwatching your every move with the piercing gaze of red eyes.",
+  followUp: ()=>{
+    if(hero.inventory.includes("Warm Apple Pie")===true){
+      colorChangeWords(`\n\nGrim Reaper\n    "What's that delicious aroma in the air?\n     Do you have a freshly baked Warm Apple Pie with you?\n     I haven't had one of those in a millennium.\n     Tell you what, if you give me your dessert,\n     I will give you a second chance at life.\n     I will even give you my weapon to sweeten the deal."\n\nYou receive Death's Scythe.\n`, highlightedWords);
+      hero.status = "Alive Again & Healthy";
+      locationUpdate("HERO-UNDEATH");
+    }else{
+      colorChangeWords(`\n\nGrim Reaper\n    "Welcome to the Underwold, ${heroName}.\n     Sadly, you won't be staying for very long.\n     You see I am incredibly hungry and you are the only thing on the menu."\n\nWith no where to turn and no hope of escape,\nYou are resigned to your fate.\nThe Grim Reaper bakes you into a pie and eats you.\nAt least you left the world knowing that you are delicious.\n\nYOU DIED\nGAME OVER\n`, highlightedWords);
+      playAgain();
+  }},
   status: "Normal"
 });
 
@@ -393,8 +415,8 @@ let aWarmMeal = new Commodity({
   followUp: ()=>{},
 });
 
-let BagsOfJewels = new Commodity({
-  name: "Bags Of Jewels",
+let BagOfJewels = new Commodity({
+  name: "Bag Of Jewels",
   interact: "A bag of priceless gems.",
   followUp: ()=>{},//TODO event goes here
 });
@@ -414,7 +436,7 @@ let warmApplePie = new Commodity({
 let damagedLute = new Commodity({
   name: "Damaged Lute",
   interact: "\nA musical instrument that has seen better days.\nIt appears to have been damaged by some kind of wild animal.",
-  followUp: ()=>{},//TODO
+  followUp: ()=>{},
 });
 
 let crookedSign = new Commodity({
@@ -459,6 +481,12 @@ let pileOfBones = new Commodity({
     locationUpdate("HERO-DEATH");},
 });
 
+let dragonsTreasure = new Commodity({
+  name: "Dragon's Treasure",
+  interact: `\nYour prize for slaying the Dragon!\nWealth beyond your wildest dreams.\nYou return to the hamlet, with all the Gold in tow.\nAll the villager's praise your efforts.\nThey will sing your praises from now until the end of time.\nAll will know your name:\n     "${heroName} the Mighty",the Adventurer of Placeholder Village!\n\nCongratulation, You Won!`,
+  followUp: ()=>{playAgain()},
+});
+
 let deathsScythe = new Commodity({
   name: "Death's Scythe",
   interact: "\nThe immortal weapon of the manifestation of Death.\nA single scratch would cause any creature to immediately perish.\nUse with caution.",
@@ -471,7 +499,7 @@ let interactCommodity = {
   "Bucket":bucket,
   "Premium Horse Manure":premiumHorseManure,
   "A Warm Meal":aWarmMeal,
-  "Bags Of Jewels":BagsOfJewels,
+  "Bag Of Jewels":BagOfJewels,
   "Town Map":townMap,
   "Warm Apple Pie":warmApplePie,
   "Damaged Lute":damagedLute,
@@ -481,6 +509,7 @@ let interactCommodity = {
   "Mounds Of Gold":moundsOfGold,
   "Heaps Of Silver":heapsOfSilver,
   "Pile Of Bones":pileOfBones,
+  "Dragon's Treasure":dragonsTreasure,
   "Death's Scythe":deathsScythe
 }
 
@@ -508,11 +537,7 @@ async function heroAction(heroName) {
   let action = await ask(heroAction);
   action = capitalizePlayerInput(action);
   if (action === "Exit" || action === "E") {
-    colorChangeWords(
-      `\nThis is where the Adventure of ${heroName} comes to an end.\n`,
-      highlightedWords
-    );
-    process.exit();
+   quitGame();
   } else if (action === "Help" || action === "H") {
     //Brings up the Help Menu
     //console.log(`\nHELP\n`); //! Test
@@ -631,7 +656,7 @@ function speakFriendAndEnter(password) {
 
 async function introduction() {
   colorChangeWords(
-    `\nThe sun rises peacefully on the small hamlet of Placeholder Village.\nThe birds are singing sweetly in the tress.\nThe morning dew glistens on the grass as the first rays of the sun reach the still earth below.\nA gentle breeze caresses your face as you briskly walk to the Town Triangle, hoping to get a jump on our morning chores.\n\nUpon entering the Town Triangle you see the village's heroic Adventurer in a rather bad temper.\nThe Adventurer groans loudly, before throwing his Sword down upon the ground.\n    "I has't hadith enough!\n     Yee all kepeth requesting too much.\n     Th're is nary a way f'r me to slayeth a Dragon with this steel!\n     I art to retire."\n\nIt appears the village is in need of a new heroic Adventurer...\n\nDo you pick up the Sword?`,
+    `\nThe sun rises peacefully on the small hamlet of Placeholder Village.\nThe birds are singing sweetly in the tress.\nThe morning dew glistens on the grass as the first rays of the sun reach the still earth below.\nA gentle breeze caresses your face as you briskly walk to the Town Triangle, hoping to get a jump on your morning chores.\n\nUpon entering the Town Triangle you see the village's heroic Adventurer in a rather bad temper.\nThe Adventurer groans loudly, before throwing his Sword down upon the ground.\n    "I has't hadith enough!\n     Yee all kepeth requesting too much.\n     Th're is nary a way f'r me to slayeth a Dragon with this steel!\n     I art to retire."\n\nIt appears the village is in need of a new heroic Adventurer...\n\nDo you pick up the Sword?`,
     highlightedWords
   );
   const welcomeMessage = `Yes (y) or No (n)\n>_ `;
@@ -655,8 +680,12 @@ async function introduction() {
     );
     process.exit();
   } else {
-    unknownPrompt(answer);
-    process.exit();
+    colorChangeWords(
+      `\nSorry, I don't know how to ${answer}.\n\n`,
+      highlightedWords
+    );
+    tryAgain();
+    introduction();
   }
 }
 
@@ -699,6 +728,10 @@ function locationUpdate(newLocation) {
     currentLocation = "Underworld";
     colorChangeWords(`\n${locations[currentLocation].description}`,highlightedWords); //Gives a description when you enter a new location.
     return currentLocation;
+  }else if(newLocation === "HERO-UNDEATH"){
+      currentLocation = "Town Triangle";
+      colorChangeWords(`\n${locations[currentLocation].description}`,highlightedWords); //Gives a description when you enter a new location.
+      return currentLocation;
   }else{
   let possibleOptionsToUpdateLocation =
     locations[currentLocation].possibleLocations;
@@ -734,7 +767,7 @@ function locationUpdate(newLocation) {
     }
   }}
   } else if (newLocation === "Exit") {
-    process.exit();
+    quitGame();
   } else {
     // If the player tries to move to an invalid location they get the following response
     colorChangeWords(
@@ -774,7 +807,7 @@ function colorChangeWords(string, highlightedWords) {
   console.log(white + string + white);
 }
 
-// Help Menue
+// Help Menu
 function helpMenu() {
   colorChangeWords(
     `\nYou may perform any of the following actions:\n     Type "Move" or "m" = Move to a Nearby Location.\n     Type "Look" or "l" = Look around for Clues and Items.\n     Type "Interact" or "i" = Interact with a Person or Item\n     Type "Status" or "s" = Check your General Wellbeing \n     Type "Backpack" or "b" = Check your Backpack's Inventory\n     Type "Take" or "t" = Pick up an Item from this Location\n     Type "Drop" or "d" = Drop an Item to this Location\n     Type "Help" or "h" = Open the Help Screen\n     Type "Exit" or "e" = Exit the Game at any time`,
@@ -786,6 +819,30 @@ function helpMenu() {
 function randomNum(min, max) {
   let range = max - min + 1;
   return Math.floor(Math.random() * range) + min;
+}
+
+// Function to start the game again after you complete it
+async function playAgain() {
+  let restart = await ask(
+    `\nWould you like to Play Again?\nPlay (P) or Exit (E)?\n>_ `
+  );
+  restart = capitalizeFirstLetter(restart);
+  if (restart === ("P" || "Play")) {
+    start(); // Runs the game from the Introduction
+  } else if (restart === "E" || round2 === "Exit") {
+    quitGame();
+  } else {
+    unknownPrompt(restart);
+    playAgain();
+  }
+}
+// Fucntion that handles Quiting the game.
+function quitGame(){
+  colorChangeWords(
+    `\nThis is where the Adventure of ${heroName} comes to an end.\n`,
+    highlightedWords
+  );
+  process.exit();
 }
 
 //For when the Player's input does NOT makes sense.
@@ -833,7 +890,28 @@ if (playGame === "Yes" || playGame === "Y") {
   );
   process.exit();
 } else {
-  unknownPrompt(answer);
-  process.exit();
+  colorChangeWords(
+    `\nSorry, I don't know how to ${playGame}.\n\n`,
+    highlightedWords
+  );
+  tryAgain();
+  titleScreen();
 }
 }
+
+// Function to Try Again before the game gets started
+function tryAgain()
+{console.log(`
+████████╗██████╗░██╗░░░██╗
+╚══██╔══╝██╔══██╗╚██╗░██╔╝
+░░░██║░░░██████╔╝░╚████╔╝░
+░░░██║░░░██╔══██╗░░╚██╔╝░░
+░░░██║░░░██║░░██║░░░██║░░░
+░░░╚═╝░░░╚═╝░░╚═╝░░░╚═╝░░░
+
+░█████╗░░██████╗░░█████╗░██╗███╗░░██╗
+██╔══██╗██╔════╝░██╔══██╗██║████╗░██║
+███████║██║░░██╗░███████║██║██╔██╗██║
+██╔══██║██║░░╚██╗██╔══██║██║██║╚████║
+██║░░██║╚██████╔╝██║░░██║██║██║░╚███║
+╚═╝░░╚═╝░╚═════╝░╚═╝░░╚═╝╚═╝╚═╝░░╚══╝\n\n\n\n\n`)};
