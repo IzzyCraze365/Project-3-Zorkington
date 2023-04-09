@@ -17,7 +17,6 @@ function ask(questionText) {
 
 // Randomly assigns the number to be used by the secretName
 let randomNumber = randomNum(1, 5);
-//console.log("The Random Number is", randomNumber); //! TEST
 
 // The options for our Secret Name (Key Puzzle) can change thanks to the switch
 let secretName = "";
@@ -40,7 +39,6 @@ switch (randomNumber) {
   default:
     secretName = "unknown";
 }
-//console.log("The Secret Name is", secretName); //! TEST
 
 // A list of words that I want to have in Yellow Text
 let highlightedWords = [
@@ -270,7 +268,6 @@ let currentLocation = "Town Triangle"; // This updates as the player moves
 let heroName = ""; // Currently their is no input
 let userInput = ""; // Currently their is no input
 
-//! State Machine, Keeps track of where the Player can Go
 // See functions "locationMove" & "locationUpdate" to see how you move
 //The following are all the locations the player can travel to
 let locations = {
@@ -692,7 +689,6 @@ titleScreen(); // Title Screen & Art
 // This is the function that Plays the Game
 async function start() {
   heroName = await introduction(); //The player will have to name themselves;
-  //console.log(heroName, userInput, "Before Loop of Function\n"); //! TEST
   colorChangeWords(
     `\n${heroName}, you find yourself at the Beginning of a Grand Adventure!\nAnd it all starts right here in this quaint little hamlet of Dorkington.\nIt is probably a good idea to "Look" around.\n(type "Help" to see a list of available actions.)`,
     highlightedWords
@@ -703,7 +699,6 @@ async function start() {
       highlightedWords
     );
     userInput = await heroAction(heroName);
-    //console.log(heroName, userInput, "Inside Loop of Function\n"); //! TEST
   }
 }
 
@@ -716,19 +711,15 @@ async function heroAction(heroName) {
     quitGame();
   } else if (action === "Help" || action === "H") {
     //Brings up the Help Menu
-    //console.log(`\nHELP\n`); //! Test
     helpMenu();
   } else if (action === "Move" || action === "M") {
     //Move from one location to an 'adjacent' one
-    //console.log(`\nMOVE\n`); //! Test
     await locationMove();
   } else if (action === "Backpack" || action === "B") {
     // Displays inventory
-    //console.log(`\nBACKPACK\n`); //! Test
     itemDisplay(hero.inventory);
   } else if (action === "Drop" || action === "D") {
     // Removes item from Backpack, Adds item to Current Room
-    //console.log(`\nDROP\n`); //! Test
     let dropItem = await ask(`\nWhat would you like to drop?\n>_ `);
     droppingItem = capitalizePlayerInput(dropItem);
     if (hero.inventory.includes(droppingItem) === true) {
@@ -749,7 +740,6 @@ async function heroAction(heroName) {
     }
   } else if (action === "Take" || action === "T") {
     // Adds item to Backpack, Removes item from Current Room
-    //console.log(`\nTAKE\n`); //! Test
     let takeItem = await ask(`\nWhat would you like to take?\n>_ `);
     tookenItem = capitalizePlayerInput(takeItem);
     if (
@@ -785,7 +775,6 @@ async function heroAction(heroName) {
     }
   } else if (action === "Interact" || action === "I") {
     //Let's player Interact with an Object or person
-    //console.log(`\nINTERACT\n`); //! Test
     let interactObject = await ask(`\nWhat do you want to interact with?\n>_ `);
     interactableObject = capitalizePlayerInput(interactObject);
     if (
@@ -793,7 +782,6 @@ async function heroAction(heroName) {
         true &&
       interactableObject === "Sleeping Child"
     ) {
-      //console.log("I am in the INTERACTION"); //!TEST
       await sleepingChildInteraction(); //Special Interaction (see below)
     } else if (
       locations[currentLocation].interact.includes(interactableObject) ===
@@ -835,7 +823,6 @@ async function heroAction(heroName) {
     }
   } else if (action === "Look" || action === "L") {
     //Let's player get a description of the Location they are in, good for finding Interactable targets
-    //console.log(`\nLOOK\n`); //! Test
     colorChangeWords(
       `${locations[currentLocation].description}`,
       highlightedWords
@@ -856,7 +843,6 @@ async function heroAction(heroName) {
     }
   } else if (action === "Status" || action === "S") {
     //Gives the player a quick check of their current Status
-    //console.log(`\nSTATUS\n`); //! Test
     colorChangeWords(`\nStatus: ${hero.status}\n`, highlightedWords);
   } else {
     unknownPrompt(action);
@@ -909,16 +895,11 @@ function itemDisplay(player) {
 
 // This is what allows "Take" and "Drop" to work with items
 function itemExchange(giver, receiver, itemToBeExchanged) {
-  //console.log("The Giver's Items before", giver); //! TEST
-  //console.log("The Receiver's Items before", receiver); //! TEST
   let index = giver.indexOf(itemToBeExchanged);
-  //console.log(`The ${itemToBeExchanged} is in position ${index}`); //! TEST
   if (index !== -1) {
     giver.splice(index, 1);
     receiver.push(itemToBeExchanged);
   }
-  //console.log("The Giver's Items after", giver); //! TEST
-  //console.log("The Receiver's Items after", receiver); //! TEST
 }
 
 //! Functions that handle Movement
@@ -957,7 +938,6 @@ function locationUpdate(newLocation) {
       // Found a match and we are able to update the state in the function "locationMove"
       if (locations[newLocation].doorLock === false) {
         currentLocation = newLocation;
-        //console.log("\nYou have moved state!\n"); //! TEST
         colorChangeWords(
           `\n${locations[currentLocation].description}`,
           highlightedWords
@@ -1080,9 +1060,7 @@ async function retiredAdventurerInteraction() {
         colorChangeWords(
           `\nRetired Adventurer\n    "By Jove, Squire ${heroName}!\n     You hath done it!!\n     Thou hast found mine number.\n     Thou art truly cunning to find my number was ${secretNumber}\n     and thou hath used ${guessCount} guesses only!"`,highlightedWords
         );
-        //console.log(retiredAdventurer.status);//!TEST
         retiredAdventurer.status++
-        //console.log(retiredAdventurer.status);//!TEST
       } else if (guess > secretNumber && guess <= maxNumber) {
         colorChangeWords(
           `\nRetired Adventurer\n    "Mine number art more miniscule than ${guess}.\n     Thou has't guesses ${
@@ -1146,7 +1124,6 @@ async function sayMyName() {
 //This handles the Logic of the Sleeping Child
 async function sleepingChildInteraction() {
   if (sleepingChild.status === "Possessed") {
-    //console.log("TEST 1") //!TEST
     colorChangeWords(sleepingChild.interact, highlightedWords);
     sleepingChild.followUp();
     let nameGuess = await sayMyName();
@@ -1168,7 +1145,6 @@ async function sleepingChildInteraction() {
       );
     }
   } else {
-    //console.log("TEST 2"); //!TEST
     colorChangeWords(sleepingChild.interact, highlightedWords);
     sleepingChild.followUp();
   }
