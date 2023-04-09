@@ -16,7 +16,7 @@ function ask(questionText) {
 // Above is the provided code
 
 // Randomly assigns the number to be used by the secretName
-let randomNumber = randomNum(1, 5);
+let randomNumber = randomNum(1, 10);
 
 // The options for our Secret Name (Key Puzzle) can change thanks to the switch
 let secretName = "";
@@ -34,7 +34,22 @@ switch (randomNumber) {
     secretName = "John Isabella";
     break;
   case 5:
-    secretName = "Eli The Warlock";
+    secretName = "Eli The Warlock"; // Playtester Eli's choice
+    break;
+  case 6:
+    secretName = "Muriala"; // Playtester Nick Reference
+    break;
+  case 7:
+    secretName = "The One They Call Steve"; // Playtester Andrew Reference
+    break;
+  case 8:
+    secretName = "Ash The Trainer Of Yellow Mice"; // Playtester Scarlem's choice
+    break;
+  case 9:
+    secretName = "Taran The Warrior";
+    break;
+  case 10:
+    secretName = "Zorkington";
     break;
   default:
     secretName = "unknown";
@@ -619,7 +634,7 @@ let letterbox = new Commodity({
   interact: "",
   followUp: () => {
     colorChangeWords(
-      `\nA plain wooded box that is void of all letters.\nThe name "${secretName}" is carved into it.\n`,
+      `\nA plain wooded box that is void of all postage.\nThere is something carved into it... "${secretName}"\n`,
       highlightedWords
     );
   },
@@ -1269,18 +1284,22 @@ function unknownPrompt(input) {
 async function viewCredits() {
   console.log(`
   ________________DORKINGTON________________
- 
-                  Created by
+
   John A. Isabella III.........Game Coder / Story Writer
   
   Upright Education............Software Development Bootcamp
+  Cohort Group.................March 2023
   Week 3 Project..............."Zorkington"
+  Completion Date..............April 9, 2023
   
-                Special Thanks
+  ..............Special Thanks..............
   Rob Vanarsdall................Instructor
   Henry Dufour..................Teaching Assistant
   Mary Reagan...................Teaching Assistant
+  Eli The Warlock...............Weekend Code Aid
+  Scarlem Isabella..............Playtester
   Nick Knapp....................Playtester
+  Andrew Uhmeyer................Playtester
   
   ____________Copyright MMXXIII____________
   `);
