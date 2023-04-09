@@ -176,7 +176,7 @@ let hero = new Player(
   "Taran", // Placeholder Name
   ["Bucket", "Sword", "Premium Horse Manure"], //Hero's Backpack - starts with a Sword & useless Junk
   "Healthy." // Status is Healthy
-); 
+);
 
 // The following is a list of Objects that define our rooms.
 let townTriangle = new Room({
@@ -285,7 +285,7 @@ let locations = {
 // Complicated Person, see "retiredAdventurerInteraction" function
 let retiredAdventurer = new Person({
   name: "Retired Adventurer",
-  inventory: ["Death's Scythe","Town Map"],
+  inventory: ["Death's Scythe", "Town Map"],
   interact: `\nThe Retired Adventurer looks you up and down.\n    "I daresay, I hath been retired only since morn.\n     Tis good of yee to taketh the mantle up.\n     Dost thou even hoist?\n     Alas, I shalth spend me retirment playing me favorite game...\n    'Guess the Number'\n     Doth thou wisheth to play?`,
   followUp: () => {}, //Game of Guess the Number
   status: 0, //This is a counter
@@ -435,9 +435,10 @@ let dragon = new Person({
       itemExchange(
         dragon.inventory,
         dragonsKeep.inventory,
-        "Dragon's Treasure" 
+        "Dragon's Treasure"
       );
-      dragonsKeep.description ="\nDragon's Keep\nThe site of your epic battle with the Dragon.\nNow that the beast is slain you can claim your prize.\nThe Dragon's Treasure is your for the taking.\n\nFrom here you can head back to the Deep Woods Of Certain Doom.\n"
+      dragonsKeep.description =
+        "\nDragon's Keep\nThe site of your epic battle with the Dragon.\nNow that the beast is slain you can claim your prize.\nThe Dragon's Treasure is your for the taking.\n\nFrom here you can head back to the Deep Woods Of Certain Doom.\n";
       dragonsKeep.interact = [];
     } else if (hero.inventory.includes("Sword") === true) {
       colorChangeWords(
@@ -477,7 +478,7 @@ let grimReaper = new Person({
         `\n\nGrim Reaper\n    "Welcome to the Underwold, ${heroName}.\n     Sadly, you won't be staying for very long.\n     You see, I am incredibly hungry and you are the only thing on the menu."\n\nWith no where to turn and no hope of escape,\nYou are resigned to your fate.\nThe Grim Reaper bakes you into a pie and eats you.\nAt least you left the world knowing that you were delicious.\n\n`,
         highlightedWords
       );
-      pieSliceArt()
+      pieSliceArt();
       playAgain();
     }
   },
@@ -550,16 +551,16 @@ let BagOfJewels = new Commodity({
       );
     } else if (hero.inventory.includes("Sword") === true) {
       colorChangeWords(
-        `\nSpoons?!\nYou were not expecting that.\nNor were you expecting the Obnoxious Patron to charge at you with the ferocity of a Were-verine!!!\n\nYou drew your Sword just in time to defend yourself.\nThe Obnoxious Patron charged!\nYou closed your eyes...\nWhen you opened them again the Obnoxious Patron was impaled on your blade, Dead.\n\nIn the distance you hear the rapid approach of footsteps.\nThe Town Guards rush into the inn.\n\nTown Guards\n    "${heroName}, you have committed the crime of Murder in our peaceful hamlet.\n     The punishment for which...\n     is death!"\n\nThe Town Guards attack you, and justice is served.`,
+        `\nSpoons?!\nYou were not expecting that.\nNor were you expecting the Obnoxious Patron to charge at you with the ferocity of a Were-verine!!!\n\nYou drew your Sword just in time to defend yourself.\nThe Obnoxious Patron charged!\nYou closed your eyes...\nWhen you opened them again the Obnoxious Patron was impaled on your blade, Dead.\n\nIn the distance you hear the rapid approach of footsteps.\nThe Town Guards rush into the Idiot's Inspiring Inn.\n\nTown Guards\n    "${heroName}, you have committed the crime of Murder in our peaceful hamlet.\n     The punishment for which...\n     Life in prison!"\n\nA disgraced ${heroName} is dragged to the jailhouse, to live out the remainder of their life.`,
         highlightedWords
       );
-      hero.status = "Justly Deceased";
-      locationUpdate("HERO-DEATH");
+      hero.status = "Justly Imprisoned";
+      playAgain();
     } else if (
       locations[currentLocation].inventory.includes("Sword") === true
     ) {
       colorChangeWords(
-        `\nThe Obnoxious Patron charges at you with the ferocity of a Were-verine!!!\nCircling around you, and heading right for...\nThe Sword you dropped in the room.\nAs the Obnoxious Patron picks up the blade they stare at you with bloodshot eyes!\n\nObnoxious Patron\n    "No one touches my family jewels with my concent!"\n\nYou didn't last long after that.\nAt least you died with dignity.\nDying by the Sword and not by the spoon.\n`,
+        `\nThe Obnoxious Patron charges at you with the ferocity of a Were-verine!!!\nCircling around you, and heading right for...\nThe Sword you dropped in the room.\nObnoxious Patron picks up the blade all while staring at you with bloodshot eyes!\n\nObnoxious Patron\n    "No one touches my family jewels with my concent!"\n\nYou didn't last long after that.\nAt least you died with dignity.\nDying by the Sword and not by the spoon.\n`,
         highlightedWords
       );
       hero.status = "Dead";
@@ -616,7 +617,12 @@ let pointlessRock = new Commodity({
 let letterbox = new Commodity({
   name: "Letterbox",
   interact: "",
-  followUp: () => {colorChangeWords(`\nA plain wooded box that is void of all letters.\nThe name "${secretName}" is carved into it.\n`,highlightedWords);},
+  followUp: () => {
+    colorChangeWords(
+      `\nA plain wooded box that is void of all letters.\nThe name "${secretName}" is carved into it.\n`,
+      highlightedWords
+    );
+  },
 });
 
 let moundsOfGold = new Commodity({
@@ -641,7 +647,10 @@ let pileOfBones = new Commodity({
   name: "Pile Of Bones",
   interact: `\nAs you approach the back of the cave you see the massive Pile Of Bones littering the Dragon's Keep.\n  You look closely at the bones, and your heart starts to sink.\n     You get the feeling that you have been here before...\n     That you have tried to fight the Dragon and failed...\n     You realize that the bones on the floor are your bones!!!\n     You have gotten to this point so many times!!!\n     This is where you die!\n     Over and over again, as though your life is some twisted game\n\nYou push these thoughts out of your head.`,
   followUp: () => {
-    colorChangeWords(`     "You are "${heroName} the Mightier" and you will succeed!"\n Are your last thoughts as you turn to face the now awake Dragon.\nIt roars inches from your face.\nIts breath hot upon your face/\nThe roar was so loud and so sudden that you were scared to death...`, highlightedWords);
+    colorChangeWords(
+      `     "You are "${heroName} the Mightier" and you will succeed!"\n Are your last thoughts as you turn to face the now awake Dragon.\nIt roars inches from your face.\nIts breath hot upon your face/\nThe roar was so loud and so sudden that you were scared to death...`,
+      highlightedWords
+    );
     hero.status = "Dead (again)";
     locationUpdate("HERO-DEATH");
   },
@@ -651,7 +660,10 @@ let dragonsTreasure = new Commodity({
   name: "Dragon's Treasure",
   interact: `\nYour prize for slaying the Dragon!\nWealth beyond your wildest dreams.\nYou return to the hamlet, with all the Gold in tow.\nAll the villager's praise your efforts.`,
   followUp: () => {
-    colorChangeWords(`They will sing your praises from now until the end of time.\nAll will know your name:\n     "${heroName} the Mightier"\n     the Hero of Dorkington!\n\nCongratulation, You Won!`,highlightedWords);
+    colorChangeWords(
+      `They will sing your praises from now until the end of time.\nAll will know your name:\n     "${heroName} the Mightier"\n     the Hero of Dorkington!\n\nCongratulation, You Won!`,
+      highlightedWords
+    );
     playAgain();
   },
 });
@@ -693,7 +705,8 @@ async function start() {
     `\n${heroName}, you find yourself at the Beginning of a Grand Adventure!\nAnd it all starts right here in this quaint little hamlet of Dorkington.\nIt is probably a good idea to "Look" around.\n(type "Help" to see a list of available actions.)`,
     highlightedWords
   );
-  while (userInput !== "Exit") {// Everything runs inside this loop.
+  while (userInput !== "Exit") {
+    // Everything runs inside this loop.
     colorChangeWords(
       `\n${heroName} is currently in the ${currentLocation}.`,
       highlightedWords
@@ -707,7 +720,8 @@ async function heroAction(heroName) {
   const heroAction = `What would you like to do?\n>_ `;
   let action = await ask(heroAction);
   action = capitalizePlayerInput(action);
-  if (action === "Exit" || action === "E") {//End the game
+  if (action === "Exit" || action === "E") {
+    //End the game
     quitGame();
   } else if (action === "Help" || action === "H") {
     //Brings up the Help Menu
@@ -786,7 +800,8 @@ async function heroAction(heroName) {
     } else if (
       locations[currentLocation].interact.includes(interactableObject) ===
         true &&
-      interactableObject === "Retired Adventurer") {
+      interactableObject === "Retired Adventurer"
+    ) {
       colorChangeWords(retiredAdventurer.interact, highlightedWords);
       await retiredAdventurerInteraction(); //Special Interaction (see below)
     } else if (
@@ -917,14 +932,16 @@ async function locationMove() {
 
 // This function keeps track of where the player has moved to
 function locationUpdate(newLocation) {
-  if (newLocation === "HERO-DEATH") {//Special Move
+  if (newLocation === "HERO-DEATH") {
+    //Special Move
     currentLocation = "Underworld";
     colorChangeWords(
       `\n${locations[currentLocation].description}`,
       highlightedWords
     ); //Gives a description when you enter a new location.
     return currentLocation;
-  } else if (newLocation === "HERO-UNDEATH") {//Special Move
+  } else if (newLocation === "HERO-UNDEATH") {
+    //Special Move
     currentLocation = "Town Triangle";
     colorChangeWords(
       `\n${locations[currentLocation].description}`,
@@ -1037,81 +1054,101 @@ async function retiredAdventurerInteraction() {
   const cheatMenu = 10; // Threshold to access the cheat menu
   let wantToPlayGame = await ask(`     Yay (y) or Nay (n)"\n>_ `);
   wantToPlayGame = capitalizePlayerInput(wantToPlayGame);
-  if(wantToPlayGame==="Yay" || wantToPlayGame ==="Y"){
-  if(cheatMenu > retiredAdventurer.status){
-    colorChangeWords(
-    `\nRetired Adventurer\n    "L'est playith a game wherein I thinkith a number\n     and you, Squire ${heroName}, try to guess it.\n     Me has't selected a number betwixt 1 and 30."`,highlightedWords
-  );
-
-  // Default Variable List
-  const maxInitial = 30; // Starting Value
-  const minInitial = 1; // Starting Value
-  let maxNumber = maxInitial;
-  let minNumber = minInitial;
-  let guess;
-  let guessCount = 0; // Keeps track of how many times the Hero has guessed
-  let secretNumber = randomNum(minInitial, maxInitial); //picks the Secret Number
-
-  while (guessCount <= 6 && secretNumber !== guess) {
-    guessCount++;
-    if (guessCount <= 5) {//Hero has 5 guesses to find the Number
-      guess = await heroGuess();
-      if (guess == secretNumber) {
-        colorChangeWords(
-          `\nRetired Adventurer\n    "By Jove, Squire ${heroName}!\n     You hath done it!!\n     Thou hast found mine number.\n     Thou art truly cunning to find my number was ${secretNumber}\n     and thou hath used ${guessCount} guesses only!"`,highlightedWords
-        );
-        retiredAdventurer.status++
-      } else if (guess > secretNumber && guess <= maxNumber) {
-        colorChangeWords(
-          `\nRetired Adventurer\n    "Mine number art more miniscule than ${guess}.\n     Thou has't guesses ${
-            5 - guessCount
-          } to tarry twith."`,highlightedWords
-        );
-        maxNumber = guess;
-      } else if (guess < secretNumber && guess >= minNumber) {
-        colorChangeWords(
-          `\nRetired Adventurer\n    "Mine number art far grander than ${guess}.\n     Thou has't guesses ${
-            5 - guessCount
-          } to tarry twith."`,highlightedWords
-        );
-        minNumber = guess;
-      } else if (guess < minNumber || guess > maxNumber) {
-        colorChangeWords(
-          `\nRetired Adventurer\n    "Squire,\n     Forsooth why art thou selected ${guess}.\n     Dost thee fail to recollect thine figures and arithmetic?`,highlightedWords
-        );
-      } else {
-        colorChangeWords(
-          `\nRetired Adventurer\n    "I art confused by thou selection...\n     Doth thou wish to wasteth time?`,highlightedWords
-        );
-      }
-    } else if ((guessCount === 6)) {
+  if (wantToPlayGame === "Yay" || wantToPlayGame === "Y") {
+    if (cheatMenu > retiredAdventurer.status) {
       colorChangeWords(
-        `    "Thou hath squandered thy guesses and spoiled mine revelry!\n     Begone, knave!!!"`,highlightedWords
+        `\nRetired Adventurer\n    "L'est playith a game wherein I thinkith a number\n     and you, Squire ${heroName}, try to guess it.\n     Me has't selected a number betwixt 1 and 30."`,
+        highlightedWords
       );
+
+      // Default Variable List
+      const maxInitial = 30; // Starting Value
+      const minInitial = 1; // Starting Value
+      let maxNumber = maxInitial;
+      let minNumber = minInitial;
+      let guess;
+      let guessCount = 0; // Keeps track of how many times the Hero has guessed
+      let secretNumber = randomNum(minInitial, maxInitial); //picks the Secret Number
+
+      while (guessCount <= 6 && secretNumber !== guess) {
+        guessCount++;
+        if (guessCount <= 5) {
+          //Hero has 5 guesses to find the Number
+          guess = await heroGuess();
+          if (guess == secretNumber) {
+            colorChangeWords(
+              `\nRetired Adventurer\n    "By Jove, Squire ${heroName}!\n     You hath done it!!\n     Thou hast found mine number.\n     Thou art truly cunning to find my number was ${secretNumber}\n     and thou hath used ${guessCount} guesses only!"`,
+              highlightedWords
+            );
+            retiredAdventurer.status++;
+          } else if (guess > secretNumber && guess <= maxNumber) {
+            colorChangeWords(
+              `\nRetired Adventurer\n    "Mine number art more miniscule than ${guess}.\n     Thou has't guesses ${
+                5 - guessCount
+              } to tarry twith."`,
+              highlightedWords
+            );
+            maxNumber = guess;
+          } else if (guess < secretNumber && guess >= minNumber) {
+            colorChangeWords(
+              `\nRetired Adventurer\n    "Mine number art far grander than ${guess}.\n     Thou has't guesses ${
+                5 - guessCount
+              } to tarry twith."`,
+              highlightedWords
+            );
+            minNumber = guess;
+          } else if (guess < minNumber || guess > maxNumber) {
+            colorChangeWords(
+              `\nRetired Adventurer\n    "Squire,\n     Forsooth why art thou selected ${guess}.\n     Dost thee fail to recollect thine figures and arithmetic?`,
+              highlightedWords
+            );
+          } else {
+            colorChangeWords(
+              `\nRetired Adventurer\n    "I art confused by thou selection...\n     Doth thou wish to wasteth time?`,
+              highlightedWords
+            );
+          }
+        } else if (guessCount === 6) {
+          colorChangeWords(
+            `    "Thou hath squandered thy guesses and spoiled mine revelry!\n     Begone, knave!!!"`,
+            highlightedWords
+          );
+        }
+      }
+    } else if (cheatMenu === retiredAdventurer.status) {
+      colorChangeWords(
+        `\nRetired Adventurer\n    "I art sure that yee would like to playith again.\n     Sadly, my old bones hath grown weary on me.\n     I thank yee for doin the kindness of hoisting me spirits.\n     You, Squire... nay Hero ${heroName},\n     thine art an Adventurer.\n     Come hither, me has't no needeth of these effect.\n     Takith them and make haste!"\n\nYou have received a Town Map and Death's Scythe.`,
+        highlightedWords
+      );
+      itemExchange(retiredAdventurer.inventory, hero.inventory, "Town Map");
+      itemExchange(
+        retiredAdventurer.inventory,
+        hero.inventory,
+        "Death's Scythe"
+      );
+      retiredAdventurer.interact = `\nRetired Adventurer\n    "Thou art most wondrous with Guess the  Number.\n     Sadly, my old bones hath grown weary on me.\n     ${heroName}, I thank yee for doin the kindness of hoisting me spirits.\n`;
+      retiredAdventurer.status++;
+      hero.status = "Empowered";
+    } else {
     }
-  }}else if(cheatMenu === retiredAdventurer.status){
+  } else if (wantToPlayGame === "Nay" || wantToPlayGame === "N") {
     colorChangeWords(
-    `\nRetired Adventurer\n    "I art sure that yee would like to playith again.\n     Sadly, my old bones hath grown weary on me.\n     I thank yee for doin the kindness of hoisting me spirits.\n     You, Squire... nay Hero ${heroName},\n     thine art an Adventurer.\n     Come hither, me has't no needeth of these effect.\n     Takith them and make haste!"\n\nYou have received a Town Map and Death's Scythe.`,highlightedWords
-  );
-  itemExchange(retiredAdventurer.inventory, hero.inventory,"Town Map");
-  itemExchange(retiredAdventurer.inventory, hero.inventory,"Death's Scythe");
-  retiredAdventurer.interact = `\nRetired Adventurer\n    "Thou art most wondrous with Guess the  Number.\n     Sadly, my old bones hath grown weary on me.\n     ${heroName}, I thank yee for doin the kindness of hoisting me spirits.\n`;
-  retiredAdventurer.status++
-  hero.status = "Empowered";
-}else{}
-}else if (wantToPlayGame === "Nay" || wantToPlayGame === "N"){
-  colorChangeWords(`\nRetired Adventurer\n    "Nay? Then begone with yee!"`,highlightedWords);
-}else{  colorChangeWords(`\nRetired Adventurer\n    "I know not what you sayith...\n     Speakith more plainly to me.`,highlightedWords);
-}}
+      `\nRetired Adventurer\n    "Nay? Then begone with yee!"`,
+      highlightedWords
+    );
+  } else {
+    colorChangeWords(
+      `\nRetired Adventurer\n    "I know not what you sayith...\n     Speakith more plainly to me.`,
+      highlightedWords
+    );
+  }
+}
 
 //This function stores the Hero's guess as an interger
 async function heroGuess() {
-  let guessedNumber = await ask(
-    `\n    "Please pickith a number."\n>_ `
-  );
+  let guessedNumber = await ask(`\n    "Please pickith a number."\n>_ `);
   return parseInt(guessedNumber);
 }
-
 
 // Password Name Gane - Sleeping Child Puzzle
 async function sayMyName() {
@@ -1229,7 +1266,7 @@ function unknownPrompt(input) {
 }
 
 //Game Credits
-async function viewCredits(){
+async function viewCredits() {
   console.log(`
   ________________DORKINGTON________________
  
@@ -1253,17 +1290,21 @@ async function viewCredits(){
   if (titleQuestion === "Yes" || titleQuestion === "Y") {
     titleScreen();
   } else if (titleQuestion === "No" || titleQuestion === "N") {
-    console.log(`\nThank you for caring enough to find out about the people who worked on this game.\n\n`);
+    console.log(
+      `\nThank you for caring enough to find out about the people who worked on this game.\n\n`
+    );
     process.exit();
   } else {
-    console.log(`\n${titleQuestion} is not a recognized command.\nTerminating Program...\n\nEND OF LINE\n\n`);
+    console.log(
+      `\n${titleQuestion} is not a recognized command.\nTerminating Program...\n\nEND OF LINE\n\n`
+    );
     process.exit();
   }
 }
 
 //! Premium Functions
 //Art for the Game Over Screen
-function pieSliceArt(){ 
+function pieSliceArt() {
   console.log(`
             GAME OVER
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -1281,8 +1322,8 @@ function pieSliceArt(){
 ⠀⣿⣇⣀⣤⣤⡶⠶⠟⠛⠛⠿⠿⠀⠀⠀⢀⡀⠀⠀⠻⠧⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠉⠉⠁⠀⠀⠀⠀⢠⣄⠀⠀⠀⣀⣀⠀⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-`);}
-
+`);
+}
 
 //This is a Function that Shows the Game Start Screen
 // Used " https://fsymbols.com/generators/carty/ "
