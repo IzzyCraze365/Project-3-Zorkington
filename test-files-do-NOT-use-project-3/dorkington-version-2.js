@@ -107,7 +107,7 @@ let highlightedWords = [
   `Premium Horse Manure`,
   `Bucket`,
   `Bag Of Jewels`,
-  `A Warm Meal`,
+  `Warm Meal`,
   `Town Map`,
   `Warm Apple Pie`,
   `Damaged Lute`,
@@ -219,6 +219,7 @@ let idiotsInspiringInn = new Room({
   description:
     "\nThe Idiot's Inspiring Inn\nThe most popular tavern in Dorkington, \nprimarily because it is the only tavern in the entire village. \nThe Innkeeper behind the bar is preparing a meal for a Musician With A Broken Arm. \nIn the back of the room, an Obnoxious Patron is slovenly eating a meal.\nA Bag Of Jewels is scattered across the patron's table.\n\nFrom here you can head outside to the Town Triangle\nor go to the Upstairs Room.\n",
 });
+
 let upstairsRoom = new Room({
   name: "Upstairs Room",
   doorLock: false,
@@ -322,14 +323,14 @@ let simpleVillager = new Person({
 
 let innkeeper = new Person({
   name: "Innkeeper",
-  inventory: ["A Warm Meal"],
+  inventory: ["Warm Meal"],
   // The interaction changes after the first time you speak
-  interact: `Innkeeper\n    "Hallooo there, Adventurer!\n     Welcome to the Idiot's Inspring Inn where our hospitality is as warm as our food.\n     Don't believe me?\n     Help yourself to A Warm Meal, and feel free to talk to anybody round these parts.\n     We're all the friendly sort,\n     of course the Musician With A Broken Arm seems a tad jumpy,\n     and the Obnoxious Patron back there is a strange one\n     who's fixing to get into a tussel.`,
+  interact: `Innkeeper\n    "Hallooo there, Adventurer!\n     Welcome to the Idiot's Inspring Inn where our hospitality is as warm as our food.\n     Don't believe me?\n     Help yourself to a Warm Meal, and feel free to talk to anybody round these parts.\n     We're all the friendly sort,\n     of course the Musician With A Broken Arm seems a tad jumpy,\n     and the Obnoxious Patron back there is a strange one\n     who's fixing to get into a tussel.`,
   followUp: () => {
     itemExchange(
       innkeeper.inventory,
       locations[currentLocation].inventory,
-      "A Warm Meal"
+      "Warm Meal"
     );
     innkeeper.interact = `Innkeeper\n    "Welcome to the Idiot's Inspring Inn where our hospitality is as warm as our food.\n     Good to see you again, ${heroName}!\n     Feel free to talk to anybody round these parts.\n     We're the friendly sort of folk,\n     and we all have some nuggets of useful information.`;
   },
@@ -423,19 +424,19 @@ let exhaustedParents = new Person({
     "\nA pair of weary parents are looking over a Town Map.\nThey are talking in hushed voices about where to send their Sleeping Child to school.\nYou can barely hear their voices over their rumbling stomaches.\nThey should probably eat something.\n",
   //Follow up changes based on an item presents.
   followUp: () => {
-    if (hero.inventory.includes("A Warm Meal")) {
+    if (hero.inventory.includes("Warm Meal")) {
       colorChangeWords(
-        `\nAs you approach them, with food in hand, the two look up at you.\n\nExhausted Parents\n    "Thank you for bringing us A Warm Meal, ${heroName}.\n     We have been so busy that we haven't had a chance to eat."\n
+        `\nAs you approach them, with food in hand, the two look up at you.\n\nExhausted Parents\n    "Thank you for bringing us a Warm Meal, ${heroName}.\n     We have been so busy that we haven't had a chance to eat."\n
       \nThe Exhausted Parents drop the Town Map in the Upstairs Room.`,
         highlightedWords
       );
-      itemExchange(hero.inventory, exhaustedParents.inventory, "A Warm Meal");
+      itemExchange(hero.inventory, exhaustedParents.inventory, "Warm Meal");
       itemExchange(
         exhaustedParents.inventory,
         locations[currentLocation].inventory,
         "Town Map"
       );
-      exhaustedParents.interact = `Exhausted Parents\n    "Thank you for bringing us A Warm Meal, ${heroName}.\n     We have been so busy that we haven't had a chance to eat."\n\nThe pair continue to eat their food, oblivious to the world around them.`;
+      exhaustedParents.interact = `Exhausted Parents\n    "Thank you for bringing us a Warm Meal, ${heroName}.\n     We have been so busy that we haven't had a chance to eat."\n\nThe pair continue to eat their food, oblivious to the world around them.`;
     }
   },
   status: "Normal",
@@ -605,8 +606,8 @@ let premiumHorseManure = new Commodity({
   followUp: () => {},
 });
 
-let aWarmMeal = new Commodity({
-  name: "A Warm Meal",
+let warmMeal = new Commodity({
+  name: "Warm Meal",
   interact:
     "\nThe meal consists of a plain gruel.\nTasteless but still comforting.",
   followUp: () => {},
@@ -722,7 +723,7 @@ let interactCommodity = {
   Sword: sword,
   Bucket: bucket,
   "Premium Horse Manure": premiumHorseManure,
-  "A Warm Meal": aWarmMeal,
+  "Warm Meal": warmMeal,
   "Bag Of Jewels": BagOfJewels,
   "Town Map": townMap,
   "Warm Apple Pie": warmApplePie,
