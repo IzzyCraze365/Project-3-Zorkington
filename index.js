@@ -16,7 +16,7 @@ function ask(questionText) {
 // Above is the provided code
 
 // Randomly assigns the number to be used by the secretName
-let randomNumber = randomNum(1, 10);
+let randomNumber = randomNum(1, 12);
 
 // The options for our Secret Name (Key Puzzle) can change thanks to the switch
 let secretName = "";
@@ -50,6 +50,12 @@ switch (randomNumber) {
     break;
   case 10:
     secretName = "Zorkington";
+    break;
+  case 11:
+    secretName = "Zug Zug The Zug"; // Playtester Joshua Reference
+    break;
+  case 12:
+    secretName = "Callian The Hunter"; // Playtester Devin Reference
     break;
   default:
     secretName = "unknown";
