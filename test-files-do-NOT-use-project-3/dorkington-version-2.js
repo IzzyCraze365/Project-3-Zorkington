@@ -738,7 +738,6 @@ titleScreen(); // Title Screen & Art
 // This is the function that Plays the Game
 async function start() {
   heroName = await introduction(); //The player will have to name themselves;
-  console.clear();
   colorChangeWords(
     `\n${heroName}, you find yourself at the Beginning of a Grand Adventure!\nAnd it all starts right here in this quaint little hamlet of Dorkington.\nIt is probably a good idea to "Look" around.\n(type "Help" to see a list of available actions.)`,
     highlightedWords
@@ -755,10 +754,10 @@ async function start() {
 
 // Player selects actions every round
 async function heroAction(heroName) {
-    console.clear();
   const heroAction = `What would you like to do?\n>_ `;
   let action = await ask(heroAction);
   action = capitalizePlayerInput(action);
+  console.clear();
   if (action === "Exit" || action === "E") {
     //End the game
     quitGame();
@@ -912,6 +911,7 @@ async function introduction() {
   const welcomeMessage = `Yes (y) or No (n)\n>_ `;
   let answer = await ask(welcomeMessage);
   answer = capitalizePlayerInput(answer); // Normal Mode or super-easy don't have to do anything mode.
+  console.clear();
   if (answer === "Yes" || answer === "Y") {
     colorChangeWords(
       `\nA Simple Villager, whom bares an uncanny resemblance to you apporaches.\n    "Greetings stranger!\n     It is not often a new adventurer enters our peaceful village of Dorkington.`,
@@ -919,6 +919,7 @@ async function introduction() {
     );
     let heroName = await ask(`     What is your name, adventurer?"\n>_ `); // Player chooses their Hero Name for the story
     highlightedWords.push(heroName);
+    console.clear();
     colorChangeWords(
       `\nSimple Villager\n    "I see, your name is ${heroName},\n     Obviously, you were named after '${heroName} the Mighty' the Warrior of Legend\n     As I live and breathe, we are most fortunate for your arrival.\n\n     Recently, a missionary of rightous nuns was dispatched to aid our small hamlet.\n     However, as they were crossing a bridge over a ravine they were attacked by a horde of goblins.\n     The goblins cut the ropes of the bridge and the cart of nuns fell hundreds of feet onto the sharp rocks below.\n\n     Your assistance is needed posthaste, ${heroName}!\n     Only you can raise enough Gold to help us rebuild that broken bridge."\n`,
       highlightedWords
@@ -1307,8 +1308,9 @@ function unknownPrompt(input) {
 
 //Game Credits
 async function viewCredits() {
+  console.clear();
   console.log(`
-  ________________DORKINGTON________________
+  _____________DORKINGTON Ver. 2____________
 
   John A. Isabella III.........Game Coder / Story Writer
   
@@ -1334,6 +1336,7 @@ async function viewCredits() {
   colorChangeWords(`\nReturn to the Title Screen?`, highlightedWords);
   let titleQuestion = await ask(`Yes (y) or No (n)\n>_ `);
   titleQuestion = capitalizePlayerInput(titleQuestion);
+  console.clear();
   if (titleQuestion === "Yes" || titleQuestion === "Y") {
     titleScreen();
   } else if (titleQuestion === "No" || titleQuestion === "N") {
@@ -1395,6 +1398,7 @@ async function titleScreen() {
   const titleQuestion = `Yes (y) or No (n)\nView Credits (C)\n>_ `;
   let playGame = await ask(titleQuestion);
   playGame = capitalizePlayerInput(playGame);
+  console.clear();
   if (playGame === "Yes" || playGame === "Y") {
     start();
   } else if (playGame === "C" || playGame === "Credits") {
