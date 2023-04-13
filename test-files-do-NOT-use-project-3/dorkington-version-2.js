@@ -373,7 +373,7 @@ let musicianWithABrokenArm = new Person({
   followUp: () => {
     if (hero.inventory.includes("Damaged Lute") === true) {
       colorChangeWords(
-        `\nYou reach into your backpack and pull out the Musician's Damaged Lute.\nTears of joy appear in the Musician's eyes.\n\nMusician With A Broken Arm.\n    "My Broke Lute!\n    I never thought I would see it again!\n    Thank you so much, ${heroName}.\n    I shall use the power of music to fight against the darkness."\n\nThe musician plucks the one string on the lute that hasn't snapped.\nAn eerie sound resonates through the room.\n\n    "I should tell you, one of the foul beasts from the woods has infiltrated out humble hamlet.\n     A creature of darkness has possessed the Sleeping Child.\n     But it will only make itself known to people like myself whom have been injured."\n`,
+        `\nYou reach into your backpack and pull out the Musician's Damaged Lute.\nTears of joy appear in the Musician's eyes.\n\nMusician With A Broken Arm.\n    "My Broke Lute!\n    I never thought I would see it again!\n    Thank you so much, ${heroName}.\n    I shall use the power of music to fight against the darkness."\n\nThe musician plucks the one string on the lute that hasn't snapped.\nAn eerie sound resonates through the room.\n\n    "I should tell you, one of the foul beasts from the woods has infiltrated our humble hamlet.\n     A creature of darkness has possessed the Sleeping Child.\n     But it will only make itself known to people like myself whom have been injured."\n`,
         highlightedWords
       );
       itemExchange(
@@ -1324,7 +1324,7 @@ async function viewCredits() {
   Rob Vanarsdall................Instructor
   Henry Dufour..................Teaching Assistant
   Mary Reagan...................Teaching Assistant
-  Eli The Warlock...............Weekend Code Aid
+  Eli T. Drumm..................Weekend Code Aid
   Scarlem Isabella..............Playtester
   Nick Knapp....................Playtester
   Andrew Uhmeyer................Playtester
