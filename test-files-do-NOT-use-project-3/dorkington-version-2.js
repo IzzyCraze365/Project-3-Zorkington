@@ -649,7 +649,7 @@ let BagOfJewels = new Commodity({
       locations[currentLocation].inventory.includes("Sword") === true
     ) {
       colorChangeWords(
-        `\nThe Obnoxious Patron charges at you with the ferocity of a Were-verine!!!\nCircling around you, and heading right for...\nThe Sword you dropped in the room.\nObnoxious Patron picks up the blade all while staring at you with bloodshot eyes!\n\nObnoxious Patron\n    "No one touches my family jewels with my consent!"\n\nYou didn't last long after that.\nAt least you died with dignity.\nDying by the Sword and not by the spoon.\n`,
+        `\nThe Obnoxious Patron charges at you with the ferocity of a Were-verine!!!\nCircling around you, and heading right for...\nThe Sword you dropped in the room.\nObnoxious Patron picks up the blade all while staring at you with bloodshot eyes!\n\nObnoxious Patron\n    "No one touches my family jewels without my consent!"\n\nYou didn't last long after that.\nAt least you died with dignity.\nDying by the Sword and not by the spoon.\n`,
         highlightedWords
       );
       hero.status = "Dead";
@@ -928,7 +928,7 @@ async function introduction() {
     return heroName;
   } else if (answer === "No" || answer === "N") {
     colorChangeWords(
-      `\nYou ignore the obvious call to adventure and go about your day.\nYou manage to finsih your chores early and have enough time to explore the woods near of town.\nThat is when you met ${secretName}, your soulmate.\n\nThe two of you began spending more and more time together.\neventually you were married, and moved into the loveliest cottage together by the outskirts of Dorkington.\nYou had 3 children, 2 dogs and a hampster.\nIt was an incredibly average and boring life.\n\nYou are so lucky you didn't pick up that Sword.\nWho needs a life of adventure?\nNot you.\n\nYou are just a ridiculously normal person,\ndedicating your life to slightly above-average achievement,\ndespite your aggressive and all-consuming mundanity!\n\n`,
+      `\nYou ignore the obvious call to adventure and go about your day.\nYou manage to finsih your chores early and have enough time to explore the woods near the town.\nThat is when you met ${secretName}, your soulmate.\n\nThe two of you began spending more and more time together.\neventually you were married, and moved into the loveliest cottage together by the outskirts of Dorkington.\nYou had 3 children, 2 dogs and a hamster.\nIt was an incredibly average and boring life.\n\nYou are so lucky you didn't pick up that Sword.\nWho needs a life of adventure?\nNot you.\n\nYou are just a ridiculously normal person,\ndedicating your life to slightly above-average achievement,\ndespite your aggressive and all-consuming mundanity!\n\n`,
       highlightedWords
     );
     process.exit();
