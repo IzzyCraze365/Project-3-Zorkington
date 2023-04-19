@@ -1,5 +1,6 @@
 // Project: Week 3
 // Zorkington - A Text Based Adventure
+// Version 2.0
 // John Isabella III
 
 const readline = require("readline");
@@ -16,7 +17,7 @@ function ask(questionText) {
 // Above is the provided code
 
 // Randomly assigns the number to be used by the secretName
-let randomNumber = randomNum(1, 12);
+let randomNumber = randomNum(1, 13);
 
 // The options for our Secret Name (Key Puzzle) can change thanks to the switch
 let secretName = "";
@@ -56,6 +57,9 @@ switch (randomNumber) {
     break;
   case 12:
     secretName = "Callian The Hunter"; // Playtester Devin Reference
+    break;
+  case 13:
+    secretName = "Fannar"; // Playtester Sean Reference
     break;
   default:
     secretName = "unknown";
@@ -154,8 +158,9 @@ class Player {
 
 // A List of All Interactable Items
 class Commodity {
-  constructor({ name, interact, followUp }) {
+  constructor({ name, altNames, interact, followUp }) {
     this.name = name;
+    this.altNames = altNames;
     this.interact = interact;
     this.followUp = followUp;
   }
@@ -163,7 +168,8 @@ class Commodity {
 
 // A List of All Interactable People
 class Person {
-  constructor({ name, inventory, interact, followUp, status }) {
+  constructor({ name, altNames, inventory, interact, followUp, status }) {
+    this.altNames = altNames;
     this.interact = interact;
     this.inventory = inventory;
     this.name = name;
@@ -176,12 +182,14 @@ class Person {
 class Room {
   constructor({
     name,
+    altNames,
     doorLock,
     inventory,
     interact,
     possibleLocations,
     description,
   }) {
+    this.altNames = altNames;
     this.description = description;
     this.doorLock = doorLock;
     this.interact = interact;
@@ -202,6 +210,7 @@ let hero = new Player(
 // The following is a list of Objects that define our rooms.
 let townTriangle = new Room({
   name: "Town Triangle",
+  altNames: ["Town Triangle", "Town", "Triangle", "Tt"],
   doorLock: false,
   inventory: [],
   interact: ["Retired Adventurer", "Simple Villager"],
@@ -212,6 +221,16 @@ let townTriangle = new Room({
 
 let idiotsInspiringInn = new Room({
   name: "Idiot's Inspiring Inn",
+  altNames: [
+    "Idiot's Inspiring Inn",
+    "Idiots Inspiring Inn",
+    "Idiot",
+    "Idiots",
+    "Idiot's",
+    "Inspiring",
+    "Inn",
+    "Iii",
+  ],
   doorLock: false,
   inventory: ["Bag Of Jewels"],
   interact: ["Innkeeper", "Obnoxious Patron", "Musician With A Broken Arm"],
@@ -222,6 +241,7 @@ let idiotsInspiringInn = new Room({
 
 let upstairsRoom = new Room({
   name: "Upstairs Room",
+  altNames: ["Upstairs Room", "Upstairs", "Room", "Ur"],
   doorLock: false,
   inventory: [],
   interact: ["Sleeping Child", "Exhausted Parents"],
@@ -232,6 +252,15 @@ let upstairsRoom = new Room({
 
 let forlornForestOfFatality = new Room({
   name: "Forlorn Forest Of Fatality",
+  altNames: [
+    "Forlorn Forest Of Fatality",
+    "Forlorn Forest",
+    "Forlorn",
+    "Forest",
+    "Fatality",
+    "Ffof",
+    "Fff",
+  ],
   doorLock: false,
   inventory: ["Damaged Lute"],
   interact: ["Crooked Sign"],
@@ -242,6 +271,16 @@ let forlornForestOfFatality = new Room({
 
 let deepWoodsOfCertainDoom = new Room({
   name: "Deep Woods Of Certain Doom",
+  altNames: [
+    "Deep Woods Of Certain Doom",
+    "Deep Woods",
+    "Certain Doom",
+    "Deep",
+    "Woods",
+    "Certain",
+    "Doom",
+    "Dwocd",
+  ],
   doorLock: true,
   inventory: ["Pointless Rock"],
   interact: [],
@@ -256,6 +295,17 @@ let deepWoodsOfCertainDoom = new Room({
 
 let hagsHorridHovel = new Room({
   name: "Hag's Horrid Hovel",
+  altNames: [
+    "Hag's Horrid Hovel",
+    "Hags Horrid Hovel",
+    "Hag's Hovel",
+    "Hags Hovel",
+    "Hag's",
+    "Hags",
+    "Horrid",
+    "Hovel",
+    "Hhh",
+  ],
   doorLock: false,
   inventory: [],
   interact: ["Letterbox"],
@@ -266,6 +316,7 @@ let hagsHorridHovel = new Room({
 
 let dragonsKeep = new Room({
   name: "Dragon's Keep",
+  altNames: ["Dragon's Keep", "Dragons Keep", "Keep", "Dk"],
   doorLock: false,
   inventory: [],
   interact: ["Dragon", "Mounds Of Gold", "Heaps Of Silver", "Pile Of Bones"],
@@ -276,6 +327,7 @@ let dragonsKeep = new Room({
 
 let underworld = new Room({
   name: "Underworld",
+  altNames: ["Underworld", "U"],
   doorLock: "No Escape",
   inventory: [],
   interact: ["Grim Reaper"],
@@ -307,6 +359,7 @@ let locations = {
 // Complicated Person, see "retiredAdventurerInteraction" function
 let retiredAdventurer = new Person({
   name: "Retired Adventurer",
+  altNames: ["Retired Adventurer", "Retired", "Adventurer", "Ra"],
   inventory: ["Death's Scythe", "Town Map"],
   interact: `\nThe Retired Adventurer looks you up and down.\n    "I daresay, I hath been retired only since morn.\n     Tis good of yee to taketh the mantle up.\n     Dost thou even hoist?\n     Alas, I shalth spend me retirment playing me favorite game...\n    'Guess the Number'\n     Doth thou wisheth to play?`,
   followUp: () => {}, //Game of Guess the Number
@@ -315,6 +368,7 @@ let retiredAdventurer = new Person({
 
 let simpleVillager = new Person({
   name: "Simple Villager",
+  altNames: ["Simple Villager", "Simple", "Villager", "Sv"],
   inventory: [],
   interact: `Simple Villager\n    "Thank you for all your assistance brave adventurer.\n     Your services are invaluable to us here in Dorkington.\n     Only you can save us from the horrors that plague us.\n     Being stranded in a cozy little hamlet with no Gold to fix our broken bridge.\n     We lead a truly cursed life."`,
   followUp: () => {},
@@ -323,6 +377,7 @@ let simpleVillager = new Person({
 
 let innkeeper = new Person({
   name: "Innkeeper",
+  altNames: ["Innkeeper", "Ik", "I"],
   inventory: ["Warm Meal"],
   // The interaction changes after the first time you speak
   interact: `Innkeeper\n    "Hallooo there, Adventurer!\n     Welcome to the Idiot's Inspring Inn where our hospitality is as warm as our food.\n     Don't believe me?\n     Help yourself to a Warm Meal, and feel free to talk to anybody round these parts.\n     We're all the friendly sort,\n     of course the Musician With A Broken Arm seems a tad jumpy,\n     and the Obnoxious Patron back there is a strange one\n     who's fixing to get into a tussel.`,
@@ -340,6 +395,7 @@ let innkeeper = new Person({
 // This is a complicated Person, key to solving Puzzles
 let obnoxiousPatron = new Person({
   name: "Obnoxious Patron",
+  altNames: ["Obnoxious Patron", "Obnoxious", "Patron", "Op"],
   inventory: [], //Reward for Solving Puzzle
   interact: `As you approach the individual at the far end of the room,`,
   //FollowUp changes based off the this.status
@@ -367,6 +423,7 @@ let obnoxiousPatron = new Person({
 // Complicated Person, see "musicianSongInteraction" function
 let musicianWithABrokenArm = new Person({
   name: "Musician With A Broken Arm",
+  altNames: ["Musician With A Broken Arm", "Musician", "Broken Arm", "Mwaba"],
   inventory: [],
   interact: `\nMusician With A Broken Arm\n    "You... who are you?!?!?!?!\n     It doesn't matter, you can't help me.\n     I was attacked by many a foul beast out in the Forlorn Forest Of Fatality!\n     They broke my arm, causing me to drop my Damaged Lute.\n     That will teach me to go out into the woods without a weapon.\n     I wish my instrument could be returned to me.\n     Music brings comfort.\n     Especially in these dark times where monsters hide amoung us...\n`,
   //if the hero has the Damaged Lute the interaction changes
@@ -391,6 +448,7 @@ let musicianWithABrokenArm = new Person({
 // Complicated Person, see "sleepingChildInteraction" function
 let sleepingChild = new Person({
   name: "Sleeping Child",
+  altNames: ["Sleeping Child", "Sleeping", "Child", "Sp"],
   inventory: ["Warm Apple Pie"], //Reward for Solving Puzzle
   interact: "\nA motionless child lays asleep on an oversized bed.",
   //Locked Door & puzzle challenge threshold
@@ -419,6 +477,7 @@ let sleepingChild = new Person({
 
 let exhaustedParents = new Person({
   name: "Exhausted Parents",
+  altNames: ["Exhausted Parents", "Exhausted", "Parents", "Ep"],
   inventory: ["Town Map"], // Trade for Food
   interact:
     "\nA pair of weary parents are looking over a Town Map.\nThey are talking in hushed voices about where to send their Sleeping Child to school.\nYou can barely hear their voices over their rumbling stomaches.\nThey should probably eat something.\n",
@@ -445,6 +504,7 @@ let exhaustedParents = new Person({
 // This is a complicated Person, Success means winning the game.
 let dragon = new Person({
   name: "Dragon",
+  altNames: ["Dragon", "D"],
   inventory: ["Dragon's Treasure"],
   interact: `\nYou dash forward, hoping to attack the Dragon while it slumbered.\nBut it was all a ploy.\nAs you closed in on the monster,\nits eyes snapped open and it let out a mighty roar.\nIt was merely pretending to sleep to gain the advantage.`,
   //Followup changes based on inventory
@@ -483,6 +543,7 @@ let dragon = new Person({
 
 let grimReaper = new Person({
   name: "Grim Reaper",
+  altNames: ["Grim Reaper", "Grim", "Reaper", "Death", "Gr"],
   inventory: ["Death's Scythe"], //Reward for Solving the Puzzle
   interact:
     "You approach the Grim Reaper.\nEvery step closer to the cloaked figure chills you to your bones.\nAs you approach you see the skeletal face of Death\nwatching your every move with the piercing gaze of red eyes.",
@@ -511,6 +572,7 @@ let grimReaper = new Person({
 
 let crookedSign = new Person({
   name: "Crooked Sign",
+  altNames: ["Crooked Sign", "Crooked", "Sign", "Cs"],
   inventory: [],
   interact: `\nA worn sign at the intersection of two paths.\nIt reads:\n    "Abandon hope all yee who enter here!\n     This forest are a living maze that you'll not want to be lost in.\n     There be deadly monsters within these trees."\n`,
   followUp: () => {},
@@ -519,6 +581,7 @@ let crookedSign = new Person({
 
 let letterbox = new Person({
   name: "Letterbox",
+  altNames: ["Letterbox", "L"],
   inventory: [],
   interact: "",
   followUp: () => {
@@ -532,6 +595,7 @@ let letterbox = new Person({
 
 let moundsOfGold = new Person({
   name: "Mounds Of Gold",
+  altNames: ["Mounds Of Gold", "Mounds", "Mound", "Gold", "Mog"],
   inventory: [],
   interact: `\nYour eyes don't deceive you.  There are piles upon piles of Gold in this cave.\nIt is more wealth than you have ever dreamed of.\nCertainly enough to rebuild the town's broken bridge.\n\nYou daydream about the heroic feast the village will throw you.\n     The cooked meats assorted deserts.\n     The dancing into the night with an attractive villager.\n     Turns out that villager was your soulmate!\n     Eventually the two of you will be married\n     and have 3 children, 2 dogs and a hampster.\n     It was an incredibly wonderful life!\n\nOr it would have been...\nYou were so busy daydreaming about the Mounds Of Gold you did not realize\nthe Dragon had stirred from its slumber.\nIt attacked you while you were not paying attention...\n`,
   followUp: () => {
@@ -543,6 +607,7 @@ let moundsOfGold = new Person({
 
 let heapsOfSilver = new Person({
   name: "Heaps Of Silver",
+  altNames: ["Heaps Of Silver", "Heaps", "Heap", "Silver", "Hos"],
   inventory: [],
   interact: `\nSilver!  You have never seen so many glittering coins.\nThere are heaps upon heaps of silver in this cave.\nIt is more wealth than you have ever dreamed of.\n\nYou daydream all that you could do with this silver.\n     Buy fancy armor and weapons.\n     Melt it down and have a statue crafted in your image.\n     You could make a large pile of coins and just go swimming in it!\n     There is nothing better than having all that silver at your fingertips.\n     You will live like a king!\n\nOr you would have...\nSadly, you were so distracted by the Heaps Of Silver you did not realize\nthe Dragon had stirred from its slumber.\nIt attacked you while you were not paying attention...\n`,
   followUp: () => {
@@ -554,6 +619,7 @@ let heapsOfSilver = new Person({
 
 let pileOfBones = new Person({
   name: "Pile Of Bones",
+  altNames: ["Pile Of Bones", "Pile", "Bones", "Pob"],
   inventory: [],
   interact: `\nAs you approach the back of the cave you see the massive Pile Of Bones littering the Dragon's Keep.\nYou look closely at the bones, and your heart starts to sink.\n     You get the feeling that you have been here before...\n     That you have tried to fight the Dragon and failed...\n     You realize that the bones on the floor are your bones!!!\n     You have gotten to this point so many times!!!\n     This is where you die!\n     Over and over again, as though your life is some twisted game\n\nYou push these thoughts out of your head.`,
   followUp: () => {
@@ -588,6 +654,7 @@ let interactPeople = {
 // List of Interactable Items
 let sword = new Commodity({
   name: "Sword",
+  altNames: ["Sword"],
   interact:
     "\nThe sword of an adventurer.\nThe blade is very sharp.\nA lethal weapon, to be sure.",
   followUp: () => {},
@@ -595,12 +662,21 @@ let sword = new Commodity({
 
 let bucket = new Commodity({
   name: "Bucket",
+  altNames: ["Bucket"],
   interact: "\nA simple bucket, with a hole in the bottom.",
   followUp: () => {},
 });
 
 let premiumHorseManure = new Commodity({
   name: "Premium Horse Manure",
+  altNames: [
+    "Premium Horse Manure",
+    "Horse Manure",
+    "Premium",
+    "Horse",
+    "Manure",
+    "Phm",
+  ],
   interact:
     "\nIf it looks like shit,\nsmells like shit,\nand tastes like shit...\nIt'll make the crops grow tall!",
   followUp: () => {},
@@ -608,6 +684,7 @@ let premiumHorseManure = new Commodity({
 
 let warmMeal = new Commodity({
   name: "Warm Meal",
+  altNames: ["Warm Meal", "Meal", "Wm"],
   interact:
     "\nThe meal consists of a plain gruel.\nTasteless but still comforting.",
   followUp: () => {},
@@ -616,6 +693,14 @@ let warmMeal = new Commodity({
 // This is a complicated Item, the inventory of the Hero and Room are factored in determining the outcome.
 let BagOfJewels = new Commodity({
   name: "Bag Of Jewels",
+  altNames: [
+    "Bag Of Jewels",
+    "Bags Of Jewels",
+    "Bag Of Jewel",
+    "Bag",
+    "Jewels",
+    "Boj",
+  ],
   interact: "A bag of priceless gems.",
   followUp: () => {
     if (obnoxiousPatron.status === "Normal") {
@@ -674,6 +759,7 @@ let BagOfJewels = new Commodity({
 
 let townMap = new Commodity({
   name: "Town Map",
+  altNames: ["Town Map", "Map", "Tm"],
   interact:
     "\nA Map of Dorkington and the surrounding forest.\nYou can't get lost with this in hand.\n",
   followUp: () => {},
@@ -681,6 +767,7 @@ let townMap = new Commodity({
 
 let warmApplePie = new Commodity({
   name: "Warm Apple Pie",
+  altNames: ["Warm Apple Pie", "Apple Pie", "Apple", "Pie", "Wap"],
   interact:
     "\nFresh baked pie is the best.\nEveryone loves apple pie.\nAnd people do crazy, death-defying things when they are in love.\n",
   followUp: () => {},
@@ -688,6 +775,7 @@ let warmApplePie = new Commodity({
 
 let damagedLute = new Commodity({
   name: "Damaged Lute",
+  altNames: ["Damaged Lute", "Damaged", "Lute", "Dl"],
   interact:
     "\nA musical instrument that has seen better days.\nIt appears to have been damaged by some kind of wild animal.",
   followUp: () => {},
@@ -695,12 +783,14 @@ let damagedLute = new Commodity({
 
 let pointlessRock = new Commodity({
   name: "Pointless Rock",
+  altNames: ["Pointless Rock", "Pointless", "Rock", "Pr"],
   interact: "\nA simple rock that has no innate value.\n",
   followUp: () => {},
 });
 
 let dragonsTreasure = new Commodity({
   name: "Dragon's Treasure",
+  altNames: ["Dragon's Treasure", "Dragons Treasure", "Treasure", "Dt"],
   interact: `\nYour prize for slaying the Dragon!\nWealth beyond your wildest dreams.\nYou return to the hamlet, with all the Gold in tow.\nAll the villagers praise your efforts.`,
   followUp: () => {
     colorChangeWords(
@@ -713,6 +803,7 @@ let dragonsTreasure = new Commodity({
 
 let deathsScythe = new Commodity({
   name: "Death's Scythe",
+  altNames: ["Death's Scythe", "Deaths Scythe", "Scythe", "Ds"],
   interact:
     "\nThe immortal weapon of the manifestation of Death.\nA single scratch would cause any creature to immediately perish.\nUse with caution.",
   followUp: () => {},
@@ -775,6 +866,7 @@ async function heroAction(heroName) {
     // Removes item from Backpack, Adds item to Current Room
     let dropItem = await ask(`\nWhat would you like to drop?\n>_ `);
     droppingItem = capitalizePlayerInput(dropItem);
+    droppingItem = nameChecker(droppingItem);
     if (hero.inventory.includes(droppingItem) === true) {
       itemExchange(
         hero.inventory,
@@ -795,6 +887,7 @@ async function heroAction(heroName) {
     // Adds item to Backpack, Removes item from Current Room
     let takeItem = await ask(`\nWhat would you like to take?\n>_ `);
     tookenItem = capitalizePlayerInput(takeItem);
+    tookenItem = nameChecker(tookenItem);
     if (
       locations[currentLocation].inventory.includes(tookenItem) === true &&
       tookenItem === "Bag Of Jewels"
@@ -830,6 +923,9 @@ async function heroAction(heroName) {
     //Let's player Interact with an Object or person
     let interactObject = await ask(`\nWhat do you want to interact with?\n>_ `);
     interactableObject = capitalizePlayerInput(interactObject);
+    console.log("Test1", interactableObject); //! TEST
+    interactableObject = nameChecker(interactableObject);
+    console.log("Test2", interactableObject); //! TEST
     if (
       locations[currentLocation].interact.includes(interactableObject) ===
         true &&
@@ -968,7 +1064,38 @@ async function locationMove() {
   );
   newLocation = await ask(`Where would you like to go?\n>_ `);
   newLocation = capitalizePlayerInput(newLocation);
+  newLocation = nameChecker(newLocation);
   locationUpdate(newLocation);
+}
+
+//! Thanks to Sean M. and Nick K for help.
+// Checks alternate names against what
+function nameChecker(alternateName) {
+  //function needs to locate the new LOCATION NAME so Iii and know that it means the Idiot's Inspiring Inn
+  //Will need a new key in my classes for all locations.
+  //How can it check those
+  let actualLocationName = Object.keys(locations).find((i) =>
+    locations[i].altNames.includes(alternateName)
+  );
+  let actualPeopleName = Object.keys(interactPeople).find((i) =>
+    interactPeople[i].altNames.includes(alternateName)
+  );
+  let actualCommodityName = Object.keys(interactCommodity).find((i) =>
+    interactCommodity[i].altNames.includes(alternateName)
+  );
+  //if (locations.altNames.includes(newLocationName)){
+  if (actualLocationName) {
+    console.log("This is a location"); //! TEST
+    return locations[actualLocationName].name;
+  } else if (actualPeopleName) {
+    console.log("This is a person"); //! TEST
+    return interactPeople[actualPeopleName].name;
+  } else if (actualCommodityName) {
+    console.log("This is a item"); //! TEST
+    return interactCommodity[actualCommodityName].name;
+  } else {
+    return alternateName;
+  }
 }
 
 // This function keeps track of where the player has moved to
@@ -1331,6 +1458,7 @@ async function viewCredits() {
   Joshua Zygman.................Playtester
   Sarah Judd....................Playtester
   Devin Trager..................Playtester
+  Sean McCormack................Playtester
   
   ____________Copyright MMXXIII____________
   `);
