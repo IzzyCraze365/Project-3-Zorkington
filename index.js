@@ -923,9 +923,9 @@ async function heroAction(heroName) {
     //Let's player Interact with an Object or person
     let interactObject = await ask(`\nWhat do you want to interact with?\n>_ `);
     interactableObject = capitalizePlayerInput(interactObject);
-    console.log("Test1", interactableObject); //! TEST
+    //console.log("Test1", interactableObject); //! TEST
     interactableObject = nameChecker(interactableObject);
-    console.log("Test2", interactableObject); //! TEST
+    //console.log("Test2", interactableObject); //! TEST
     if (
       locations[currentLocation].interact.includes(interactableObject) ===
         true &&
@@ -1085,13 +1085,13 @@ function nameChecker(alternateName) {
   );
   //if (locations.altNames.includes(newLocationName)){
   if (actualLocationName) {
-    console.log("This is a location"); //! TEST
+    //console.log("This is a location"); //! TEST
     return locations[actualLocationName].name;
   } else if (actualPeopleName) {
-    console.log("This is a person"); //! TEST
+    //console.log("This is a person"); //! TEST
     return interactPeople[actualPeopleName].name;
   } else if (actualCommodityName) {
-    console.log("This is a item"); //! TEST
+    //console.log("This is a item"); //! TEST
     return interactCommodity[actualCommodityName].name;
   } else {
     return alternateName;
